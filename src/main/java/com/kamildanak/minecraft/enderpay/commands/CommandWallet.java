@@ -1,8 +1,6 @@
 package com.kamildanak.minecraft.enderpay.commands;
 
 import com.kamildanak.minecraft.enderpay.economy.Account;
-import com.kamildanak.minecraft.enderpay.network.PacketDispatcher;
-import com.kamildanak.minecraft.enderpay.network.client.MessageBalance;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -32,7 +30,7 @@ public class CommandWallet extends CommandBase {
     @Override
     @Nonnull
     public String getUsage(@Nullable ICommandSender sender) {
-        return "commands.wallet.usage";
+        return "/wallet <give|take|set|balance> <player> <amount>";
     }
 
     @Override
@@ -42,33 +40,33 @@ public class CommandWallet extends CommandBase {
             Account account = Account.get(entityplayer);
             account.update();
             if ("balance".equals(args[0])) {
-                sender.sendMessage((new TextComponentTranslation("commands.wallet.balance.success",
+                sender.sendMessage((new TextComponentTranslation("%s balance: %s",
                         entityplayer.getName(), account.getBalance())));
                 return;
             }
             long amount = parseLong(args[2]);
             if ("set".equals(args[0])) {
                 account.setBalance(amount);
-                sender.sendMessage((new TextComponentTranslation("commands.wallet.set.success",
+                sender.sendMessage((new TextComponentTranslation("%s balance set to %s",
                         entityplayer.getName(), account.getBalance())));
                 return;
             }
             if ("give".equals(args[0])) {
                 account.addBalance(amount);
-                sender.sendMessage((new TextComponentTranslation("commands.wallet.give.success",
+                sender.sendMessage((new TextComponentTranslation("%s added to %s balance",
                         amount, entityplayer.getName())));
                 return;
             }
             if ("take".equals(args[0])) {
                 account.addBalance(-amount);
-                sender.sendMessage((new TextComponentTranslation("commands.wallet.take.success",
+                sender.sendMessage((new TextComponentTranslation("%s taken from %s balance",
                         amount, entityplayer.getName())));
                 return;
             }
-            PacketDispatcher.sendTo(new MessageBalance(account.getBalance()), entityplayer);
+            entityplayer.sendMessage(new TextComponentTranslation("Balance: %s", account.getBalance()));
         }
         //noinspection RedundantArrayCreation
-        throw new WrongUsageException("commands.wallet.usage", new Object[0]);
+        throw new WrongUsageException("/wallet <give|take|set|balance> <player> <amount>", new Object[0]);
     }
 
     @Override

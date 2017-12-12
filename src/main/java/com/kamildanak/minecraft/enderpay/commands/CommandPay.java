@@ -1,12 +1,11 @@
 package com.kamildanak.minecraft.enderpay.commands;
 
 import com.kamildanak.minecraft.enderpay.economy.Account;
-import com.kamildanak.minecraft.enderpay.network.PacketDispatcher;
-import com.kamildanak.minecraft.enderpay.network.client.MessageBalance;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,7 +22,7 @@ public class CommandPay extends CommandBase {
     @Override
     @Nonnull
     public String getUsage(@Nullable ICommandSender sender) {
-        return "commands.pay.usage";
+        return "/pay <player> <amount>";
     }
 
     @Override
@@ -35,18 +34,18 @@ public class CommandPay extends CommandBase {
             long amount = parseLong(args[1]);
             if (amount < 0)
                 //noinspection RedundantArrayCreation
-                throw new NumberInvalidException("commands.pay.number_must_be_positive", new Object[0]);
+                throw new NumberInvalidException("You cannot pay someone negative amount. That would be rude.", new Object[0]);
             Account senderAccount = Account.get((EntityPlayerMP) sender);
             if (senderAccount.getBalance() < amount)
                 throw new InsufficientCreditException();
             senderAccount.addBalance(-amount);
             account.addBalance(amount);
-            PacketDispatcher.sendTo(new MessageBalance(senderAccount.getBalance()), (EntityPlayerMP) sender);
-            PacketDispatcher.sendTo(new MessageBalance(account.getBalance()), entityplayer);
+            sender.sendMessage(new TextComponentTranslation("Balance: %s", senderAccount.getBalance()));
+            entityplayer.sendMessage(new TextComponentTranslation("Balance: %s", account.getBalance()));
             return;
         }
         //noinspection RedundantArrayCreation
-        throw new WrongUsageException("commands.pay.usage", new Object[0]);
+        throw new WrongUsageException("/pay <player> <amount>", new Object[0]);
     }
 
     @Override

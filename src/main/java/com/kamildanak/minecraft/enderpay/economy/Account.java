@@ -4,10 +4,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kamildanak.minecraft.enderpay.EnderPay;
 import com.kamildanak.minecraft.enderpay.Utils;
-import com.kamildanak.minecraft.enderpay.network.PacketDispatcher;
-import com.kamildanak.minecraft.enderpay.network.client.MessageBalance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -150,7 +149,7 @@ public class Account {
     public void setBalance(long v) {
         balance = v;
         changed = true;
-        PacketDispatcher.sendTo(new MessageBalance(balance), getPlayerMP());
+        getPlayerMP().sendMessage(new TextComponentTranslation("Balance: %s", balance));
     }
 
     public void addBalance(long v) {

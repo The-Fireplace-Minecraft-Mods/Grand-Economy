@@ -5,19 +5,11 @@ import com.kamildanak.minecraft.enderpay.commands.CommandPay;
 import com.kamildanak.minecraft.enderpay.commands.CommandWallet;
 import com.kamildanak.minecraft.enderpay.economy.Account;
 import com.kamildanak.minecraft.enderpay.events.EventHandler;
-import com.kamildanak.minecraft.enderpay.gui.GuiBanknote;
-import com.kamildanak.minecraft.enderpay.item.ItemBlankBanknote;
-import com.kamildanak.minecraft.enderpay.item.ItemFilledBanknote;
 import com.kamildanak.minecraft.enderpay.proxy.Proxy;
 import com.kamildanak.minecraft.enderpay.proxy.Settings;
-import com.kamildanak.minecraft.foamflower.gui.GuiHandler;
-import com.kamildanak.minecraft.foamflower.inventory.DummyContainer;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
@@ -32,28 +24,21 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
 
-@Mod(modid = EnderPay.modID, name = EnderPay.modName, version = EnderPay.VERSION,
-        acceptedMinecraftVersions = EnderPay.ACCEPTED_VERSIONS,
-        guiFactory = "com.kamildanak.minecraft.enderpay.gui.EnderPayGuiFactory",
-        dependencies = "required-after:foamflower")
+@Mod(modid = EnderPay.modID, name = EnderPay.modName, version = EnderPay.VERSION, acceptedMinecraftVersions = EnderPay.ACCEPTED_VERSIONS, serverSideOnly = true, acceptableRemoteVersions = "*")
 public class EnderPay {
-    public static final String modID = "enderpay";
+    public static final String modID = "enderpayserver";
     static final String VERSION = "{@enderPayVersion}";
-    static final String ACCEPTED_VERSIONS = "{@mcVersion}";
-    static final String modName = "EnderPay Economy Api";
+    static final String ACCEPTED_VERSIONS = "[1.12,1.13)";
+    static final String modName = "EnderPay Economy Api - Server Edition";
     @Mod.Instance(modID)
     @SuppressWarnings("unused")
     public static EnderPay instance;
 
-    public static GuiHandler guiBanknote;
-
     public static MinecraftServer minecraftServer;
-    public static Item itemBlankBanknote;
-    public static Item itemFilledBanknote;
-    @SidedProxy(clientSide = "com.kamildanak.minecraft.enderpay.proxy.ProxyClient", serverSide = "com.kamildanak.minecraft.enderpay.proxy.Proxy")
+    @SidedProxy(serverSide = "com.kamildanak.minecraft.enderpay.proxy.Proxy")
     @SuppressWarnings("unused")
     public static Proxy proxy;
-    @SidedProxy(clientSide = "com.kamildanak.minecraft.enderpay.proxy.SettingsClient", serverSide = "com.kamildanak.minecraft.enderpay.proxy.Settings")
+    @SidedProxy(serverSide = "com.kamildanak.minecraft.enderpay.proxy.Settings")
     @SuppressWarnings("unused")
     public static Settings settings;
     private static Configuration config;
@@ -63,32 +48,14 @@ public class EnderPay {
     public void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
-        proxy.preInit();
 
         settings.loadConfig(config);
-        itemBlankBanknote = new ItemBlankBanknote("blank_banknote");
-        itemFilledBanknote = new ItemFilledBanknote("filled_banknote");
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void init(FMLInitializationEvent event) {
-        proxy.init();
-        proxy.registerPackets();
         MinecraftForge.EVENT_BUS.register(new EventHandler());
-
-        guiBanknote = new GuiHandler("wrench") {
-            @Override
-            public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-                return new DummyContainer();
-            }
-
-            @Override
-            public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-                return new GuiBanknote(world, new BlockPos(x, y, z), player);
-            }
-        };
-        GuiHandler.register(this);
     }
 
     @Mod.EventHandler

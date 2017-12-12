@@ -1,10 +1,6 @@
 package com.kamildanak.minecraft.enderpay.proxy;
 
-import com.kamildanak.minecraft.enderpay.gui.hud.Anchor;
-import com.kamildanak.minecraft.enderpay.gui.hud.Position;
-
 public class DummySettings implements ISettings{
-    private final Anchor anchor;
     private String currencyNameSingular;
     private String currencyNameMultiple;
     private long maxLoginDelta;
@@ -13,14 +9,8 @@ public class DummySettings implements ISettings{
     private boolean stampedMoney;
     private int stampedMoneyPercent;
     private int startBalance;
-    private boolean consumeBanknotesInCreativeMode;
-    private boolean registerBanknoteRecipe;
-    private int daysAfterBanknotesExpires;
     private int resetLoginDelta;
     private int dayLength;
-    private int xOffset;
-    private int yOffset;
-    private Position position;
     private int pvpMoneyDrop;
 
     public DummySettings(String currencyNameSingular,
@@ -31,15 +21,8 @@ public class DummySettings implements ISettings{
                          boolean stampedMoney,
                          int stampedMoneyPercent,
                          int startBalance,
-                         boolean consumeBanknotesInCreativeMode,
-                         boolean registerBanknoteRecipe,
-                         int daysAfterBanknotesExpires,
                          int resetLoginDelta,
                          int dayLength,
-                         int xOffset,
-                         int yOffset,
-                         Position position,
-                         Anchor anchor,
                          int pvpMoneyDrop) {
         this.currencyNameSingular = currencyNameSingular;
         this.currencyNameMultiple = currencyNameMultiple;
@@ -49,15 +32,8 @@ public class DummySettings implements ISettings{
         this.stampedMoney = stampedMoney;
         this.stampedMoneyPercent = stampedMoneyPercent;
         this.startBalance = startBalance;
-        this.consumeBanknotesInCreativeMode = consumeBanknotesInCreativeMode;
-        this.registerBanknoteRecipe = registerBanknoteRecipe;
-        this.daysAfterBanknotesExpires = daysAfterBanknotesExpires;
         this.resetLoginDelta = resetLoginDelta;
         this.dayLength = dayLength;
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
-        this.position = position;
-        this.anchor = anchor;
         this.pvpMoneyDrop = pvpMoneyDrop;
     }
 
@@ -102,21 +78,6 @@ public class DummySettings implements ISettings{
     }
 
     @Override
-    public boolean isConsumeBanknotesInCreativeMode() {
-        return consumeBanknotesInCreativeMode;
-    }
-
-    @Override
-    public boolean isRegisterBanknoteRecipe() {
-        return registerBanknoteRecipe;
-    }
-
-    @Override
-    public int getDaysAfterBanknotesExpires() {
-        return daysAfterBanknotesExpires;
-    }
-
-    @Override
     public int getResetLoginDelta() {
         return resetLoginDelta;
     }
@@ -124,26 +85,6 @@ public class DummySettings implements ISettings{
     @Override
     public int getDayLength() {
         return dayLength;
-    }
-
-    @Override
-    public int getxOffset() {
-        return xOffset;
-    }
-
-    @Override
-    public int getyOffset() {
-        return yOffset;
-    }
-
-    @Override
-    public Position getPosition() {
-        return position;
-    }
-
-    @Override
-    public Anchor getAnchor() {
-        return anchor;
     }
 
     @Override

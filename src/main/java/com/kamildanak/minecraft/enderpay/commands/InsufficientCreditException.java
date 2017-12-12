@@ -6,7 +6,7 @@ class InsufficientCreditException extends CommandException {
 
     InsufficientCreditException() {
         //noinspection RedundantArrayCreation
-        this("commands.pay.insufficient_credit", new Object[0]);
+        this("You don't have money you want to pay :(.", new Object[0]);
     }
 
     private InsufficientCreditException(String message, Object... objects) {

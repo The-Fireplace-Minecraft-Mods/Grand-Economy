@@ -3,17 +3,14 @@ package com.kamildanak.minecraft.enderpay.events;
 import com.kamildanak.minecraft.enderpay.EnderPay;
 import com.kamildanak.minecraft.enderpay.Utils;
 import com.kamildanak.minecraft.enderpay.economy.Account;
-import com.kamildanak.minecraft.enderpay.network.PacketDispatcher;
-import com.kamildanak.minecraft.enderpay.network.client.MessageBalance;
-import com.kamildanak.minecraft.enderpay.network.client.MessageSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -29,8 +26,7 @@ public class EventHandler {
             Account account = Account.get((EntityPlayer) event.getEntity());
             account.update();
             long balance = account.getBalance();
-            PacketDispatcher.sendTo(new MessageBalance(balance), (EntityPlayerMP) event.getEntity());
-            PacketDispatcher.sendTo(new MessageSettings(EnderPay.settings), (EntityPlayerMP) event.getEntity());
+            event.getEntity().sendMessage(new TextComponentTranslation("Balance: %s", balance));
         }
     }
 
@@ -56,7 +52,7 @@ public class EventHandler {
         for (EntityPlayerMP entityPlayer : server.getPlayerList().getPlayers()) {
             Account account = Account.get(entityPlayer);
             if (account.update())
-                PacketDispatcher.sendTo(new MessageBalance(account.getBalance()), entityPlayer);
+                entityPlayer.sendMessage(new TextComponentTranslation("Balance: %s", account.getBalance()));
         }
     }
 
@@ -78,18 +74,11 @@ public class EventHandler {
         account.addBalance(-amountTaken);
 
         long balance = account.getBalance();
-        PacketDispatcher.sendTo(new MessageBalance(balance), (EntityPlayerMP) entity);
+        entity.sendMessage(new TextComponentTranslation("Balance: %s", balance));
 
         Account killerAccount = Account.get((EntityPlayer) killer);
         killerAccount.addBalance(amountTaken);
         long balance2 = killerAccount.getBalance();
-        PacketDispatcher.sendTo(new MessageBalance(balance2), (EntityPlayerMP) killer);
-    }
-
-    @SubscribeEvent
-    public void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (!event.getModID().equals(EnderPay.modID)) return;
-        EnderPay.settings.config.save();
-        EnderPay.settings.reloadConfig();
+        killer.sendMessage(new TextComponentTranslation("Balance: %s", balance2));
     }
 }
