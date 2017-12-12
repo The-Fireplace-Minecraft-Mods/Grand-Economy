@@ -9,10 +9,15 @@ The amount of tax taken each day is configurable (as well as other values)
 
 ## Commands
 /balance - Check account balance
+
 /pay <player> <amount> - Pay another player money from your account
+  
 /wallet balance <player> - Check another player's account balance
+
 /wallet give <player> - Add credits to player's account
+
 /wallet take <player> - Take credits from player's account
+
 /wallet set <player> - Set player's account balance
 
 ## Installation
