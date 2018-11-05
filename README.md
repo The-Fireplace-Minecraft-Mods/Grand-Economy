@@ -1,4 +1,4 @@
-# EnderPay - Server-Side Only Edition
+# Grand Economy - A server-side only economy mod
 
 EnderPay adds economy to Forge servers.
 By itself, it doesn't do much, but it does add a basic income system, as well as commands to interact with players' currency. This is intended for use by other mods.
