@@ -1,6 +1,6 @@
 # Grand Economy - A server-side only economy mod
 
-EnderPay adds economy to Forge servers.
+Grand Economy adds economy to Forge servers.
 By itself, it doesn't do much, but it does add a basic income system, as well as commands to interact with players' currency. This is intended for use by other mods.
 
 By default the user gets 100 credits on first login, and 50 for each (real time) day, as long as they login at least once every 6 days.
