@@ -1,4 +1,4 @@
-package com.kamildanak.minecraft.enderpay.commands;
+package the_fireplace.grandeconomy.commands;
 
 import net.minecraft.command.CommandException;
 

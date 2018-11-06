@@ -1,44 +1,40 @@
-package com.kamildanak.minecraft.enderpay;
+package the_fireplace.grandeconomy;
 
-import com.kamildanak.minecraft.enderpay.commands.CommandBalance;
-import com.kamildanak.minecraft.enderpay.commands.CommandPay;
-import com.kamildanak.minecraft.enderpay.commands.CommandWallet;
-import com.kamildanak.minecraft.enderpay.economy.Account;
-import com.kamildanak.minecraft.enderpay.events.EventHandler;
-import com.kamildanak.minecraft.enderpay.proxy.Proxy;
-import com.kamildanak.minecraft.enderpay.proxy.Settings;
+import the_fireplace.grandeconomy.commands.CommandBalance;
+import the_fireplace.grandeconomy.commands.CommandPay;
+import the_fireplace.grandeconomy.commands.CommandWallet;
+import the_fireplace.grandeconomy.economy.Account;
+import the_fireplace.grandeconomy.proxy.Proxy;
+import the_fireplace.grandeconomy.proxy.Settings;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
 
-@Mod(modid = EnderPay.modID, name = EnderPay.modName, version = EnderPay.VERSION, acceptedMinecraftVersions = EnderPay.ACCEPTED_VERSIONS, serverSideOnly = true, acceptableRemoteVersions = "*")
-public class EnderPay {
-    public static final String modID = "enderpayserver";
-    static final String VERSION = "{@enderPayVersion}";
-    static final String ACCEPTED_VERSIONS = "[1.12,1.13)";
-    static final String modName = "EnderPay Economy Api - Server Edition";
-    @Mod.Instance(modID)
+@Mod(modid = GrandEconomy.MODID, name = GrandEconomy.MODNAME, version = GrandEconomy.VERSION, acceptedMinecraftVersions = "[1.12,1.13)", serverSideOnly = true, acceptableRemoteVersions = "*")
+public class GrandEconomy {
+    public static final String MODID = "grandeconomy";
+    public static final String MODNAME = "Grand Economy";
+    public static final String VERSION = "${version}";
+    @Mod.Instance(MODID)
     @SuppressWarnings("unused")
-    public static EnderPay instance;
+    public static GrandEconomy instance;
 
     public static MinecraftServer minecraftServer;
-    @SidedProxy(serverSide = "com.kamildanak.minecraft.enderpay.proxy.Proxy")
+    @SidedProxy(serverSide = "the_fireplace.grandeconomy.proxy.Proxy")
     @SuppressWarnings("unused")
     public static Proxy proxy;
-    @SidedProxy(serverSide = "com.kamildanak.minecraft.enderpay.proxy.Settings")
+    @SidedProxy(serverSide = "the_fireplace.grandeconomy.proxy.Settings")
     @SuppressWarnings("unused")
     public static Settings settings;
     private static Configuration config;
@@ -50,12 +46,6 @@ public class EnderPay {
         config.load();
 
         settings.loadConfig(config);
-    }
-
-    @Mod.EventHandler
-    @SuppressWarnings("unused")
-    public void init(FMLInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     @Mod.EventHandler
@@ -73,7 +63,7 @@ public class EnderPay {
         File file = getWorldDir(minecraftServer.getEntityWorld());
         if (file == null) return;
 
-        Account.setLocation(new File(file, "EnderPay-accounts"));
+        Account.setLocation(new File(file, "GrandEconomy-accounts"));
 
         registerCommands(event);
     }

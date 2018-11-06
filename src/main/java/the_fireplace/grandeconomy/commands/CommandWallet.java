@@ -1,6 +1,6 @@
-package com.kamildanak.minecraft.enderpay.commands;
+package the_fireplace.grandeconomy.commands;
 
-import com.kamildanak.minecraft.enderpay.economy.Account;
+import the_fireplace.grandeconomy.economy.Account;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

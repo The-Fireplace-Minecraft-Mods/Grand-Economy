@@ -1,4 +1,4 @@
-package com.kamildanak.minecraft.enderpay;
+package the_fireplace.grandeconomy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -57,12 +57,12 @@ public class Utils {
     }
 
     private static long timeToDays(long time) {
-        long day = 1000 * 60 * EnderPay.settings.getDayLength();
+        long day = 1000 * 60 * GrandEconomy.settings.getDayLength();
         return time / day;
     }
 
     private static long daysToTime(long days) {
-        long day = 1000 * 60 * EnderPay.settings.getDayLength();
+        long day = 1000 * 60 * GrandEconomy.settings.getDayLength();
         return days * day;
     }
 

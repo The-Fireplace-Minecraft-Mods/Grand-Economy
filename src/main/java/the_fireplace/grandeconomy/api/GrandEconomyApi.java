@@ -1,12 +1,12 @@
-package com.kamildanak.minecraft.enderpay.api;
+package the_fireplace.grandeconomy.api;
 
-import com.kamildanak.minecraft.enderpay.EnderPay;
-import com.kamildanak.minecraft.enderpay.economy.Account;
+import the_fireplace.grandeconomy.GrandEconomy;
+import the_fireplace.grandeconomy.economy.Account;
 
 import java.util.UUID;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class EnderPayApi {
+public class GrandEconomyApi {
     public static long getBalance(UUID uuid) throws NoSuchAccountException {
         Account account = Account.get(uuid);
         if (account == null) throw new NoSuchAccountException();
@@ -32,16 +32,16 @@ public class EnderPayApi {
 
     @Deprecated
     public static String getCurrencyNameSingular() {
-        return EnderPay.settings.getCurrencyNameSingular();
+        return GrandEconomy.settings.getCurrencyNameSingular();
     }
 
     @Deprecated
     public static String getCurrencyNameMultiple() {
-        return EnderPay.settings.getCurrencyNameMultiple();
+        return GrandEconomy.settings.getCurrencyNameMultiple();
     }
 
     public static String getCurrencyName(long amount) {
-        if (amount == 1) return EnderPay.settings.getCurrencyNameSingular();
-        return EnderPay.settings.getCurrencyNameMultiple();
+        if (amount == 1) return GrandEconomy.settings.getCurrencyNameSingular();
+        return GrandEconomy.settings.getCurrencyNameMultiple();
     }
 }

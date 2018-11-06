@@ -1,6 +1,6 @@
-package com.kamildanak.minecraft.enderpay.commands;
+package the_fireplace.grandeconomy.commands;
 
-import com.kamildanak.minecraft.enderpay.economy.Account;
+import the_fireplace.grandeconomy.economy.Account;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;

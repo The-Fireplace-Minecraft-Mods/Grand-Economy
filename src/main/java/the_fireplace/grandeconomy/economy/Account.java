@@ -1,9 +1,9 @@
-package com.kamildanak.minecraft.enderpay.economy;
+package the_fireplace.grandeconomy.economy;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.kamildanak.minecraft.enderpay.EnderPay;
-import com.kamildanak.minecraft.enderpay.Utils;
+import the_fireplace.grandeconomy.GrandEconomy;
+import the_fireplace.grandeconomy.Utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -28,7 +28,7 @@ public class Account {
 
     private Account(UUID uuid) {
         this.uuid = uuid;
-        this.balance = EnderPay.settings.getStartBalance();
+        this.balance = GrandEconomy.settings.getStartBalance();
         long now = Utils.getCurrentDay();
         this.lastLogin = now;
         this.lastCountActivity = now;
@@ -78,21 +78,21 @@ public class Account {
 
         if (activityDeltaDays == 0) return false;
 
-        if (EnderPay.settings.isStampedMoney()) {
-            if (activityDeltaDays <= EnderPay.settings.getResetLoginDelta()) {
+        if (GrandEconomy.settings.isStampedMoney()) {
+            if (activityDeltaDays <= GrandEconomy.settings.getResetLoginDelta()) {
                 for (int i = 0; i < activityDeltaDays; i++)
-                    this.balance -= Math.ceil((double) (this.balance * EnderPay.settings.getStampedMoneyPercent()) / 100);
+                    this.balance -= Math.ceil((double) (this.balance * GrandEconomy.settings.getStampedMoneyPercent()) / 100);
             }
         }
-        if (EnderPay.settings.isBasicIncome() && getPlayerMP() != null) {
+        if (GrandEconomy.settings.isBasicIncome() && getPlayerMP() != null) {
             long loginDeltaDays = (now - this.lastLogin);
-            if (loginDeltaDays > EnderPay.settings.getMaxLoginDelta())
-                loginDeltaDays = EnderPay.settings.getMaxLoginDelta();
+            if (loginDeltaDays > GrandEconomy.settings.getMaxLoginDelta())
+                loginDeltaDays = GrandEconomy.settings.getMaxLoginDelta();
             this.lastLogin = now;
-            this.balance += loginDeltaDays * EnderPay.settings.getBasicIncomeAmount();
+            this.balance += loginDeltaDays * GrandEconomy.settings.getBasicIncomeAmount();
         }
-        if (activityDeltaDays > EnderPay.settings.getResetLoginDelta()) {
-            this.balance = EnderPay.settings.getStartBalance();
+        if (activityDeltaDays > GrandEconomy.settings.getResetLoginDelta()) {
+            this.balance = GrandEconomy.settings.getStartBalance();
         }
         return activityDeltaDays > 0;
     }
@@ -158,7 +158,7 @@ public class Account {
 
     @Nullable
     private EntityPlayerMP getPlayerMP() {
-        EntityPlayerMP entityPlayerMP = EnderPay.minecraftServer.getPlayerList().getPlayerByUUID(uuid);
+        EntityPlayerMP entityPlayerMP = GrandEconomy.minecraftServer.getPlayerList().getPlayerByUUID(uuid);
         //noinspection ConstantConditions
         return (entityPlayerMP != null) ? entityPlayerMP : null;
     }

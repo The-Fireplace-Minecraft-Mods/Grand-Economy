@@ -1,13 +1,13 @@
 [
 {
-  "modid": "enderpay",
-  "name": "EnderPay",
+  "modid": "grandeconomy",
+  "name": "Grand Economy",
   "description": "Adds Economy to your Forge server.",
   "version": "${version}",
-  "mcversion": "${mcversion}",
-  "logoFile": "assets/enderpay/icon.png",
-  "url": "https://github.com/kamildanak/EnderPay",
-  "authorList": ["kamildanak"],
+  "mcversion": "",
+  "logoFile": "",
+  "url": "",
+  "authorList": ["The_Fireplace", "kamildanak"],
   "screenshots": []
 }
 ]

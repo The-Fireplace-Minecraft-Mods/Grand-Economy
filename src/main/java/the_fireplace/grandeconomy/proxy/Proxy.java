@@ -1,4 +1,4 @@
-package com.kamildanak.minecraft.enderpay.proxy;
+package the_fireplace.grandeconomy.proxy;
 
 
 import net.minecraft.entity.player.EntityPlayer;
