@@ -23,8 +23,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'net.cazzar.gradle.modsio'
 
 version = "1.0.0"
-group = "com.kamildanak.minecraft.enderpay"
-archivesBaseName = "enderpay"
+group = "the_fireplace.grandeconomy"
+archivesBaseName = "GrandEconomy-1.12.2"
 
 allprojects {
     sourceCompatibility = 1.8
