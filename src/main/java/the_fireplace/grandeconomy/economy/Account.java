@@ -42,9 +42,11 @@ public class Account {
     @Nullable
     public static Account get(UUID uuid) {
         Account account = objects.get(uuid.toString());
-        if (account != null) return account;
+        if (account != null)
+            return account;
 
-        if (location == null) return null;
+        if (location == null)
+            return null;
         //noinspection ResultOfMethodCallIgnored
         location.mkdirs();
 

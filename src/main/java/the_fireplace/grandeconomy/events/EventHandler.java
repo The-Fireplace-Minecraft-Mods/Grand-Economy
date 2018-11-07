@@ -22,7 +22,6 @@ public class EventHandler {
     private static long lastTickEvent = 0;
 
     @SubscribeEvent
-    @SuppressWarnings("unused")
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof EntityPlayer && !event.getEntity().world.isRemote) {
             Account account = Account.get((EntityPlayer) event.getEntity());
@@ -33,7 +32,6 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    @SuppressWarnings("unused")
     public static void onPlayerSaveToFile(PlayerEvent.SaveToFile event) {
         Account account = Account.get(event.getEntityPlayer());
         try {
@@ -44,13 +42,14 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    @SuppressWarnings("unused")
     public static void onServerTickEvent(TickEvent.ServerTickEvent event) {
         long now = Utils.getCurrentDay();
-        if (lastTickEvent == now) return;
+        if (lastTickEvent == now)
+            return;
         lastTickEvent = now;
         MinecraftServer server = GrandEconomy.minecraftServer;
-        if (server == null) return;
+        if (server == null)
+            return;
         for (EntityPlayerMP entityPlayer : server.getPlayerList().getPlayers()) {
             Account account = Account.get(entityPlayer);
             if (account.update())
@@ -59,17 +58,19 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    @SuppressWarnings("unused")
     public static void onLivingDeathEvent(LivingDeathEvent event) {
         int moneyDropValue = GrandEconomy.settings.getPvpMoneyDrop();
         if (moneyDropValue == 0) return;
         Entity entity = event.getEntity();
-        if (!(entity instanceof EntityPlayer) || entity.world.isRemote) return;
+        if (!(entity instanceof EntityPlayer) || entity.world.isRemote)
+            return;
         Entity killer = event.getSource().getTrueSource();
-        if (!(killer instanceof EntityPlayerMP)) return;
+        if (!(killer instanceof EntityPlayerMP))
+            return;
 
         Account account = Account.get((EntityPlayer) entity);
-        if (account.getBalance() <= 0) return;
+        if (account.getBalance() <= 0)
+            return;
         long amountTaken = (moneyDropValue > 0) ?
                 (account.getBalance() * GrandEconomy.settings.getPvpMoneyDrop()) / 100 :
                 Math.max(Math.min(account.getBalance(), -GrandEconomy.settings.getPvpMoneyDrop()), 0);

@@ -1,8 +1,8 @@
-package the_fireplace.grandeconomy.proxy;
+package the_fireplace.grandeconomy;
 
 import net.minecraftforge.common.config.Configuration;
 
-public class Settings implements ISettings{
+public class Settings {
     public Configuration config;
     private String currencyNameSingular;
     private String currencyNameMultiple;
@@ -51,57 +51,46 @@ public class Settings implements ISettings{
                         " of players money should be transferred to slayer");
     }
 
-    @Override
     public String getCurrencyNameSingular() {
         return currencyNameSingular;
     }
 
-    @Override
     public String getCurrencyNameMultiple() {
         return currencyNameMultiple;
     }
 
-    @Override
     public long getMaxLoginDelta() {
         return maxLoginDelta;
     }
 
-    @Override
     public boolean isBasicIncome() {
         return basicIncome;
     }
 
-    @Override
     public int getBasicIncomeAmount() {
         return basicIncomeAmount;
     }
 
-    @Override
     public boolean isStampedMoney() {
         return stampedMoney;
     }
 
-    @Override
     public int getStampedMoneyPercent() {
         return stampedMoneyPercent;
     }
 
-    @Override
     public int getStartBalance() {
         return startBalance;
     }
 
-    @Override
     public int getResetLoginDelta() {
         return resetLoginDelta;
     }
 
-    @Override
     public int getDayLength() {
         return dayLength;
     }
 
-    @Override
     public int getPvpMoneyDrop() {
         return pvpMoneyDrop;
     }
