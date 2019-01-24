@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Account {
@@ -56,11 +57,7 @@ public class Account {
         File file = account.getFile();
         if (!file.exists()) return account;
 
-        try {
-            account.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        account.read();
         return account;
     }
 
@@ -93,7 +90,7 @@ public class Account {
             this.lastLogin = now;
             this.balance += loginDeltaDays * GrandEconomy.settings.getBasicIncomeAmount();
         }
-        if (activityDeltaDays > GrandEconomy.settings.getResetLoginDelta()) {
+        if (activityDeltaDays > GrandEconomy.settings.getResetLoginDelta() && GrandEconomy.settings.getResetLoginDelta() != 0) {
             this.balance = GrandEconomy.settings.getStartBalance();
         }
         return activityDeltaDays > 0;
@@ -107,22 +104,20 @@ public class Account {
         return new File(location, uuid + ".json");
     }
 
-    private void read() throws IOException {
+    private void read() {
         read(getFile());
     }
 
-    private void read(File file) throws IOException {
+    private void read(File file) {
         changed = false;
 
         JsonParser jsonParser = new JsonParser();
         try {
-
             Object obj = jsonParser.parse(new FileReader(file));
             JsonObject jsonObject = (JsonObject) obj;
             balance = jsonObject.get("balance").getAsLong();
             lastLogin = jsonObject.get("lastLogin").getAsLong();
             lastCountActivity = jsonObject.get("lastCountActivity").getAsLong();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,20 +143,20 @@ public class Account {
         return balance;
     }
 
-    public void setBalance(long v) {
+    public void setBalance(long v, boolean showMsg) {
         balance = v;
         changed = true;
-        getPlayerMP().sendMessage(new TextComponentTranslation("Balance: %s", balance));
+        if(showMsg)
+            Objects.requireNonNull(getPlayerMP()).sendMessage(new TextComponentTranslation("Your balance is now: %s", balance));
     }
 
-    public void addBalance(long v) {
-        setBalance(balance + v);
+    public void addBalance(long v, boolean showMsg) {
+        setBalance(balance + v, showMsg);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Nullable
     private EntityPlayerMP getPlayerMP() {
-        EntityPlayerMP entityPlayerMP = GrandEconomy.minecraftServer.getPlayerList().getPlayerByUUID(uuid);
-        //noinspection ConstantConditions
-        return (entityPlayerMP != null) ? entityPlayerMP : null;
+        return GrandEconomy.minecraftServer.getPlayerList().getPlayerByUUID(uuid);
     }
 }

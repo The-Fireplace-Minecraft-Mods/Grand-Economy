@@ -1,10 +1,10 @@
-package the_fireplace.grandeconomy.commands;
+package the_fireplace.grandeconomy.api;
 
 import net.minecraft.command.CommandException;
 
-class InsufficientCreditException extends CommandException {
+public class InsufficientCreditException extends CommandException {
 
-    InsufficientCreditException() {
+    public InsufficientCreditException() {
         //noinspection RedundantArrayCreation
         this("You don't have money you want to pay :(.", new Object[0]);
     }

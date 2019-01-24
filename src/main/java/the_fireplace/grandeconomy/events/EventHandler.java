@@ -74,14 +74,14 @@ public class EventHandler {
         long amountTaken = (moneyDropValue > 0) ?
                 (account.getBalance() * GrandEconomy.settings.getPvpMoneyDrop()) / 100 :
                 Math.max(Math.min(account.getBalance(), -GrandEconomy.settings.getPvpMoneyDrop()), 0);
-        account.addBalance(-amountTaken);
+        account.addBalance(-amountTaken, false);
 
         long balance = account.getBalance();
-        entity.sendMessage(new TextComponentTranslation("Balance: %s", balance));
+        entity.sendMessage(new TextComponentTranslation("You were killed, your balance is now: %s", balance));
 
         Account killerAccount = Account.get((EntityPlayer) killer);
-        killerAccount.addBalance(amountTaken);
+        killerAccount.addBalance(amountTaken, false);
         long balance2 = killerAccount.getBalance();
-        killer.sendMessage(new TextComponentTranslation("Balance: %s", balance2));
+        killer.sendMessage(new TextComponentTranslation("You just killed someone, your balance is now: %s", balance2));
     }
 }

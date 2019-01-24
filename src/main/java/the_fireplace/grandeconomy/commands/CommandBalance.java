@@ -27,15 +27,13 @@ public class CommandBalance extends CommandBase {
     @Override
     public void execute(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nullable String[] args) throws CommandException {
         if (sender instanceof EntityPlayer) {
-            //noinspection RedundantArrayCreation
             Account account = Account.get((EntityPlayer) sender);
             account.update();
             long balance = account.getBalance();
             notifyCommandListener(sender, this, "Balance: %s", balance);
             return;
         }
-        //noinspection RedundantArrayCreation
-        throw new WrongUsageException("/balance", new Object[0]);
+        throw new WrongUsageException("/balance");
     }
 
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {

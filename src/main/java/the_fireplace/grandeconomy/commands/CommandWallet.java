@@ -46,27 +46,26 @@ public class CommandWallet extends CommandBase {
             }
             long amount = parseLong(args[2]);
             if ("set".equals(args[0])) {
-                account.setBalance(amount);
+                account.setBalance(amount, false);
                 sender.sendMessage((new TextComponentTranslation("%s balance set to %s",
                         entityplayer.getName(), account.getBalance())));
                 return;
             }
             if ("give".equals(args[0])) {
-                account.addBalance(amount);
+                account.addBalance(amount, false);
                 sender.sendMessage((new TextComponentTranslation("%s added to %s balance",
                         amount, entityplayer.getName())));
                 return;
             }
             if ("take".equals(args[0])) {
-                account.addBalance(-amount);
+                account.addBalance(-amount, false);
                 sender.sendMessage((new TextComponentTranslation("%s taken from %s balance",
                         amount, entityplayer.getName())));
                 return;
             }
             entityplayer.sendMessage(new TextComponentTranslation("Balance: %s", account.getBalance()));
         }
-        //noinspection RedundantArrayCreation
-        throw new WrongUsageException("/wallet <give|take|set|balance> <player> <amount>", new Object[0]);
+        throw new WrongUsageException("/wallet <give|take|set|balance> <player> <amount>");
     }
 
     @Override
@@ -82,6 +81,7 @@ public class CommandWallet extends CommandBase {
         return Collections.emptyList();
     }
 
+    @Override
     public boolean isUsernameIndex(String[] args, int index) {
         return index == 1;
     }
