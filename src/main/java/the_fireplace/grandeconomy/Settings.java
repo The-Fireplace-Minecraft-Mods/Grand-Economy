@@ -1,9 +1,6 @@
 package the_fireplace.grandeconomy;
 
-import net.minecraftforge.common.config.Configuration;
-
 public class Settings {
-    public Configuration config;
     private String currencyNameSingular;
     private String currencyNameMultiple;
     private long maxLoginDelta;
