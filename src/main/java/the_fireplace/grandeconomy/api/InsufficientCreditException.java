@@ -1,15 +1,17 @@
 package the_fireplace.grandeconomy.api;
 
 import net.minecraft.command.CommandException;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import the_fireplace.grandeconomy.TextStyles;
 
 public class InsufficientCreditException extends CommandException {
 
     public InsufficientCreditException() {
-        //noinspection RedundantArrayCreation
-        this("You don't have money you want to pay :(.", new Object[0]);
+        this(new TextComponentString("You don't have enough money to do that.").setStyle(TextStyles.RED));
     }
 
-    private InsufficientCreditException(String message, Object... objects) {
-        super(message, objects);
+    private InsufficientCreditException(ITextComponent message) {
+        super(message);
     }
 }

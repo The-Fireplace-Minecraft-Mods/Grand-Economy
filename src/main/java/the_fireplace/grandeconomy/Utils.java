@@ -10,7 +10,7 @@ public class Utils {
     }
 
     private static long timeToDays(long time) {
-        long day = 1000 * 60 * GrandEconomy.settings.getDayLength();
+        long day = 1000 * 60 * 24 * 60;
         return time / day;
     }
 }

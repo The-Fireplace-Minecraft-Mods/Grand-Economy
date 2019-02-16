@@ -2,6 +2,7 @@ package the_fireplace.grandeconomy.economy;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import the_fireplace.grandeconomy.Config;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.Utils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +30,7 @@ public class Account {
 
     private Account(UUID uuid) {
         this.uuid = uuid;
-        this.balance = GrandEconomy.settings.getStartBalance();
+        this.balance = Config.startBalance;
         long now = Utils.getCurrentDay();
         this.lastLogin = now;
         this.lastCountActivity = now;
@@ -77,21 +78,12 @@ public class Account {
 
         if (activityDeltaDays == 0) return false;
 
-        if (GrandEconomy.settings.isStampedMoney()) {
-            if (activityDeltaDays <= GrandEconomy.settings.getResetLoginDelta()) {
-                for (int i = 0; i < activityDeltaDays; i++)
-                    this.balance -= Math.ceil((double) (this.balance * GrandEconomy.settings.getStampedMoneyPercent()) / 100);
-            }
-        }
-        if (GrandEconomy.settings.isBasicIncome() && getPlayerMP() != null) {
+        if (Config.basicIncome && getPlayerMP() != null) {
             long loginDeltaDays = (now - this.lastLogin);
-            if (loginDeltaDays > GrandEconomy.settings.getMaxLoginDelta())
-                loginDeltaDays = GrandEconomy.settings.getMaxLoginDelta();
+            if (loginDeltaDays > Config.maxBasicIncomeDays)
+                loginDeltaDays = Config.maxBasicIncomeDays;
             this.lastLogin = now;
-            this.balance += loginDeltaDays * GrandEconomy.settings.getBasicIncomeAmount();
-        }
-        if (activityDeltaDays > GrandEconomy.settings.getResetLoginDelta() && GrandEconomy.settings.getResetLoginDelta() != 0) {
-            this.balance = GrandEconomy.settings.getStartBalance();
+            this.balance += loginDeltaDays * Config.basicIncomeAmount;
         }
         return activityDeltaDays > 0;
     }
@@ -154,7 +146,6 @@ public class Account {
         setBalance(balance + v, showMsg);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Nullable
     private EntityPlayerMP getPlayerMP() {
         return GrandEconomy.minecraftServer.getPlayerList().getPlayerByUUID(uuid);

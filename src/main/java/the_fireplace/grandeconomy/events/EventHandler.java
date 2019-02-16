@@ -1,5 +1,8 @@
 package the_fireplace.grandeconomy.events;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import the_fireplace.grandeconomy.Config;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.Utils;
 import the_fireplace.grandeconomy.economy.Account;
@@ -12,12 +15,11 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.IOException;
 
-@Mod.EventBusSubscriber(modid = GrandEconomy.MODID)
+@Mod.EventBusSubscriber(modid = GrandEconomy.MODID, value = Dist.DEDICATED_SERVER)
 public class EventHandler {
     private static long lastTickEvent = 0;
 
@@ -59,7 +61,7 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
-        int moneyDropValue = GrandEconomy.settings.getPvpMoneyDrop();
+        int moneyDropValue = Config.pvpMoneyDrop;
         if (moneyDropValue == 0) return;
         Entity entity = event.getEntity();
         if (!(entity instanceof EntityPlayer) || entity.world.isRemote)
@@ -72,8 +74,8 @@ public class EventHandler {
         if (account.getBalance() <= 0)
             return;
         long amountTaken = (moneyDropValue > 0) ?
-                (account.getBalance() * GrandEconomy.settings.getPvpMoneyDrop()) / 100 :
-                Math.max(Math.min(account.getBalance(), -GrandEconomy.settings.getPvpMoneyDrop()), 0);
+                (account.getBalance() * Config.pvpMoneyDrop) / 100 :
+                Math.max(Math.min(account.getBalance(), -Config.pvpMoneyDrop), 0);
         account.addBalance(-amountTaken, false);
 
         long balance = account.getBalance();

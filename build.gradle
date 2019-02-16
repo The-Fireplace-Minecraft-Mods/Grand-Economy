@@ -17,13 +17,13 @@ buildscript {
     }
 }
 
-plugins {
+/*plugins {
     id "com.matthewprenger.cursegradle" version "1.1.0"
-}
+}*/
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'net.cazzar.gradle.modsio'
 
-version = "1.0.0"
+version = "1.1.0"
 group = "the_fireplace.grandeconomy"
 archivesBaseName = "GrandEconomy-1.13.2"
 
@@ -42,7 +42,7 @@ minecraft {
             // recommended logging data for a userdev environment
             properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             // recommended logging level for the console
-            properties 'forge.logging.console.level': 'debug'
+            properties 'forge.logging.console.level': 'info'
             workingDirectory project.file('run').canonicalPath
             source sourceSets.main
         }
@@ -50,7 +50,7 @@ minecraft {
             // recommended logging data for a userdev environment
             properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             // recommended logging level for the console
-            properties 'forge.logging.console.level': 'debug'
+            properties 'forge.logging.console.level': 'info'
             workingDirectory project.file('run').canonicalPath
             source sourceSets.main
         }
@@ -91,7 +91,7 @@ jar {
     }
 }*/
 
-task showVersion {
+/*task showVersion {
     description "Displays the current version"
     group "help"
     
@@ -107,7 +107,7 @@ task showVersion {
     }
     
     outputs.upToDateWhen { false }
-}
+}*/
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
@@ -120,7 +120,7 @@ artifacts {
     //archives sourceJar
 }
 
-curseforge {
+/*curseforge {
   apiKey = project.hasProperty("curseForgeApiKey")? project.curseForgeApiKey : "empty"
   project {
     id = '312141'
@@ -134,13 +134,13 @@ curseforge {
     /*addArtifact(sourceJar) {
         displayName = sourceJar.archiveName.replace(".jar", "")
         changelog = "*This is a file for mod developers. If you don't know what to do with it, don't use it!*"
-    }*/
+    }*//*
     addArtifact(deobfJar) {
         displayName = deobfJar.archiveName.replace(".jar", "")
         changelog = "*This is a file for mod developers. If you don't know what to do with it, don't use it!*"
     }
   }
-}
+}*/
 
 modsIO {
     key = project.hasProperty("modsioApiKey")? project.modsioApiKey : "empty"
