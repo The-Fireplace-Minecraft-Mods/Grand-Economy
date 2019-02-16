@@ -2,6 +2,7 @@ package the_fireplace.grandeconomy;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
@@ -30,6 +31,7 @@ public class GrandEconomy {
 
     public GrandEconomy() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_SPEC);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
@@ -40,11 +42,6 @@ public class GrandEconomy {
 
     @SubscribeEvent
     public void onServerStart(FMLServerStartingEvent event) {
-        LOGGER.trace("Server Starting!!!!!!");
-        LOGGER.debug("Hello?");
-        LOGGER.info("Hello???");
-        LOGGER.warn("Hey, is this thing on?");
-        LOGGER.error("Ok, fine, I give up.");
         Account.clear();
 
         minecraftServer = event.getServer();
