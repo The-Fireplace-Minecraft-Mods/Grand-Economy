@@ -2,12 +2,10 @@ package the_fireplace.grandeconomy;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.ModLifecycleEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.economy.Account;
@@ -28,18 +26,25 @@ public class GrandEconomy {
 
     public static MinecraftServer minecraftServer;
 
-    public static Logger logger = LogManager.getLogger(MODID);
+    public static final Logger LOGGER = LogManager.getLogger(MODID);
 
     public GrandEconomy() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_SPEC);
     }
 
+    @SubscribeEvent
     public void serverConfig(ModConfig.ModConfigEvent event) {
         if (event.getConfig().getType() == ModConfig.Type.SERVER)
             Config.load();
     }
 
+    @SubscribeEvent
     public void onServerStart(FMLServerStartingEvent event) {
+        LOGGER.trace("Server Starting!!!!!!");
+        LOGGER.debug("Hello?");
+        LOGGER.info("Hello???");
+        LOGGER.warn("Hey, is this thing on?");
+        LOGGER.error("Ok, fine, I give up.");
         Account.clear();
 
         minecraftServer = event.getServer();

@@ -11,7 +11,7 @@ public class GrandEconomyApi {
     public static long getBalance(UUID uuid) {
         Account account = Account.get(uuid);
         if (account == null){
-            GrandEconomy.logger.warn("Account for "+uuid+" was null");
+            GrandEconomy.LOGGER.warn("Account for "+uuid+" was null");
             return 0;
         }
         return account.getBalance();
@@ -20,7 +20,7 @@ public class GrandEconomyApi {
     public static void addToBalance(UUID uuid, long amount, boolean showMsg) {
         Account account = Account.get(uuid);
         if(account == null) {
-            GrandEconomy.logger.warn("Account for "+uuid+" was null");
+            GrandEconomy.LOGGER.warn("Account for "+uuid+" was null");
             return;
         }
         account.addBalance(amount, showMsg);
@@ -29,7 +29,7 @@ public class GrandEconomyApi {
     public static boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
         Account account = Account.get(uuid);
         if (account == null){
-            GrandEconomy.logger.warn("Account for "+uuid+" was null");
+            GrandEconomy.LOGGER.warn("Account for "+uuid+" was null");
             return false;
         }
         if (account.getBalance() < amount)
