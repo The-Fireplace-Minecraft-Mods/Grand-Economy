@@ -1,1 +1,1 @@
-Update to 1.13.2
+Fixed config error

@@ -23,7 +23,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'net.cazzar.gradle.modsio'
 
-version = "1.1.0"
+version = "1.1.1"
 group = "the_fireplace.grandeconomy"
 archivesBaseName = "GrandEconomy-1.13.2"
 
@@ -33,14 +33,14 @@ allprojects {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20180921-1.13'
+    mappings channel: 'stable', version: '43-1.13'
     
     runs {
         client = {
             // recommended logging data for a userdev environment
             properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             // recommended logging level for the console
-            properties 'forge.logging.console.level': 'info'
+            properties 'forge.logging.console.level': 'debug'
             workingDirectory project.file('run').canonicalPath
             source sourceSets.main
         }
@@ -48,17 +48,15 @@ minecraft {
             // recommended logging data for a userdev environment
             properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
             // recommended logging level for the console
-            properties 'forge.logging.console.level': 'info'
+            properties 'forge.logging.console.level': 'debug'
             workingDirectory project.file('run').canonicalPath
             source sourceSets.main
         }
     }
-
-	//clientRunArgs += "--uuid=0b1ec5ad-cb2a-43b7-995d-889320eb2e5b --username=The_Fireplace"
 }
 
 dependencies {
-	minecraft 'net.minecraftforge:forge:1.13.2-25.0.10'
+	minecraft 'net.minecraftforge:forge:1.13.2-25.0.13'
 }
 
 jar {
