@@ -27,10 +27,10 @@ public class GeCommands {
         }));
 
         commandDispatcher.register(Commands.literal("pay").requires((iCommandSender) -> iCommandSender.getEntity() instanceof EntityPlayer)
-                        .then(Commands.argument("player", EntityArgument.singlePlayer())
+                        .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("amount", IntegerArgumentType.integer(0)))
                         .executes((command) -> {
-                            EntityPlayerMP entityplayer = EntityArgument.getOnePlayer(command, "player");
+                            EntityPlayerMP entityplayer = EntityArgument.getPlayer(command, "player");
                             Account account = Account.get(entityplayer);
                             account.update();
                             long amount = command.getArgument("amount", Integer.class);
@@ -53,38 +53,38 @@ public class GeCommands {
             long balance = account.getBalance();
             command.getSource().sendFeedback(new TextComponentTranslation("Balance: %s", balance), false);
             return 1;
-        }).then(Commands.argument("target", EntityArgument.singlePlayer()).executes((command) -> {
-            EntityPlayer target = EntityArgument.getOnePlayer(command, "target");
+        }).then(Commands.argument("target", EntityArgument.player()).executes((command) -> {
+            EntityPlayer target = EntityArgument.getPlayer(command, "target");
             Account pAccount = Account.get(target);
             pAccount.update();
             command.getSource().sendFeedback(new TextComponentTranslation("%s balance: %s", target.getName(), pAccount.getBalance()), false);
             return 1;
         })));
         walletCommand.then(Commands.literal("set")
-                .then(Commands.argument("target", EntityArgument.singlePlayer())
+                .then(Commands.argument("target", EntityArgument.player())
                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                 .executes((command) -> {
-            EntityPlayer target = EntityArgument.getOnePlayer(command, "target");
+            EntityPlayer target = EntityArgument.getPlayer(command, "target");
             Account pAccount = Account.get(target);
             pAccount.setBalance(IntegerArgumentType.getInteger(command, "amount"), false);
             command.getSource().sendFeedback(new TextComponentTranslation("%s balance set to %s", target.getName(), pAccount.getBalance()), false);
             return 1;
         }))));
         walletCommand.then(Commands.literal("give")
-                .then(Commands.argument("target", EntityArgument.singlePlayer())
+                .then(Commands.argument("target", EntityArgument.player())
                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                 .executes((command) -> {
-                    EntityPlayer target = EntityArgument.getOnePlayer(command, "target");
+                    EntityPlayer target = EntityArgument.getPlayer(command, "target");
                     Account pAccount = Account.get(target);
                     pAccount.addBalance(IntegerArgumentType.getInteger(command, "amount"), false);
                     command.getSource().sendFeedback(new TextComponentTranslation("%s balance is now %s", target.getName(), pAccount.getBalance()), false);
                     return 1;
                 }))));
         walletCommand.then(Commands.literal("take")
-                .then(Commands.argument("target", EntityArgument.singlePlayer())
+                .then(Commands.argument("target", EntityArgument.player())
                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                 .executes((command) -> {
-                    EntityPlayer target = EntityArgument.getOnePlayer(command, "target");
+                    EntityPlayer target = EntityArgument.getPlayer(command, "target");
                     Account pAccount = Account.get(target);
                     pAccount.addBalance(-IntegerArgumentType.getInteger(command, "amount"), false);
                     command.getSource().sendFeedback(new TextComponentTranslation("%s balance is now %s", target.getName(), pAccount.getBalance()), false);

@@ -1,6 +1,5 @@
 package the_fireplace.grandeconomy.events;
 
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import the_fireplace.grandeconomy.Config;
 import the_fireplace.grandeconomy.GrandEconomy;
@@ -19,17 +18,19 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.IOException;
 
-@Mod.EventBusSubscriber(modid = GrandEconomy.MODID, value = Dist.DEDICATED_SERVER)
+@Mod.EventBusSubscriber(modid = GrandEconomy.MODID)
 public class EventHandler {
     private static long lastTickEvent = 0;
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof EntityPlayer && !event.getEntity().world.isRemote) {
+            GrandEconomy.LOGGER.info("Player joined the world!");
             Account account = Account.get((EntityPlayer) event.getEntity());
             account.update();
             long balance = account.getBalance();
-            event.getEntity().sendMessage(new TextComponentTranslation("Balance: %s", balance));
+            if(Config.showBalanceOnJoin)
+                event.getEntity().sendMessage(new TextComponentTranslation("Balance: %s", balance));
         }
     }
 
@@ -61,29 +62,31 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
-        int moneyDropValue = Config.pvpMoneyDrop;
-        if (moneyDropValue == 0) return;
-        Entity entity = event.getEntity();
-        if (!(entity instanceof EntityPlayer) || entity.world.isRemote)
-            return;
-        Entity killer = event.getSource().getTrueSource();
-        if (!(killer instanceof EntityPlayerMP))
-            return;
+        if(!event.getEntity().world.isRemote) {
+            int moneyDropValue = Config.pvpMoneyDrop;
+            if (moneyDropValue == 0) return;
+            Entity entity = event.getEntity();
+            if (!(entity instanceof EntityPlayer) || entity.world.isRemote)
+                return;
+            Entity killer = event.getSource().getTrueSource();
+            if (!(killer instanceof EntityPlayerMP))
+                return;
 
-        Account account = Account.get((EntityPlayer) entity);
-        if (account.getBalance() <= 0)
-            return;
-        long amountTaken = (moneyDropValue > 0) ?
-                (account.getBalance() * Config.pvpMoneyDrop) / 100 :
-                Math.max(Math.min(account.getBalance(), -Config.pvpMoneyDrop), 0);
-        account.addBalance(-amountTaken, false);
+            Account account = Account.get((EntityPlayer) entity);
+            if (account.getBalance() <= 0)
+                return;
+            long amountTaken = (moneyDropValue > 0) ?
+                    (account.getBalance() * Config.pvpMoneyDrop) / 100 :
+                    Math.max(Math.min(account.getBalance(), -Config.pvpMoneyDrop), 0);
+            account.addBalance(-amountTaken, false);
 
-        long balance = account.getBalance();
-        entity.sendMessage(new TextComponentTranslation("You were killed, your balance is now: %s", balance));
+            long balance = account.getBalance();
+            entity.sendMessage(new TextComponentTranslation("You were killed, your balance is now: %s", balance));
 
-        Account killerAccount = Account.get((EntityPlayer) killer);
-        killerAccount.addBalance(amountTaken, false);
-        long balance2 = killerAccount.getBalance();
-        killer.sendMessage(new TextComponentTranslation("You just killed someone, your balance is now: %s", balance2));
+            Account killerAccount = Account.get((EntityPlayer) killer);
+            killerAccount.addBalance(amountTaken, false);
+            long balance2 = killerAccount.getBalance();
+            killer.sendMessage(new TextComponentTranslation("You just killed someone, your balance is now: %s", balance2));
+        }
     }
 }
