@@ -1,0 +1,14 @@
+modLoader="javafml"
+loaderVersion="[24,)"
+issueTrackerURL="https://github.com/The-Fireplace-Minecraft-Mods/Grand-Economy/issues"
+displayURL="https://minecraft.curseforge.com/projects/grand-economy"
+credits="Thanks to kamildanak for making EnderPay, which this is forked from."
+authors="The_Fireplace"
+
+[[mods]] #mandatory
+modId="grandeconomy"
+version="${file.jarVersion}"
+displayName="Grand Economy"
+description='''
+Adds Economy to your Forge server.
+'''
