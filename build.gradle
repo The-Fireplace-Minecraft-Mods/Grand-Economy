@@ -17,9 +17,9 @@ buildscript {
     }
 }
 
-/*plugins {
-    id "com.matthewprenger.cursegradle" version "1.1.0"
-}*/
+plugins {
+    id "com.matthewprenger.cursegradle" version "1.1.2"
+}
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'net.cazzar.gradle.modsio'
 
@@ -33,8 +33,6 @@ allprojects {
 }
 
 minecraft {
-    /*replace '${version}', project.version
-    replace '${name}', project.name*/
     mappings channel: 'snapshot', version: '20180921-1.13'
     
     runs {
@@ -55,8 +53,8 @@ minecraft {
             source sourceSets.main
         }
     }
-	
-	//clientRunArgs += "--uuid=0b1ec5ad-cb2a-43b7-995d-889320eb2e5b --username=The_Fireplace"//TODO check if this works still or if it should be moved to run args in runs/client
+
+	//clientRunArgs += "--uuid=0b1ec5ad-cb2a-43b7-995d-889320eb2e5b --username=The_Fireplace"
 }
 
 dependencies {
@@ -69,45 +67,11 @@ jar {
                     "Specification-Vendor": "The_Fireplace",
                     "Specification-Version": "24.0", // We are version 1 of the modlauncher specification
                     "Implementation-Title": "Grand Economy",
-                    "Implementation-Version": project.version,
+                    "Implementation-Version": "${version}",
                     "Implementation-Vendor" : "The_Fireplace",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
 }
-
-/*processResources
-{
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}*/
-
-/*task showVersion {
-    description "Displays the current version"
-    group "help"
-    
-    compileJava.dependsOn showVersion
-    //deobfCompileDummyTask.dependsOn showVersion
-    //extractMcpMappings.dependsOn showVersion
-  
-    doLast {
-        def versionFile = new File(buildDir, '.version')
-    
-        versionFile.getParentFile().mkdirs()
-        versionFile.text = version
-    }
-    
-    outputs.upToDateWhen { false }
-}*/
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
@@ -117,10 +81,9 @@ task deobfJar(type: Jar) {
 artifacts {
     archives jar
     archives deobfJar
-    //archives sourceJar
 }
 
-/*curseforge {
+curseforge {
   apiKey = project.hasProperty("curseForgeApiKey")? project.curseForgeApiKey : "empty"
   project {
     id = '312141'
@@ -131,16 +94,12 @@ artifacts {
     mainArtifact(jar) {
         displayName = jar.archiveName.replace(".jar", "")
     }
-    /*addArtifact(sourceJar) {
-        displayName = sourceJar.archiveName.replace(".jar", "")
-        changelog = "*This is a file for mod developers. If you don't know what to do with it, don't use it!*"
-    }*//*
     addArtifact(deobfJar) {
         displayName = deobfJar.archiveName.replace(".jar", "")
         changelog = "*This is a file for mod developers. If you don't know what to do with it, don't use it!*"
     }
   }
-}*/
+}
 
 modsIO {
     key = project.hasProperty("modsioApiKey")? project.modsioApiKey : "empty"

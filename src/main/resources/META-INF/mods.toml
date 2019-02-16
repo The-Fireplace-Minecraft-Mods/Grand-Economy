@@ -12,3 +12,16 @@ displayName="Grand Economy"
 description='''
 Adds Economy to your Forge server.
 '''
+
+[[dependencies.grandeconomy]]
+    modId="forge"
+    mandatory=true
+    versionRange="[25,)"
+    ordering="NONE"
+    side="SERVER"
+[[dependencies.grandeconomy]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13.2,1.14)"
+    ordering="NONE"
+    side="SERVER"
