@@ -33,7 +33,7 @@ public class Settings {
                 "Each day give set amount of credits to each player to stimulate economy");
         basicIncomeAmount = config.getInt("amount", "basicIncome", 50, 0, 10000,
                 "Amount of credits to give each player each day");
-        stampedMoney = config.getBoolean("enabled", "stampedMoney", true,
+        stampedMoney = config.getBoolean("enabled", "stampedMoney", false,
                 "Take % of players money each day to stimulate economy");
         stampedMoneyPercent = config.getInt("percent", "stampedMoney", 1, 0, 100,
                 "What percentage of players money should be taken each day");

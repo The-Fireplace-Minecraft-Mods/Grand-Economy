@@ -1,1 +1,2 @@
-Initial Release
+Tweaks to make non-player account handling work better
+Tweaked config defaults

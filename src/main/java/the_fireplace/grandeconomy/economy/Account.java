@@ -2,6 +2,7 @@ package the_fireplace.grandeconomy.economy;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.Utils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +27,7 @@ public class Account {
     private long balance;
     private long lastLogin;
     private long lastCountActivity;
+    private boolean isPlayer = false;
 
     private Account(UUID uuid) {
         this.uuid = uuid;
@@ -34,6 +36,8 @@ public class Account {
         this.lastLogin = now;
         this.lastCountActivity = now;
         this.changed = true;
+        if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().getProfileByUUID(uuid) != null)
+            this.isPlayer = true;
     }
 
     public static Account get(EntityPlayer player) {
@@ -75,7 +79,7 @@ public class Account {
         long activityDeltaDays = now - this.lastCountActivity;
         this.lastCountActivity = now;
 
-        if (activityDeltaDays == 0) return false;
+        if (!isPlayer || activityDeltaDays == 0) return false;
 
         if (GrandEconomy.settings.isStampedMoney()) {
             if (activityDeltaDays <= GrandEconomy.settings.getResetLoginDelta()) {
@@ -118,6 +122,12 @@ public class Account {
             balance = jsonObject.get("balance").getAsLong();
             lastLogin = jsonObject.get("lastLogin").getAsLong();
             lastCountActivity = jsonObject.get("lastCountActivity").getAsLong();
+            if(jsonObject.has("isPlayer"))
+                isPlayer = jsonObject.get("isPlayer").getAsBoolean();
+            else if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().getProfileByUUID(uuid) != null) {
+                this.isPlayer = true;
+                this.changed = true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -132,6 +142,7 @@ public class Account {
         obj.addProperty("balance", balance);
         obj.addProperty("lastLogin", lastLogin);
         obj.addProperty("lastCountActivity", lastCountActivity);
+        obj.addProperty("isPlayer", isPlayer);
         try (FileWriter file = new FileWriter(location)) {
             String str = obj.toString();
             file.write(str);
@@ -144,8 +155,10 @@ public class Account {
     }
 
     public void setBalance(long v, boolean showMsg) {
-        balance = v;
-        changed = true;
+        if(balance != v) {
+            balance = v;
+            changed = true;
+        }
         if(showMsg)
             Objects.requireNonNull(getPlayerMP()).sendMessage(new TextComponentTranslation("Your balance is now: %s", balance));
     }
