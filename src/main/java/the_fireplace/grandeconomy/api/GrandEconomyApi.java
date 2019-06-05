@@ -10,7 +10,7 @@ public class GrandEconomyApi {
     public static long getBalance(UUID uuid) {
         Account account = Account.get(uuid);
         if (account == null){
-            //TODO: Log error
+            GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
             return 0;
         }
         return account.getBalance();
@@ -19,7 +19,7 @@ public class GrandEconomyApi {
     public static void addToBalance(UUID uuid, long amount, boolean showMsg) {
         Account account = Account.get(uuid);
         if(account == null) {
-            //TODO: Log error
+            GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
             return;
         }
         account.addBalance(amount, showMsg);
@@ -28,7 +28,7 @@ public class GrandEconomyApi {
     public static boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
         Account account = Account.get(uuid);
         if (account == null){
-            //TODO: Log error
+            GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
             return false;
         }
         if (account.getBalance() < amount)
@@ -39,7 +39,7 @@ public class GrandEconomyApi {
 
     public static String getCurrencyName(long amount) {
         if (amount == 1)
-            return GrandEconomy.settings.getCurrencyNameSingular();
-        return GrandEconomy.settings.getCurrencyNameMultiple();
+            return GrandEconomy.cfg.currencyNameSingular;
+        return GrandEconomy.cfg.currencyNameMultiple;
     }
 }

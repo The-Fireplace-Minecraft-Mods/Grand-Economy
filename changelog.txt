@@ -1,2 +1,2 @@
-Tweaks to make non-player account handling work better
-Tweaked config defaults
+Updated the config to match the 1.13.2 version
+New command alias: "/wallet add" now works like "/wallet give"

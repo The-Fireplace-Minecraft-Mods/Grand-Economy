@@ -27,7 +27,8 @@ public class EventHandler {
             Account account = Account.get((EntityPlayer) event.getEntity());
             account.update();
             long balance = account.getBalance();
-            event.getEntity().sendMessage(new TextComponentTranslation("Balance: %s", balance));
+            if(GrandEconomy.cfg.showBalanceOnJoin)
+                event.getEntity().sendMessage(new TextComponentTranslation("Balance: %s", balance));
         }
     }
 
@@ -59,29 +60,31 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
-        int moneyDropValue = GrandEconomy.settings.getPvpMoneyDrop();
-        if (moneyDropValue == 0) return;
-        Entity entity = event.getEntity();
-        if (!(entity instanceof EntityPlayer) || entity.world.isRemote)
-            return;
-        Entity killer = event.getSource().getTrueSource();
-        if (!(killer instanceof EntityPlayerMP))
-            return;
+        if(!event.getEntity().world.isRemote) {
+            int moneyDropValue = GrandEconomy.cfg.pvpMoneyTransfer;
+            if (moneyDropValue == 0) return;
+            Entity entity = event.getEntity();
+            if (!(entity instanceof EntityPlayer) || entity.world.isRemote)
+                return;
+            Entity killer = event.getSource().getTrueSource();
+            if (!(killer instanceof EntityPlayerMP))
+                return;
 
-        Account account = Account.get((EntityPlayer) entity);
-        if (account.getBalance() <= 0)
-            return;
-        long amountTaken = (moneyDropValue > 0) ?
-                (account.getBalance() * GrandEconomy.settings.getPvpMoneyDrop()) / 100 :
-                Math.max(Math.min(account.getBalance(), -GrandEconomy.settings.getPvpMoneyDrop()), 0);
-        account.addBalance(-amountTaken, false);
+            Account account = Account.get((EntityPlayer) entity);
+            if (account.getBalance() <= 0)
+                return;
+            long amountTaken = (moneyDropValue > 0) ?
+                    (account.getBalance() * GrandEconomy.cfg.pvpMoneyTransfer) / 100 :
+                    Math.max(Math.min(account.getBalance(), -GrandEconomy.cfg.pvpMoneyTransfer), 0);
+            account.addBalance(-amountTaken, false);
 
-        long balance = account.getBalance();
-        entity.sendMessage(new TextComponentTranslation("You were killed, your balance is now: %s", balance));
+            long balance = account.getBalance();
+            entity.sendMessage(new TextComponentTranslation("You were killed, your balance is now: %s", balance));
 
-        Account killerAccount = Account.get((EntityPlayer) killer);
-        killerAccount.addBalance(amountTaken, false);
-        long balance2 = killerAccount.getBalance();
-        killer.sendMessage(new TextComponentTranslation("You just killed someone, your balance is now: %s", balance2));
+            Account killerAccount = Account.get((EntityPlayer) killer);
+            killerAccount.addBalance(amountTaken, false);
+            long balance2 = killerAccount.getBalance();
+            killer.sendMessage(new TextComponentTranslation("You just killed someone, your balance is now: %s", balance2));
+        }
     }
 }

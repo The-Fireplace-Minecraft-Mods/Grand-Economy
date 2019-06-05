@@ -1,5 +1,8 @@
 package the_fireplace.grandeconomy;
 
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.fml.common.FMLLog;
+import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.commands.CommandBalance;
 import the_fireplace.grandeconomy.commands.CommandPay;
 import the_fireplace.grandeconomy.commands.CommandWallet;
@@ -23,25 +26,14 @@ public class GrandEconomy {
     public static final String MODID = "grandeconomy";
     public static final String MODNAME = "Grand Economy";
     public static final String VERSION = "${version}";
-    @Mod.Instance(MODID)
-    public static GrandEconomy instance;
+
+    public static Logger LOGGER = FMLLog.getLogger();
 
     public static MinecraftServer minecraftServer;
-    public static Settings settings;
-    private static Configuration config;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        config = new Configuration(event.getSuggestedConfigurationFile());
-        config.load();
-
-        settings = new Settings();
-        settings.loadConfig(config);
-    }
-
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        config.save();
+        LOGGER = event.getModLog();
     }
 
     @Mod.EventHandler
@@ -72,5 +64,30 @@ public class GrandEconomy {
         if (!(handler instanceof SaveHandler))
             return null;
         return handler.getWorldDirectory();
+    }
+
+    @Config(modid = MODID)
+    public static class cfg {
+        @Config.Comment("Currency name (Singular)")
+        public static String currencyNameSingular = "gp";
+        @Config.Comment("Currency name (Multiple)")
+        public static String currencyNameMultiple = "gp";
+        @Config.Comment("If enabled, players will be shown a message with their account balance when they join the server")
+        public static boolean showBalanceOnJoin = true;
+        @Config.Comment("What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer")
+        @Config.RangeInt(max=100)
+        public static int pvpMoneyTransfer = 0;
+
+        @Config.Comment("Give each player credits every day they log in")
+        public static boolean basicIncome = true;
+        @Config.Comment("The amount of basic income to be given to a player")
+        @Config.RangeInt(min=0)
+        public static int basicIncomeAmount = 50;
+        @Config.Comment("Amount of currency given to new players when they join the server")
+        @Config.RangeInt(min=0)
+        public static int startBalance = 100;
+        @Config.Comment("The max number of days since last login the player will be paid basic income for")
+        @Config.RangeInt(min=0)
+        public static int maxBasicIncomeDays = 5;
     }
 }

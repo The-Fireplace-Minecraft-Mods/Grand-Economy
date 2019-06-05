@@ -5,8 +5,7 @@ import net.minecraft.command.CommandException;
 public class InsufficientCreditException extends CommandException {
 
     public InsufficientCreditException() {
-        //noinspection RedundantArrayCreation
-        this("You don't have money you want to pay :(.", new Object[0]);
+        this("You don't have enough money to do that.");
     }
 
     private InsufficientCreditException(String message, Object... objects) {

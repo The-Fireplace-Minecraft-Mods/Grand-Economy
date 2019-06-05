@@ -51,7 +51,7 @@ public class CommandWallet extends CommandBase {
                         entityplayer.getName(), account.getBalance())));
                 return;
             }
-            if ("give".equals(args[0])) {
+            if ("give".equals(args[0]) || "add".equals(args[0])) {
                 account.addBalance(amount, false);
                 sender.sendMessage((new TextComponentTranslation("%s added to %s balance",
                         amount, entityplayer.getName())));
@@ -72,8 +72,7 @@ public class CommandWallet extends CommandBase {
     @Nonnull
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
-            //noinspection RedundantArrayCreation
-            return getListOfStringsMatchingLastWord(args, new String[]{"give", "take", "set", "balance"});
+            return getListOfStringsMatchingLastWord(args, "give", "take", "set", "balance", "add");
         }
         if (args.length == 2) {
             return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
