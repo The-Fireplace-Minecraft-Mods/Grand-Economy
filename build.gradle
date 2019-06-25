@@ -43,7 +43,7 @@ minecraft {
 
 dependencies {
     provided 'org.spongepowered:spongeapi:7.1.0'
-    provided group: "com.forgeessentials", name: "forgeessentials", version: "1.4.6-SNAPSHOT", classifier: "dev", changing: true
+    compile group: "com.forgeessentials", name: "forgeessentials", version: "1.4.4-SNAPSHOT", classifier: "dev", changing: true
 }
 
 repositories {
@@ -56,7 +56,6 @@ repositories {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-    //Forge Essentials 2
     maven {
 		name = "sk89q"
 		url = "http://maven.sk89q.com/repo/"
