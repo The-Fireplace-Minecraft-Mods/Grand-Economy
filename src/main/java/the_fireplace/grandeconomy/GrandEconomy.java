@@ -2,22 +2,26 @@ package the_fireplace.grandeconomy;
 
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.commands.CommandBalance;
 import the_fireplace.grandeconomy.commands.CommandPay;
 import the_fireplace.grandeconomy.commands.CommandWallet;
-import the_fireplace.grandeconomy.economy.Account;
+import the_fireplace.grandeconomy.econhandlers.IEconHandler;
+import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
+import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
+import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
+import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 
 import java.io.File;
 
@@ -31,9 +35,33 @@ public class GrandEconomy {
 
     public static MinecraftServer minecraftServer;
 
+    public static IEconHandler economy;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+        switch(cfg.economyBridge) {
+            case "sponge":
+            case "spongeapi":
+            case "spongeforge":
+                economy = new SpongeEconHandler();
+                break;
+            case "forgeessentials":
+            case "fe":
+                economy = new ForgeEssentialsEconHandler();
+                break;
+            case "enderpay":
+            case "ep":
+                economy = new EnderPayEconHandler();
+                break;
+            default:
+                economy = new GrandEconomyEconHandler();
+        }
+        economy.init();
     }
 
     @Mod.EventHandler
@@ -77,6 +105,8 @@ public class GrandEconomy {
         @Config.Comment("What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer")
         @Config.RangeInt(max=100)
         public static int pvpMoneyTransfer = 0;
+        @Config.Comment("Which economy to bridge to, if any. Choices are \"sponge\", \"enderpay\", and \"forgeessentials\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded.")
+        public static String economyBridge = "none";
 
         @Config.Comment("Give each player credits every day they log in")
         public static boolean basicIncome = true;

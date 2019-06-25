@@ -1,6 +1,6 @@
 package the_fireplace.grandeconomy.commands;
 
-import the_fireplace.grandeconomy.economy.Account;
+import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

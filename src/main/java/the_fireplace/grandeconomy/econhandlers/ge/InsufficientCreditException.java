@@ -1,4 +1,4 @@
-package the_fireplace.grandeconomy.api;
+package the_fireplace.grandeconomy.econhandlers.ge;
 
 import net.minecraft.command.CommandException;
 

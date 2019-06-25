@@ -1,8 +1,7 @@
-package the_fireplace.grandeconomy.events;
+package the_fireplace.grandeconomy.econhandlers.ge;
 
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.Utils;
-import the_fireplace.grandeconomy.economy.Account;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -11,18 +10,16 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.IOException;
 
-@Mod.EventBusSubscriber(modid = GrandEconomy.MODID)
 public class EventHandler {
     private static long lastTickEvent = 0;
 
     @SubscribeEvent
-    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof EntityPlayer && !event.getEntity().world.isRemote) {
             Account account = Account.get((EntityPlayer) event.getEntity());
             account.update();
@@ -33,7 +30,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerSaveToFile(PlayerEvent.SaveToFile event) {
+    public void onPlayerSaveToFile(PlayerEvent.SaveToFile event) {
         Account account = Account.get(event.getEntityPlayer());
         try {
             account.writeIfChanged();
@@ -43,7 +40,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onServerTickEvent(TickEvent.ServerTickEvent event) {
+    public void onServerTickEvent(TickEvent.ServerTickEvent event) {
         long now = Utils.getCurrentDay();
         if (lastTickEvent == now)
             return;
@@ -59,7 +56,7 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public static void onLivingDeathEvent(LivingDeathEvent event) {
+    public void onLivingDeathEvent(LivingDeathEvent event) {
         if(!event.getEntity().world.isRemote) {
             int moneyDropValue = GrandEconomy.cfg.pvpMoneyTransfer;
             if (moneyDropValue == 0) return;

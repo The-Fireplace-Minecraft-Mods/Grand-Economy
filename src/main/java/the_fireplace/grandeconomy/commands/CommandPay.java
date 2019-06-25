@@ -1,7 +1,7 @@
 package the_fireplace.grandeconomy.commands;
 
-import the_fireplace.grandeconomy.api.InsufficientCreditException;
-import the_fireplace.grandeconomy.economy.Account;
+import the_fireplace.grandeconomy.econhandlers.ge.InsufficientCreditException;
+import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;

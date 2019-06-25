@@ -1,6 +1,7 @@
 package the_fireplace.grandeconomy.commands;
 
-import the_fireplace.grandeconomy.economy.Account;
+import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -27,13 +28,10 @@ public class CommandBalance extends CommandBase {
     @Override
     public void execute(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nullable String[] args) throws CommandException {
         if (sender instanceof EntityPlayer) {
-            Account account = Account.get((EntityPlayer) sender);
-            account.update();
-            long balance = account.getBalance();
-            notifyCommandListener(sender, this, "Balance: %s", balance);
+            notifyCommandListener(sender, this, "Balance: %s", GrandEconomyApi.getBalance(((EntityPlayer) sender).getUniqueID()));
             return;
         }
-        throw new WrongUsageException("/balance");
+        throw new WrongUsageException("/balance can only be used by players.");
     }
 
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
