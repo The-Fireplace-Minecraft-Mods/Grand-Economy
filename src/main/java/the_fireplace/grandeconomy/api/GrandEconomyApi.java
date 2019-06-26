@@ -14,11 +14,19 @@ public class GrandEconomyApi {
         GrandEconomy.economy.addToBalance(uuid, amount, showMsg);
     }
 
+    public static boolean setBalance(UUID uuid, long amount, boolean showMsg) {
+        return GrandEconomy.economy.setBalance(uuid, amount, showMsg);
+    }
+
     public static boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
         return GrandEconomy.economy.takeFromBalance(uuid, amount, showMsg);
     }
 
     public static String getCurrencyName(long amount) {
         return GrandEconomy.economy.getCurrencyName(amount);
+    }
+
+    public static boolean hasAccount(UUID uuid) {
+        return GrandEconomy.economy.hasAccount(uuid);
     }
 }

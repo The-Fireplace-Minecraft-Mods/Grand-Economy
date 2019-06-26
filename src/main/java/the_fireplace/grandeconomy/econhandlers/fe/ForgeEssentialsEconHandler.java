@@ -23,8 +23,19 @@ public class ForgeEssentialsEconHandler implements IEconHandler {
     }
 
     @Override
+    public boolean setBalance(UUID uuid, long amount, boolean showMsg) {
+        APIRegistry.economy.getWallet(UserIdent.get(uuid)).set(amount);
+        return true;
+    }
+
+    @Override
     public String getCurrencyName(long amount) {
         return APIRegistry.economy.currency(amount);
+    }
+
+    @Override
+    public boolean hasAccount(UUID uuid) {
+        return APIRegistry.economy.getWallet(UserIdent.get(uuid)) != null;
     }
 
     @Override

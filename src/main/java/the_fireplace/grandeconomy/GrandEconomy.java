@@ -37,6 +37,9 @@ public class GrandEconomy {
 
     public static IEconHandler economy;
 
+    @Mod.Instance(MODID)
+    public static GrandEconomy instance;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();

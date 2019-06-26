@@ -42,8 +42,20 @@ public class SpongeEconHandler implements IEconHandler {
     }
 
     @Override
+    public boolean setBalance(UUID uuid, long amount, boolean showMsg) {
+        if(getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent())
+            return getEcon().getOrCreateAccount(uuid).get().setBalance(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.economy)).getResult().equals(ResultType.SUCCESS);
+        return false;
+    }
+
+    @Override
     public String getCurrencyName(long amount) {
         return amount == 1 ? getEcon().getDefaultCurrency().getDisplayName().toPlain() : getEcon().getDefaultCurrency().getPluralDisplayName().toPlain();
+    }
+
+    @Override
+    public boolean hasAccount(UUID uuid) {
+        return getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent();
     }
 
     @Override
