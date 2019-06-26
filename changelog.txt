@@ -1,2 +1,2 @@
-Updated the config to match the 1.13.2 version
-New command alias: "/wallet add" now works like "/wallet give"
+Grand Economy now acts as a bridge to other economies, if the config option is set
+When using Grand Economy currency, Grand Economy is now registered as an economy in Sponge
