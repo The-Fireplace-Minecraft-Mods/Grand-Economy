@@ -1,11 +1,11 @@
 package the_fireplace.grandeconomy.commands;
 
-import the_fireplace.grandeconomy.econhandlers.ge.InsufficientCreditException;
-import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import the_fireplace.grandeconomy.econhandlers.ge.Account;
+import the_fireplace.grandeconomy.econhandlers.ge.InsufficientCreditException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,6 +60,6 @@ public class CommandPay extends CommandBase {
     }
 
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
+        return sender instanceof EntityPlayerMP;
     }
 }

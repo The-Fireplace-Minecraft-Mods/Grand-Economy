@@ -2,11 +2,11 @@ package the_fireplace.grandeconomy.econhandlers.ge;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import the_fireplace.grandeconomy.GrandEconomy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.Utils;
 
 import javax.annotation.Nullable;

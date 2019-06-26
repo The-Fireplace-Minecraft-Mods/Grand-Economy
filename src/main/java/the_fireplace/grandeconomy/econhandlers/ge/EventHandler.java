@@ -1,7 +1,5 @@
 package the_fireplace.grandeconomy.econhandlers.ge;
 
-import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.Utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,6 +10,8 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import the_fireplace.grandeconomy.GrandEconomy;
+import the_fireplace.grandeconomy.Utils;
 
 import java.io.IOException;
 

@@ -1,6 +1,5 @@
 package the_fireplace.grandeconomy.commands;
 
-import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -9,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import the_fireplace.grandeconomy.econhandlers.ge.Account;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,6 +37,9 @@ public class CommandWallet extends CommandBase {
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         if (args.length > 1) {
             EntityPlayerMP entityplayer = getPlayer(server, sender, args[1]);
+            //noinspection ConstantConditions
+            if(entityplayer == null)
+                throw new WrongUsageException(getUsage(sender));
             Account account = Account.get(entityplayer);
             account.update();
             if ("balance".equals(args[0])) {
@@ -65,7 +68,7 @@ public class CommandWallet extends CommandBase {
             }
             entityplayer.sendMessage(new TextComponentTranslation("Balance: %s", account.getBalance()));
         }
-        throw new WrongUsageException("/wallet <give|take|set|balance> <player> <amount>");
+        throw new WrongUsageException(getUsage(sender));
     }
 
     @Override

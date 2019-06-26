@@ -1,2 +1,3 @@
 Grand Economy now acts as a bridge to other economies, if the config option is set
 When using Grand Economy currency, Grand Economy is now registered as an economy in Sponge
+It is now possible for server owners to specify items that can be converted into currency using the new /convert command.

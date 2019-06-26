@@ -1,26 +1,28 @@
 package the_fireplace.grandeconomy;
 
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import org.apache.logging.log4j.Logger;
-import the_fireplace.grandeconomy.commands.CommandBalance;
-import the_fireplace.grandeconomy.commands.CommandPay;
-import the_fireplace.grandeconomy.commands.CommandWallet;
-import the_fireplace.grandeconomy.econhandlers.IEconHandler;
-import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
-import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
-import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
-import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import org.apache.logging.log4j.Logger;
+import the_fireplace.grandeconomy.commands.CommandBalance;
+import the_fireplace.grandeconomy.commands.CommandConvert;
+import the_fireplace.grandeconomy.commands.CommandPay;
+import the_fireplace.grandeconomy.commands.CommandWallet;
+import the_fireplace.grandeconomy.earnings.ConversionItems;
+import the_fireplace.grandeconomy.econhandlers.IEconHandler;
+import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
+import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
+import the_fireplace.grandeconomy.econhandlers.ge.Account;
+import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 
 import java.io.File;
@@ -40,9 +42,13 @@ public class GrandEconomy {
     @Mod.Instance(MODID)
     public static GrandEconomy instance;
 
+    public static File configDir;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
+        configDir = new File(event.getModConfigurationDirectory(), "grandeconomy-extra");
+        ConversionItems.hasValue(null, 0);
     }
 
     @Mod.EventHandler
@@ -88,6 +94,7 @@ public class GrandEconomy {
         manager.registerCommand(new CommandWallet());
         manager.registerCommand(new CommandBalance());
         manager.registerCommand(new CommandPay());
+        manager.registerCommand(new CommandConvert());
     }
 
     private File getWorldDir(World world) {
