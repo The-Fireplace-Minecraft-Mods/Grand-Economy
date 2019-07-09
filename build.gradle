@@ -17,13 +17,12 @@ buildscript {
 }
 
 plugins {
-	id 'org.spongepowered.plugin' version '0.9.0'
     id "com.matthewprenger.cursegradle" version "1.2.0"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'net.cazzar.gradle.modsio'
 
-version = "1.2.0"
+version = "1.2.0a2"
 group = "the_fireplace.grandeconomy"
 archivesBaseName = "GrandEconomy-1.12.2"
 
@@ -33,7 +32,7 @@ allprojects {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2768"
+    version = "1.12.2-14.23.5.2838"
     runDir = "run"
     replace '${version}', project.version
     mappings = "stable_39"
@@ -43,7 +42,7 @@ minecraft {
 
 dependencies {
     provided 'org.spongepowered:spongeapi:7.1.0'
-    compile group: "com.forgeessentials", name: "forgeessentials", version: "1.4.4-SNAPSHOT", classifier: "dev", changing: true
+    provided group: "com.forgeessentials", name: "forgeessentials", version: "1.4.4-SNAPSHOT", classifier: "dev", changing: true
 }
 
 repositories {

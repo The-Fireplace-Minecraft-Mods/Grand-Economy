@@ -48,6 +48,8 @@ public class GrandEconomy {
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
         configDir = new File(event.getModConfigurationDirectory(), "grandeconomy-extra");
+        //noinspection ResultOfMethodCallIgnored
+        configDir.mkdirs();
         ConversionItems.hasValue(null, 0);
     }
 
