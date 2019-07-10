@@ -7,6 +7,7 @@ import the_fireplace.grandeconomy.compat.sponge.ISpongeCompat;
 import the_fireplace.grandeconomy.compat.sponge.RegisterSpongeEconomy;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
+import java.io.IOException;
 import java.util.UUID;
 
 public class GrandEconomyEconHandler implements IEconHandler {
@@ -20,13 +21,14 @@ public class GrandEconomyEconHandler implements IEconHandler {
         return account.getBalance();
     }
 
-    public void addToBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
         Account account = Account.get(uuid);
         if(account == null) {
             GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
-            return;
+            return false;
         }
         account.addBalance(amount, showMsg);
+        return true;
     }
 
     public boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
@@ -60,8 +62,18 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean hasAccount(UUID uuid) {
+    public boolean ensureAccountExists(UUID uuid) {
         return Account.get(uuid) != null;
+    }
+
+    @Override
+    public Boolean forceSave(UUID uuid) {
+        try {
+            Account.get(uuid).writeIfChanged();
+            return true;
+        } catch(IOException e) {
+            return false;
+        }
     }
 
     @Override

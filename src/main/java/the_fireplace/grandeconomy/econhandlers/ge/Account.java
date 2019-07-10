@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.Utils;
+import the_fireplace.grandeconomy.TimeUtils;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -32,7 +32,7 @@ public class Account {
     private Account(UUID uuid) {
         this.uuid = uuid;
         this.balance = GrandEconomy.cfg.startBalance;
-        long now = Utils.getCurrentDay();
+        long now = TimeUtils.getCurrentDay();
         this.lastLogin = now;
         this.lastCountActivity = now;
         this.changed = true;
@@ -75,7 +75,7 @@ public class Account {
     }
 
     public boolean update() {
-        long now = Utils.getCurrentDay();
+        long now = TimeUtils.getCurrentDay();
         long activityDeltaDays = now - this.lastCountActivity;
         this.lastCountActivity = now;
 

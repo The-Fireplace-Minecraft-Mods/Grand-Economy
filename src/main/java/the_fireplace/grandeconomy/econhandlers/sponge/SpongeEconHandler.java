@@ -29,9 +29,10 @@ public class SpongeEconHandler implements IEconHandler {
     }
 
     @Override
-    public void addToBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
         if(getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent())
-            getEcon().getOrCreateAccount(uuid).get().deposit(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.economy));
+            return getEcon().getOrCreateAccount(uuid).get().deposit(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.economy)).getResult().equals(ResultType.SUCCESS);
+        return false;
     }
 
     @Override
@@ -54,8 +55,13 @@ public class SpongeEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean hasAccount(UUID uuid) {
+    public boolean ensureAccountExists(UUID uuid) {
         return getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent();
+    }
+
+    @Override
+    public Boolean forceSave(UUID uuid) {
+        return null;
     }
 
     @Override

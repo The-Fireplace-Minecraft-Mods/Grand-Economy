@@ -108,10 +108,6 @@ public class GrandEconomy {
 
     @Config(modid = MODID)
     public static class cfg {
-        @Config.Comment("Currency name (Singular)")
-        public static String currencyNameSingular = "gp";
-        @Config.Comment("Currency name (Multiple)")
-        public static String currencyNameMultiple = "gp";
         @Config.Comment("If enabled, players will be shown a message with their account balance when they join the server")
         public static boolean showBalanceOnJoin = true;
         @Config.Comment("What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer")
@@ -119,15 +115,22 @@ public class GrandEconomy {
         public static int pvpMoneyTransfer = 0;
         @Config.Comment("Which economy to bridge to, if any. Choices are \"sponge\", \"enderpay\", and \"forgeessentials\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded.")
         public static String economyBridge = "none";
+        @Config.Comment("Server locale - the client's locale takes precedence if Grand Economy is installed there.")
+        public static String locale = "en_us";
 
-        @Config.Comment("Give each player credits every day they log in")
+        @Config.Comment("Currency name (Singular). This option only works when not using an economy bridge.")
+        public static String currencyNameSingular = "gp";
+        @Config.Comment("Currency name (Multiple). This option only works when not using an economy bridge.")
+        public static String currencyNameMultiple = "gp";
+
+        @Config.Comment("Amount of currency given to new players when they join the server. This option only works when not using an economy bridge.")
+        @Config.RangeInt(min=0)
+        public static int startBalance = 100;
+        @Config.Comment("Give each player credits every day they log in. This option only works when not using an economy bridge.")
         public static boolean basicIncome = true;
         @Config.Comment("The amount of basic income to be given to a player")
         @Config.RangeInt(min=0)
         public static int basicIncomeAmount = 50;
-        @Config.Comment("Amount of currency given to new players when they join the server")
-        @Config.RangeInt(min=0)
-        public static int startBalance = 100;
         @Config.Comment("The max number of days since last login the player will be paid basic income for")
         @Config.RangeInt(min=0)
         public static int maxBasicIncomeDays = 5;

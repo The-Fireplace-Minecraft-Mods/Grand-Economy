@@ -6,6 +6,7 @@ import com.kamildanak.minecraft.enderpay.api.NoSuchAccountException;
 import com.kamildanak.minecraft.enderpay.economy.Account;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
+import java.io.IOException;
 import java.util.UUID;
 
 public class EnderPayEconHandler implements IEconHandler {
@@ -19,10 +20,13 @@ public class EnderPayEconHandler implements IEconHandler {
     }
 
     @Override
-    public void addToBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
         try {
             EnderPayApi.addToBalance(uuid, amount);
-        } catch(NoSuchAccountException ignored) {}
+            return true;
+        } catch(NoSuchAccountException ignored) {
+            return false;
+        }
     }
 
     @Override
@@ -52,8 +56,18 @@ public class EnderPayEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean hasAccount(UUID uuid) {
+    public boolean ensureAccountExists(UUID uuid) {
         return Account.get(uuid) != null;
+    }
+
+    @Override
+    public Boolean forceSave(UUID uuid) {
+        try {
+            Account.get(uuid).writeIfChanged();
+            return true;
+        } catch(IOException e) {
+            return false;
+        }
     }
 
     @Override

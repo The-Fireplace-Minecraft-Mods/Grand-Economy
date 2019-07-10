@@ -4,8 +4,9 @@ import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import the_fireplace.grandeconomy.econhandlers.ge.Account;
+import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.econhandlers.ge.InsufficientCreditException;
+import the_fireplace.grandeconomy.translation.TranslationUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,28 +23,26 @@ public class CommandPay extends CommandBase {
     @Override
     @Nonnull
     public String getUsage(@Nullable ICommandSender sender) {
-        return "/pay <player> <amount>";
+        return TranslationUtil.getRawTranslationString(sender, "commands.grandeconomy.pay.usage");
     }
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
-        if (args.length > 1) {
-            EntityPlayerMP entityplayer = getPlayer(server, sender, args[0]);
-            Account account = Account.get(entityplayer);
-            account.update();
-            long amount = parseLong(args[1]);
-            if (amount < 0)
-                throw new NumberInvalidException("You cannot pay someone negative amount. That would be rude.");
-            Account senderAccount = Account.get((EntityPlayerMP) sender);
-            if (senderAccount.getBalance() < amount)
-                throw new InsufficientCreditException();
-            senderAccount.addBalance(-amount, true);
-            account.addBalance(amount, true);
-            //sender.sendMessage(new TextComponentTranslation("Balance: %s", senderAccount.getBalance()));
-            //entityplayer.sendMessage(new TextComponentTranslation("Balance: %s", account.getBalance()));
-            return;
-        }
-        throw new WrongUsageException("/pay <player> <amount>");
+        if (args.length > 2) {
+            if(sender instanceof EntityPlayerMP) {
+                EntityPlayerMP targetPlayer = getPlayer(server, sender, args[0]);
+                GrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID());
+                long amount = parseLong(args[1]);
+                if (amount < 0)
+                    throw new NumberInvalidException(TranslationUtil.getStringTranslation(((EntityPlayerMP) sender).getUniqueID(), "commands.grandeconomy.pay.negative"));
+                if (GrandEconomyApi.getBalance(((EntityPlayerMP) sender).getUniqueID()) < amount)
+                    throw new InsufficientCreditException(((EntityPlayerMP) sender).getUniqueID());
+                GrandEconomyApi.takeFromBalance(((EntityPlayerMP) sender).getUniqueID(), amount, true);
+                GrandEconomyApi.addToBalance(targetPlayer.getUniqueID(), amount, true);
+            } else
+                throw new WrongUsageException(TranslationUtil.getStringTranslation("commands.grandeconomy.common.console", getUsage(sender)));
+        } else
+            throw new WrongUsageException(getUsage(sender));
     }
 
     @Override

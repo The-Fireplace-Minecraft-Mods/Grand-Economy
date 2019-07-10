@@ -10,11 +10,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.earnings.ConversionItems;
-import the_fireplace.grandeconomy.econhandlers.ge.Account;
+import the_fireplace.grandeconomy.translation.TranslationUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,7 +27,7 @@ public class CommandConvert extends CommandBase {
     @Override
     @Nonnull
     public String getUsage(@Nullable ICommandSender sender) {
-        return "/convert";
+        return TranslationUtil.getRawTranslationString(sender, "commands.grandeconomy.convert.usage");
     }
 
     @Override
@@ -40,14 +38,14 @@ public class CommandConvert extends CommandBase {
             if(ConversionItems.hasValue(heldResource, heldMeta)) {
                 int value = ConversionItems.getValue(heldResource, heldMeta);
                 int count = ((EntityPlayer) sender).getHeldItemMainhand().getCount();
-                Account.get((EntityPlayer) sender).addBalance(value * count, false);
+                GrandEconomyApi.addToBalance(((EntityPlayer) sender).getUniqueID(), value * count, false);
                 ((EntityPlayer) sender).setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
-                sender.sendMessage(new TextComponentTranslation("You have exchanged %s %s for %s each, earning a total of %s. Your balance is now %s.", count, heldResource.toString(), value, value * count, GrandEconomyApi.getBalance(((EntityPlayer)sender).getUniqueID())));
+                sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayer) sender).getUniqueID(), "commands.grandeconomy.convert.success", count, heldResource.toString(), value, value * count, GrandEconomyApi.getBalance(((EntityPlayer)sender).getUniqueID())));
             } else
-                sender.sendMessage(new TextComponentString("The item you are holding has no value."));
+                sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayer) sender).getUniqueID(), "commands.grandeconomy.convert.failure"));
             return;
         }
-        throw new WrongUsageException(getUsage(sender));
+        throw new WrongUsageException(TranslationUtil.getStringTranslation("commands.grandeconomy.common.console", getUsage(sender)));
     }
 
     @Override

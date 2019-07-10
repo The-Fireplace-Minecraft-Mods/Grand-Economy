@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.translation.TranslationUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,16 +23,16 @@ public class CommandBalance extends CommandBase {
     @Override
     @Nonnull
     public String getUsage(@Nullable ICommandSender sender) {
-        return "/balance";
+        return TranslationUtil.getRawTranslationString(sender, "commands.grandeconomy.balance.usage");
     }
 
     @Override
     public void execute(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nullable String[] args) throws CommandException {
         if (sender instanceof EntityPlayer) {
-            notifyCommandListener(sender, this, "Balance: %s", GrandEconomyApi.getBalance(((EntityPlayer) sender).getUniqueID()));
+            sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayer) sender).getUniqueID(), "commands.grandeconomy.common.balance", GrandEconomyApi.getBalance(((EntityPlayer) sender).getUniqueID())));
             return;
         }
-        throw new WrongUsageException("/balance can only be used by players.");
+        throw new WrongUsageException(TranslationUtil.getStringTranslation("commands.grandeconomy.common.console", getUsage(sender)));
     }
 
     @Override
