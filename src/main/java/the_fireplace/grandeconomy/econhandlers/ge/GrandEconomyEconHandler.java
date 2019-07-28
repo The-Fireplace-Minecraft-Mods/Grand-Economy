@@ -27,6 +27,8 @@ public class GrandEconomyEconHandler implements IEconHandler {
             GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
             return false;
         }
+        if(account.getBalance() + amount < 0)
+            return false;
         account.addBalance(amount, showMsg);
         return true;
     }
@@ -50,6 +52,8 @@ public class GrandEconomyEconHandler implements IEconHandler {
             GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
             return false;
         }
+        if(amount < 0)
+            return false;
 
         account.setBalance(amount, showMsg);
         return true;

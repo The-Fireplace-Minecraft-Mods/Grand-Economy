@@ -1,12 +1,11 @@
 package the_fireplace.grandeconomy.commands;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
+import com.mojang.authlib.GameProfile;
+import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.translation.TranslationUtil;
 
@@ -36,30 +35,34 @@ public class CommandWallet extends CommandBase {
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         if (args.length > 1) {
-            EntityPlayerMP target = getPlayer(server, sender, args[1]);
+            GameProfile target = server.getPlayerProfileCache().getGameProfileForUsername(args[1]);
+            if(target == null)
+                throw new PlayerNotFoundException("commands.generic.player.notFound", args[1]);
             if ("balance".equals(args[0])) {
-                sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.balance",
-                        target.getName(), GrandEconomyApi.getBalance(target.getUniqueID())));
+                sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.balance", target.getName(), GrandEconomyApi.getBalance(target.getId())));
                 return;
             }
             if(args.length > 2) {
                 long amount = parseLong(args[2]);
                 if ("set".equals(args[0])) {
-                    GrandEconomyApi.setBalance(target.getUniqueID(), amount, true);
-                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.set",
-                            target.getName(), GrandEconomyApi.getBalance(target.getUniqueID())));
+                    if(amount < 0)
+                        throw new CommandException("commands.grandeconomy.wallet.negative", target.getName());
+                    GrandEconomyApi.setBalance(target.getId(), amount, true);
+                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.set", target.getName(), GrandEconomyApi.getBalance(target.getId())));
                     return;
                 }
                 if ("give".equals(args[0]) || "add".equals(args[0])) {
-                    GrandEconomyApi.addToBalance(target.getUniqueID(), amount, true);
-                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.given",
-                            amount, target.getName()));
+                    if(GrandEconomyApi.getBalance(target.getId()) + amount < 0)
+                        throw new CommandException("commands.grandeconomy.wallet.negative", target.getName());
+                    GrandEconomyApi.addToBalance(target.getId(), amount, true);
+                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.given", amount, target.getName()));
                     return;
                 }
                 if ("take".equals(args[0])) {
-                    GrandEconomyApi.takeFromBalance(target.getUniqueID(), amount, true);
-                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.taken",
-                            amount, target.getName()));
+                    if(GrandEconomyApi.getBalance(target.getId()) - amount < 0)
+                        throw new CommandException("commands.grandeconomy.wallet.negative", target.getName());
+                    GrandEconomyApi.takeFromBalance(target.getId(), amount, true);
+                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.taken", amount, target.getName()));
                     return;
                 }
             }
