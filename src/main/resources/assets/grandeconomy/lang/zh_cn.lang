@@ -1,0 +1,22 @@
+grandeconomy.insufficient_credit=你的金额不足
+
+grandeconomy.killed_balance=你刚刚战败了，现在的余额为 %s
+grandeconomy.killer_balance=你刚刚战胜玩家，现在的金额为 %s
+
+commands.grandeconomy.common.console=%s 只能由玩家使用
+commands.grandeconomy.common.balance=账户余额： %s
+
+commands.grandeconomy.balance.usage=/balance
+
+commands.grandeconomy.convert.usage=/convert
+commands.grandeconomy.convert.success=你兑换了 %s %s 从 %s , 总共获得 %s. 你现在的账户余额为 %s.
+commands.grandeconomy.convert.failure=此物品没有任何价值
+
+commands.grandeconomy.pay.usage=/pay <玩家> <金额>
+commands.grandeconomy.pay.negative=支付金额不能为负
+
+commands.grandeconomy.wallet.usage=/wallet <give|take|set|balance> <玩家> <金额> 
+commands.grandeconomy.wallet.given=%s 添加到 %s 的账户中
+commands.grandeconomy.wallet.taken=%s 减掉了 %s 的账户中
+commands.grandeconomy.wallet.set=%s 的账户余额设置为 %s
+commands.grandeconomy.wallet.balance=%s 的账户余额为： %s

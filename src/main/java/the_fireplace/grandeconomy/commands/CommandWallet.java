@@ -2,10 +2,8 @@ package the_fireplace.grandeconomy.commands;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.command.*;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.translation.TranslationUtil;
 
