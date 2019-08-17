@@ -2,14 +2,14 @@ package the_fireplace.grandeconomy;
 
 public class TimeUtils {
     public static long getCurrentDay() {
-        return timeToDays(getCurrentServerTime());
+        return millisToDays(getCurrentServerTimeMillis());
     }
 
-    private static long getCurrentServerTime() {
+    public static long getCurrentServerTimeMillis() {
         return System.currentTimeMillis();
     }
 
-    private static long timeToDays(long time) {
+    public static long millisToDays(long time) {
         long day = 1000 * 60 * 24 * 60;
         return time / day;
     }

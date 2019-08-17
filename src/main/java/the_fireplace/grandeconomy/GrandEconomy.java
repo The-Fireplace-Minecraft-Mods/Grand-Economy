@@ -1,6 +1,8 @@
 package the_fireplace.grandeconomy;
 
-import net.minecraft.command.ICommandManager;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -13,10 +15,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
-import the_fireplace.grandeconomy.commands.CommandBalance;
-import the_fireplace.grandeconomy.commands.CommandConvert;
-import the_fireplace.grandeconomy.commands.CommandPay;
-import the_fireplace.grandeconomy.commands.CommandWallet;
+import the_fireplace.grandeconomy.commands.*;
 import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
@@ -26,6 +25,7 @@ import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 
 import java.io.File;
+import java.util.List;
 
 @Mod(modid = GrandEconomy.MODID, name = GrandEconomy.MODNAME, version = GrandEconomy.VERSION, acceptedMinecraftVersions = "[1.12,1.13)", acceptableRemoteVersions = "*")
 public class GrandEconomy {
@@ -81,22 +81,23 @@ public class GrandEconomy {
 
         minecraftServer = event.getServer();
         File file = getWorldDir(minecraftServer.getEntityWorld());
-        if (file == null)
-            return;
-
         Account.setLocation(new File(file, "GrandEconomy-accounts"));
 
-        registerCommands(event);
+        registerCommands((ServerCommandManager)minecraftServer.getCommandManager());
     }
 
-    private void registerCommands(FMLServerStartingEvent event) {
-        MinecraftServer server = event.getServer();
-        ICommandManager command = server.getCommandManager();
-        ServerCommandManager manager = (ServerCommandManager) command;
-        manager.registerCommand(new CommandWallet());
-        manager.registerCommand(new CommandBalance());
-        manager.registerCommand(new CommandPay());
-        manager.registerCommand(new CommandConvert());
+    public static final List<CommandBase> commands = Lists.newArrayList();
+
+    private void registerCommands(ServerCommandManager manager) {
+        commands.addAll(Sets.newHashSet(
+                new CommandWallet(),
+                new CommandBalance(),
+                new CommandPay(),
+                new CommandConvert(),
+                new CommandGEHelp()
+        ));
+        for(CommandBase command: commands)
+            manager.registerCommand(command);
     }
 
     private File getWorldDir(World world) {
