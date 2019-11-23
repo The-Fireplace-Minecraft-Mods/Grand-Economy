@@ -1,6 +1,7 @@
 package the_fireplace.grandeconomy;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ServerCommandManager;
@@ -11,6 +12,7 @@ import net.minecraft.world.storage.SaveHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -27,6 +29,7 @@ import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 @Mod(modid = GrandEconomy.MODID, name = GrandEconomy.MODNAME, version = GrandEconomy.VERSION, acceptedMinecraftVersions = "[1.12,1.13)", acceptableRemoteVersions = "*")
 public class GrandEconomy {
@@ -44,6 +47,21 @@ public class GrandEconomy {
     public static GrandEconomy instance;
 
     public static File configDir;
+
+    private static Map<String, IEconHandler> econHandlers = Maps.newHashMap();
+
+    public static boolean hasEconHandler(String key) {
+        return econHandlers.containsKey(key);
+    }
+
+    public static boolean registerEconHandler(IEconHandler handler, String forModid, String... aliases) {
+        if(econHandlers.containsKey(forModid) || forModid.equalsIgnoreCase(MODID))
+            return false;
+        econHandlers.put(forModid, handler);
+        for(String alias: aliases)
+            econHandlers.putIfAbsent(alias, handler);
+        return true;
+    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -72,7 +90,7 @@ public class GrandEconomy {
                 economy = new EnderPayEconHandler();
                 break;
             default:
-                economy = new GrandEconomyEconHandler();
+                economy = econHandlers.getOrDefault(cfg.economyBridge, new GrandEconomyEconHandler());
         }
         economy.init();
     }

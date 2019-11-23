@@ -1,1 +1,4 @@
-API improvements: Add an event for when an account's balance changes, and a way to retrieve which mod GE is currently bridging to, if any.
+API improvements:
+-Add an event for when an account's balance changes
+-Add a way to retrieve which mod GE is currently bridging to, if any.
+-Add a way for developers to register their own economy bridges.

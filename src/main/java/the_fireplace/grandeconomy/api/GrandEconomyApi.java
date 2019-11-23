@@ -3,6 +3,7 @@ package the_fireplace.grandeconomy.api;
 import net.minecraftforge.common.MinecraftForge;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.event.BalanceChangeEvent;
+import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
 import java.util.UUID;
 
@@ -109,7 +110,25 @@ public class GrandEconomyApi {
         return GrandEconomy.economy.forceSave(uuid);
     }
 
+    /**
+     * Get the modid of the economy Grand Economy is using for currency.
+     */
     public static String getEconomyModId() {
         return GrandEconomy.economy.getId();
+    }
+
+    /**
+     * Register an economy handler for your mod. This will allow setting the "economy bridge" config option to forModid or one of the aliases to have GE use your economy handler.
+     * This must be done BEFORE {@link net.minecraftforge.fml.common.event.FMLInitializationEvent}.
+     * @param handler
+     * Your economy handler instance
+     * @param forModid
+     * The modid the handler is for.
+     * @param aliases
+     * Aliases that can also be used in the config to use your currency. The method still returns true if any of these are already taken, as long as the modid isn't.
+     * @return false if registering the handler failed (currently the only reason is if another handler is registered with the given modid) and true otherwise
+     */
+    public static boolean registerEconomyHandler(IEconHandler handler, String forModid, String... aliases) {
+        return GrandEconomy.registerEconHandler(handler, forModid, aliases);
     }
 }
