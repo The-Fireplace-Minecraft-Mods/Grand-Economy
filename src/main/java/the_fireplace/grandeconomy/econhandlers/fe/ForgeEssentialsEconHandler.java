@@ -2,6 +2,7 @@ package the_fireplace.grandeconomy.econhandlers.fe;
 
 import com.forgeessentials.api.APIRegistry;
 import com.forgeessentials.api.UserIdent;
+import com.forgeessentials.core.ForgeEssentials;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
 import java.util.UUID;
@@ -42,6 +43,11 @@ public class ForgeEssentialsEconHandler implements IEconHandler {
     @Override
     public Boolean forceSave(UUID uuid) {
         return null;
+    }
+
+    @Override
+    public String getId() {
+        return ForgeEssentials.MODID;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package the_fireplace.grandeconomy.econhandlers.ep;
 
+import com.kamildanak.minecraft.enderpay.EnderPay;
 import com.kamildanak.minecraft.enderpay.api.EnderPayApi;
 import com.kamildanak.minecraft.enderpay.api.InsufficientCreditException;
 import com.kamildanak.minecraft.enderpay.api.NoSuchAccountException;
@@ -68,6 +69,11 @@ public class EnderPayEconHandler implements IEconHandler {
         } catch(IOException e) {
             return false;
         }
+    }
+
+    @Override
+    public String getId() {
+        return EnderPay.modID;
     }
 
     @Override

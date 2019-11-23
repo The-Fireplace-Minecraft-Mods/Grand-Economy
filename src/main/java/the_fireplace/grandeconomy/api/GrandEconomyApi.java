@@ -1,6 +1,8 @@
 package the_fireplace.grandeconomy.api;
 
+import net.minecraftforge.common.MinecraftForge;
 import the_fireplace.grandeconomy.GrandEconomy;
+import the_fireplace.grandeconomy.api.event.BalanceChangeEvent;
 
 import java.util.UUID;
 
@@ -29,7 +31,11 @@ public class GrandEconomyApi {
      * Whether the amount was successfully added or not
      */
     public static boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
-        return GrandEconomy.economy.addToBalance(uuid, amount, showMsg);
+        long oldAmount = getBalance(uuid);
+        boolean added = GrandEconomy.economy.addToBalance(uuid, amount, showMsg);
+        if(added)
+            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
+        return added;
     }
 
     /**
@@ -44,7 +50,11 @@ public class GrandEconomyApi {
      * Whether the balance was successfully set or not
      */
     public static boolean setBalance(UUID uuid, long amount, boolean showMsg) {
-        return GrandEconomy.economy.setBalance(uuid, amount, showMsg);
+        long oldAmount = getBalance(uuid);
+        boolean balanceSet = GrandEconomy.economy.setBalance(uuid, amount, showMsg);
+        if(balanceSet)
+            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
+        return balanceSet;
     }
 
     /**
@@ -59,7 +69,11 @@ public class GrandEconomyApi {
      * Whether the amount was successfully taken or not
      */
     public static boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
-        return GrandEconomy.economy.takeFromBalance(uuid, amount, showMsg);
+        long oldAmount = getBalance(uuid);
+        boolean taken = GrandEconomy.economy.takeFromBalance(uuid, amount, showMsg);
+        if(taken)
+            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
+        return taken;
     }
 
     /**
@@ -93,5 +107,9 @@ public class GrandEconomyApi {
      */
     public static Boolean forceSave(UUID uuid) {
         return GrandEconomy.economy.forceSave(uuid);
+    }
+
+    public static String getEconomyModId() {
+        return GrandEconomy.economy.getId();
     }
 }

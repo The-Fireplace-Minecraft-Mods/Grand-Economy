@@ -1,1 +1,1 @@
-Added a /gehelp command
+API improvements: Add an event for when an account's balance changes, and a way to retrieve which mod GE is currently bridging to, if any.

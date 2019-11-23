@@ -81,6 +81,11 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
+    public String getId() {
+        return GrandEconomy.MODID;
+    }
+
+    @Override
     public void init() {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
         if(Loader.isModLoaded("spongeapi")) {

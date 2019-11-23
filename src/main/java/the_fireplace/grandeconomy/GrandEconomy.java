@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
@@ -50,6 +51,7 @@ public class GrandEconomy {
         configDir = new File(event.getModConfigurationDirectory(), "grandeconomy-extra");
         //noinspection ResultOfMethodCallIgnored
         configDir.mkdirs();
+        //Initialize ConversionItems
         ConversionItems.hasValue(null, 0);
     }
 

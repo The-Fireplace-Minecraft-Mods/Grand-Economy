@@ -65,6 +65,11 @@ public class SpongeEconHandler implements IEconHandler {
     }
 
     @Override
+    public String getId() {
+        return Sponge.getServiceManager().getRegistration(EconomyService.class).isPresent() ? Sponge.getServiceManager().getRegistration(EconomyService.class).get().getPlugin().getId() : "spongeapi";
+    }
+
+    @Override
     public void init() {
 
     }

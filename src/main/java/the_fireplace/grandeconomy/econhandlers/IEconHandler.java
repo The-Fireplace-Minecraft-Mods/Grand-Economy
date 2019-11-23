@@ -78,5 +78,10 @@ public interface IEconHandler {
      */
     Boolean forceSave(UUID uuid);
 
+    /**
+     * Get the modid of the economy mod this is using.
+     */
+    String getId();
+
     void init();
 }
