@@ -1,3 +1,4 @@
+Added Vault support
 API improvements:
 -Add an event for when an account's balance changes
 -Add a way to retrieve which mod GE is currently bridging to, if any.

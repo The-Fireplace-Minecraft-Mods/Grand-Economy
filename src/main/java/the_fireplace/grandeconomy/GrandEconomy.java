@@ -26,6 +26,7 @@ import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
+import the_fireplace.grandeconomy.econhandlers.vault.VaultEconHandler;
 
 import java.io.File;
 import java.util.List;
@@ -89,6 +90,10 @@ public class GrandEconomy {
             case "ep":
                 economy = new EnderPayEconHandler();
                 break;
+            case "vault":
+            case "bukkit":
+                economy = new VaultEconHandler();
+                break;
             default:
                 economy = econHandlers.getOrDefault(cfg.economyBridge, new GrandEconomyEconHandler());
         }
@@ -134,7 +139,7 @@ public class GrandEconomy {
         @Config.Comment("What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer")
         @Config.RangeInt(max=100)
         public static int pvpMoneyTransfer = 0;
-        @Config.Comment("Which economy to bridge to, if any. Choices are \"none\", \"sponge\", \"enderpay\", and \"forgeessentials\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded.")
+        @Config.Comment("Which economy to bridge to, if any. Choices are \"none\", \"sponge\", \"enderpay\", \"forgeessentials\", and \"vault\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded.")
         public static String economyBridge = "none";
         @Config.Comment("Server locale - the client's locale takes precedence if Grand Economy is installed there.")
         public static String locale = "en_us";
