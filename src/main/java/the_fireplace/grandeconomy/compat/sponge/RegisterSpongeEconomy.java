@@ -29,7 +29,7 @@ import java.util.*;
 @MethodsReturnNonnullByDefault
 public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
-    TransactionType genericTransactionType = new TransactionType() {
+    private TransactionType genericTransactionType = new TransactionType() {
         @Override
         public String getId() {
             return GrandEconomy.MODID+"-generic";
@@ -41,7 +41,7 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
         }
     };
 
-    Currency geCurrency = new Currency() {
+    private Currency geCurrency = new Currency() {
 
         @Override
         public String getId() {
@@ -70,7 +70,7 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
         @Override
         public Text format(BigDecimal amount, int numFractionDigits) {
-            return Text.of(amount.longValue());
+            return Text.of(GrandEconomyApi.toString(amount.longValue()));
         }
 
         @Override
@@ -96,13 +96,13 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
     @Override
     public boolean hasAccount(UUID uuid) {
-        return GrandEconomy.getEconomy().ensureAccountExists(uuid);
+        return GrandEconomyApi.ensureAccountExists(uuid, null);
     }
 
     @Override
     public boolean hasAccount(String identifier) {
         try {
-            return GrandEconomy.getEconomy().ensureAccountExists(UUID.fromString(identifier));
+            return GrandEconomyApi.ensureAccountExists(UUID.fromString(identifier), null);
         } catch(IllegalArgumentException e) {
             return false;
         }
@@ -127,12 +127,12 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
                 @Override
                 public boolean hasBalance(Currency currency, Set<Context> contexts) {
-                    return GrandEconomyApi.getBalance(getUniqueId()) > 0;
+                    return GrandEconomyApi.getBalance(getUniqueId(), null) > 0;
                 }
 
                 @Override
                 public BigDecimal getBalance(Currency currency, Set<Context> contexts) {
-                    return BigDecimal.valueOf(GrandEconomyApi.getBalance(getUniqueId()));
+                    return BigDecimal.valueOf(GrandEconomyApi.getBalance(getUniqueId(), null));
                 }
 
                 @Override
@@ -165,7 +165,7 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
                         @Override
                         public ResultType getResult() {
-                            return GrandEconomyApi.setBalance(getUniqueId(), amount.longValue(), true) ? ResultType.SUCCESS : ResultType.FAILED;
+                            return GrandEconomyApi.setBalance(getUniqueId(), amount.longValue(), null) ? ResultType.SUCCESS : ResultType.FAILED;
                         }
 
                         @Override
@@ -182,7 +182,7 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
                 @Override
                 public TransactionResult resetBalance(Currency currency, Cause cause, Set<Context> contexts) {
-                    GrandEconomyApi.setBalance(uuid, GrandEconomy.cfg.startBalance, true);
+                    GrandEconomyApi.setBalance(uuid, GrandEconomy.cfg.startBalance, null);
                     return new TransactionResult() {
                         @Override
                         public Account getAccount() {
@@ -241,7 +241,7 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
                         @Override
                         public ResultType getResult() {
-                            GrandEconomyApi.addToBalance(getUniqueId(), amount.longValue(), true);
+                            GrandEconomyApi.addToBalance(getUniqueId(), amount.longValue(), null);
                             return ResultType.SUCCESS;
                         }
 
@@ -277,7 +277,7 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
                         @Override
                         public ResultType getResult() {
-                            return GrandEconomyApi.takeFromBalance(getUniqueId(), amount.longValue(), true) ? ResultType.SUCCESS : ResultType.FAILED;
+                            return GrandEconomyApi.takeFromBalance(getUniqueId(), amount.longValue(), null) ? ResultType.SUCCESS : ResultType.FAILED;
                         }
 
                         @Override
@@ -317,9 +317,9 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
                         @Override
                         public ResultType getResult() {
-                            boolean taken = GrandEconomyApi.takeFromBalance(getUniqueId(), amount.longValue(), true);
+                            boolean taken = GrandEconomyApi.takeFromBalance(getUniqueId(), amount.longValue(), null);
                             if(taken)
-                                GrandEconomyApi.addToBalance(UUID.fromString(to.getIdentifier()), amount.longValue(), true);
+                                GrandEconomyApi.addToBalance(UUID.fromString(to.getIdentifier()), amount.longValue(), null);
                             return taken ? ResultType.SUCCESS : ResultType.FAILED;
                         }
 
