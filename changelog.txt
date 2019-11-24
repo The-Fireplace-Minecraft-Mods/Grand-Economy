@@ -3,3 +3,6 @@ API improvements:
 -Add an event for when an account's balance changes
 -Add a way to retrieve which mod GE is currently bridging to, if any.
 -Add a way for developers to register their own economy bridges.
+-Remove "showMsg" parameter from some API functions - it is implemented in too few cases and doesn't provide control over what the message is.
+-Add isPlayer parameter to be used in determining what kind of account it is - Intended to reduce the chance of a player and non-player sharing an account, is only used when the economy makes a distinction between the two.
+-Add a way to retrieve the formatted currency string with the amount and currency name/symbol.

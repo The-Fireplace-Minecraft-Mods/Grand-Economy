@@ -22,30 +22,30 @@ public class SpongeEconHandler implements IEconHandler {
     }
 
     @Override
-    public long getBalance(UUID uuid) {
+    public long getBalance(UUID uuid, Boolean isPlayer) {
         if(getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent())
             return getEcon().getOrCreateAccount(uuid).get().getBalance(getEcon().getDefaultCurrency()).longValue();
         return 0;
     }
 
     @Override
-    public boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
         if(getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent())
-            return getEcon().getOrCreateAccount(uuid).get().deposit(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.economy)).getResult().equals(ResultType.SUCCESS);
+            return getEcon().getOrCreateAccount(uuid).get().deposit(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.getEconomy())).getResult().equals(ResultType.SUCCESS);
         return false;
     }
 
     @Override
-    public boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
         if(getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent())
-            return getEcon().getOrCreateAccount(uuid).get().withdraw(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.economy)).getResult().equals(ResultType.SUCCESS);
+            return getEcon().getOrCreateAccount(uuid).get().withdraw(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.getEconomy())).getResult().equals(ResultType.SUCCESS);
         return false;
     }
 
     @Override
-    public boolean setBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
         if(getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent())
-            return getEcon().getOrCreateAccount(uuid).get().setBalance(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.economy)).getResult().equals(ResultType.SUCCESS);
+            return getEcon().getOrCreateAccount(uuid).get().setBalance(getEcon().getDefaultCurrency(), BigDecimal.valueOf(amount), Cause.of(EventContext.empty(), GrandEconomy.getEconomy())).getResult().equals(ResultType.SUCCESS);
         return false;
     }
 
@@ -55,12 +55,17 @@ public class SpongeEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean ensureAccountExists(UUID uuid) {
+    public String toString(long amount) {
+        return getEcon().getDefaultCurrency().format(BigDecimal.valueOf(amount)).toPlain();
+    }
+
+    @Override
+    public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
         return getEcon() != null && getEcon().getOrCreateAccount(uuid).isPresent();
     }
 
     @Override
-    public Boolean forceSave(UUID uuid) {
+    public Boolean forceSave(UUID uuid, Boolean isPlayer) {
         return null;
     }
 

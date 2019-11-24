@@ -9,10 +9,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -42,7 +40,11 @@ public class GrandEconomy {
 
     public static MinecraftServer minecraftServer;
 
-    public static IEconHandler economy;
+    private static IEconHandler economy;
+
+    public static IEconHandler getEconomy() {
+        return economy;
+    }
 
     @Mod.Instance(MODID)
     public static GrandEconomy instance;
@@ -97,7 +99,7 @@ public class GrandEconomy {
             default:
                 economy = econHandlers.getOrDefault(cfg.economyBridge, new GrandEconomyEconHandler());
         }
-        economy.init();
+        getEconomy().init();
     }
 
     @Mod.EventHandler

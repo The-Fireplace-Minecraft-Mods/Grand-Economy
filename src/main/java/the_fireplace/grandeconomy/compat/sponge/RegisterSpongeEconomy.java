@@ -96,13 +96,13 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
     @Override
     public boolean hasAccount(UUID uuid) {
-        return GrandEconomy.economy.ensureAccountExists(uuid);
+        return GrandEconomy.getEconomy().ensureAccountExists(uuid);
     }
 
     @Override
     public boolean hasAccount(String identifier) {
         try {
-            return GrandEconomy.economy.ensureAccountExists(UUID.fromString(identifier));
+            return GrandEconomy.getEconomy().ensureAccountExists(UUID.fromString(identifier));
         } catch(IllegalArgumentException e) {
             return false;
         }

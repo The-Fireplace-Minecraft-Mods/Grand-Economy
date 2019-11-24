@@ -14,33 +14,37 @@ public class VaultEconHandler implements IEconHandler {
 
     private Economy econ;
 
+    private boolean shouldUsePlayerAccount(UUID uuid, Boolean isPlayer) {
+        return isPlayer == null && Bukkit.getOfflinePlayer(uuid).hasPlayedBefore() || isPlayer == Boolean.TRUE || !econ.hasBankSupport();
+    }
+
     @Override
-    public long getBalance(UUID uuid) {
-        if(Bukkit.getOfflinePlayer(uuid).hasPlayedBefore())
+    public long getBalance(UUID uuid, Boolean isPlayer) {
+        if(shouldUsePlayerAccount(uuid, isPlayer))
             return (long) econ.getBalance(Bukkit.getOfflinePlayer(uuid));
         else
             return (long) econ.bankBalance(uuid.toString()).balance;
     }
 
     @Override
-    public boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
-        if(Bukkit.getOfflinePlayer(uuid).hasPlayedBefore())
+    public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+        if(shouldUsePlayerAccount(uuid, isPlayer))
             return econ.depositPlayer(Bukkit.getOfflinePlayer(uuid), amount).transactionSuccess();
         else
             return econ.bankDeposit(uuid.toString(), amount).transactionSuccess();
     }
 
     @Override
-    public boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
-        if(Bukkit.getOfflinePlayer(uuid).hasPlayedBefore())
+    public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+        if(shouldUsePlayerAccount(uuid, isPlayer))
             return econ.withdrawPlayer(Bukkit.getOfflinePlayer(uuid), amount).transactionSuccess();
         else
             return econ.bankWithdraw(uuid.toString(), amount).transactionSuccess();
     }
 
     @Override
-    public boolean setBalance(UUID uuid, long amount, boolean showMsg) {
-        if(Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
+    public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+        if(shouldUsePlayerAccount(uuid, isPlayer)) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
             if(econ.getBalance(p) > amount)
                 return econ.withdrawPlayer(p, amount-econ.getBalance(p)).transactionSuccess();
@@ -60,15 +64,20 @@ public class VaultEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean ensureAccountExists(UUID uuid) {
-        if(Bukkit.getOfflinePlayer(uuid).hasPlayedBefore())
+    public String toString(long amount) {
+        return econ.format(amount);
+    }
+
+    @Override
+    public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
+        if(shouldUsePlayerAccount(uuid, isPlayer))
             return econ.hasAccount(Bukkit.getOfflinePlayer(uuid)) || econ.createPlayerAccount(Bukkit.getOfflinePlayer(uuid));
         else
             return econ.getBanks().contains(uuid.toString()) || econ.createBank(uuid.toString(), Bukkit.getOfflinePlayer(uuid)).transactionSuccess();
     }
 
     @Override
-    public Boolean forceSave(UUID uuid) {
+    public Boolean forceSave(UUID uuid, Boolean isPlayer) {
         return null;
     }
 
@@ -79,7 +88,7 @@ public class VaultEconHandler implements IEconHandler {
 
     @Override
     public void init() {
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
         econ = economyProvider.getProvider();
     }
 }

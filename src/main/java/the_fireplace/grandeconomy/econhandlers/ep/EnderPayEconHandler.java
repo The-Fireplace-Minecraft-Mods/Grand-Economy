@@ -8,11 +8,12 @@ import com.kamildanak.minecraft.enderpay.economy.Account;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class EnderPayEconHandler implements IEconHandler {
     @Override
-    public long getBalance(UUID uuid) {
+    public long getBalance(UUID uuid, Boolean isPlayer) {
         try {
             return EnderPayApi.getBalance(uuid);
         } catch(NoSuchAccountException e) {
@@ -21,7 +22,7 @@ public class EnderPayEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
         try {
             EnderPayApi.addToBalance(uuid, amount);
             return true;
@@ -31,7 +32,7 @@ public class EnderPayEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
         try {
             EnderPayApi.takeFromBalance(uuid, amount);
             return true;
@@ -41,7 +42,7 @@ public class EnderPayEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean setBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
         try {
             EnderPayApi.takeFromBalance(uuid, EnderPayApi.getBalance(uuid));
             EnderPayApi.addToBalance(uuid, amount);
@@ -57,14 +58,19 @@ public class EnderPayEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean ensureAccountExists(UUID uuid) {
+    public String toString(long amount) {
+        return amount + ' ' + getCurrencyName(amount);
+    }
+
+    @Override
+    public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
         return Account.get(uuid) != null;
     }
 
     @Override
-    public Boolean forceSave(UUID uuid) {
+    public Boolean forceSave(UUID uuid, Boolean isPlayer) {
         try {
-            Account.get(uuid).writeIfChanged();
+            Objects.requireNonNull(Account.get(uuid)).writeIfChanged();
             return true;
         } catch(IOException e) {
             return false;

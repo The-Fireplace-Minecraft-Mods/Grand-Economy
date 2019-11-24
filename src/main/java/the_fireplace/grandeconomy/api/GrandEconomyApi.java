@@ -10,14 +10,23 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class GrandEconomyApi {
     /**
+     * @deprecated
+     * Use {@link GrandEconomyApi#getBalance(UUID, Boolean)}
+     */
+    @Deprecated
+    public static long getBalance(UUID uuid) {
+        return getBalance(uuid, null);
+    }
+
+    /**
      * Check the account's balance
      * @param uuid
      * The account to check the balance of
      * @return
      * The balance
      */
-    public static long getBalance(UUID uuid) {
-        return GrandEconomy.economy.getBalance(uuid);
+    public static long getBalance(UUID uuid, Boolean isPlayer) {
+        return GrandEconomy.getEconomy().getBalance(uuid, isPlayer);
     }
 
     /**
@@ -26,14 +35,14 @@ public class GrandEconomyApi {
      * The account to increase the balance of
      * @param amount
      * The amount to increase the account balance by
-     * @param showMsg
-     * Whether or not a message should be shown to the player whose balance was updated. The effectiveness of this is economy-specific.
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * Whether the amount was successfully added or not
      */
-    public static boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
+    public static boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
         long oldAmount = getBalance(uuid);
-        boolean added = GrandEconomy.economy.addToBalance(uuid, amount, showMsg);
+        boolean added = GrandEconomy.getEconomy().addToBalance(uuid, amount, isPlayer);
         if(added)
             MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
         return added;
@@ -45,14 +54,14 @@ public class GrandEconomyApi {
      * The account to set the balance of
      * @param amount
      * The amount to set the account balance to
-     * @param showMsg
-     * Whether or not a message should be shown to the player whose balance was updated. The effectiveness of this is economy-specific.
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * Whether the balance was successfully set or not
      */
-    public static boolean setBalance(UUID uuid, long amount, boolean showMsg) {
+    public static boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
         long oldAmount = getBalance(uuid);
-        boolean balanceSet = GrandEconomy.economy.setBalance(uuid, amount, showMsg);
+        boolean balanceSet = GrandEconomy.getEconomy().setBalance(uuid, amount, isPlayer);
         if(balanceSet)
             MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
         return balanceSet;
@@ -64,14 +73,14 @@ public class GrandEconomyApi {
      * The account to decrease the balance of
      * @param amount
      * The amount to decrease the account balance by
-     * @param showMsg
-     * Whether or not a message should be shown to the player whose balance was updated. The effectiveness of this is economy-specific.
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * Whether the amount was successfully taken or not
      */
-    public static boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
+    public static boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
         long oldAmount = getBalance(uuid);
-        boolean taken = GrandEconomy.economy.takeFromBalance(uuid, amount, showMsg);
+        boolean taken = GrandEconomy.getEconomy().takeFromBalance(uuid, amount, isPlayer);
         if(taken)
             MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
         return taken;
@@ -85,18 +94,49 @@ public class GrandEconomyApi {
      * The currency name
      */
     public static String getCurrencyName(long amount) {
-        return GrandEconomy.economy.getCurrencyName(amount);
+        return GrandEconomy.getEconomy().getCurrencyName(amount);
+    }
+
+    /**
+     * Gets the currency amount with the currency name attached
+     * @param amount
+     * The currency amount
+     * @return
+     * The currency amount with the name attached
+     */
+    public static String toString(long amount) {
+        return GrandEconomy.getEconomy().toString(amount);
+    }
+
+    /**
+     * @deprecated
+     * Use {@link GrandEconomyApi#ensureAccountExists(UUID, Boolean)}
+     */
+    @Deprecated
+    public static boolean ensureAccountExists(UUID uuid) {
+        return ensureAccountExists(uuid, null);
     }
 
     /**
      * Try to make sure an account exists.
      * @param uuid
      * the account to check
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * True if it exists, false otherwise.
      */
-    public static boolean ensureAccountExists(UUID uuid) {
-        return GrandEconomy.economy.ensureAccountExists(uuid);
+    public static boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
+        return GrandEconomy.getEconomy().ensureAccountExists(uuid, isPlayer);
+    }
+
+    /**
+     * @deprecated
+     * Use {@link GrandEconomyApi#forceSave(UUID, Boolean)}
+     */
+    @Deprecated
+    public static Boolean forceSave(UUID uuid) {
+        return forceSave(uuid, null);
     }
 
     /**
@@ -106,15 +146,15 @@ public class GrandEconomyApi {
      * @return
      * true if saved, false if not saved, or null if not implemented
      */
-    public static Boolean forceSave(UUID uuid) {
-        return GrandEconomy.economy.forceSave(uuid);
+    public static Boolean forceSave(UUID uuid, Boolean isPlayer) {
+        return GrandEconomy.getEconomy().forceSave(uuid, isPlayer);
     }
 
     /**
      * Get the modid of the economy Grand Economy is using for currency.
      */
     public static String getEconomyModId() {
-        return GrandEconomy.economy.getId();
+        return GrandEconomy.getEconomy().getId();
     }
 
     /**

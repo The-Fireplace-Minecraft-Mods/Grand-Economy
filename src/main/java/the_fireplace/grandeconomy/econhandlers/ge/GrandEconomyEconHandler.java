@@ -8,10 +8,12 @@ import the_fireplace.grandeconomy.compat.sponge.RegisterSpongeEconomy;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class GrandEconomyEconHandler implements IEconHandler {
-    public long getBalance(UUID uuid) {
+    @Override
+    public long getBalance(UUID uuid, Boolean isPlayer) {
         Account account = Account.get(uuid);
         if (account == null){
             GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
@@ -21,7 +23,8 @@ public class GrandEconomyEconHandler implements IEconHandler {
         return account.getBalance();
     }
 
-    public boolean addToBalance(UUID uuid, long amount, boolean showMsg) {
+    @Override
+    public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
         Account account = Account.get(uuid);
         if(account == null) {
             GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
@@ -29,11 +32,12 @@ public class GrandEconomyEconHandler implements IEconHandler {
         }
         if(account.getBalance() + amount < 0)
             return false;
-        account.addBalance(amount, showMsg);
+        account.addBalance(amount, false);
         return true;
     }
 
-    public boolean takeFromBalance(UUID uuid, long amount, boolean showMsg) {
+    @Override
+    public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
         Account account = Account.get(uuid);
         if (account == null){
             GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
@@ -41,12 +45,12 @@ public class GrandEconomyEconHandler implements IEconHandler {
         }
         if (account.getBalance() < amount)
             return false;
-        account.addBalance(-amount, showMsg);
+        account.addBalance(-amount, false);
         return true;
     }
 
     @Override
-    public boolean setBalance(UUID uuid, long amount, boolean showMsg) {
+    public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
         Account account = Account.get(uuid);
         if (account == null){
             GrandEconomy.LOGGER.warn("Account for %s was null", uuid.toString());
@@ -55,10 +59,11 @@ public class GrandEconomyEconHandler implements IEconHandler {
         if(amount < 0)
             return false;
 
-        account.setBalance(amount, showMsg);
+        account.setBalance(amount, false);
         return true;
     }
 
+    @Override
     public String getCurrencyName(long amount) {
         if (amount == 1)
             return GrandEconomy.cfg.currencyNameSingular;
@@ -66,14 +71,19 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean ensureAccountExists(UUID uuid) {
+    public String toString(long amount) {
+        return amount + ' ' + getCurrencyName(amount);
+    }
+
+    @Override
+    public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
         return Account.get(uuid) != null;
     }
 
     @Override
-    public Boolean forceSave(UUID uuid) {
+    public Boolean forceSave(UUID uuid, Boolean isPlayer) {
         try {
-            Account.get(uuid).writeIfChanged();
+            Objects.requireNonNull(Account.get(uuid)).writeIfChanged();
             return true;
         } catch(IOException e) {
             return false;

@@ -7,10 +7,12 @@ public interface IEconHandler {
      * Check the account's balance
      * @param uuid
      * The account to check the balance of
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * The balance
      */
-    long getBalance(UUID uuid);
+    long getBalance(UUID uuid, Boolean isPlayer);
 
     /**
      * Add to the account's balance
@@ -18,12 +20,12 @@ public interface IEconHandler {
      * The account to increase the balance of
      * @param amount
      * The amount to increase the account balance by
-     * @param showMsg
-     * Whether or not a message should be shown to the player whose balance was updated. The effectiveness of this is economy-specific.
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * Whether the amount was successfully added or not
      */
-    boolean addToBalance(UUID uuid, long amount, boolean showMsg);
+    boolean addToBalance(UUID uuid, long amount, Boolean isPlayer);
 
     /**
      * Take from the account's balance
@@ -31,12 +33,12 @@ public interface IEconHandler {
      * The account to decrease the balance of
      * @param amount
      * The amount to decrease the account balance by
-     * @param showMsg
-     * Whether or not a message should be shown to the player whose balance was updated. The effectiveness of this is economy-specific.
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * Whether the amount was successfully taken or not
      */
-    boolean takeFromBalance(UUID uuid, long amount, boolean showMsg);
+    boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer);
 
     /**
      * Sets the account's balance
@@ -44,12 +46,12 @@ public interface IEconHandler {
      * The account to set the balance of
      * @param amount
      * The amount to set the account balance to
-     * @param showMsg
-     * Whether or not a message should be shown to the player whose balance was updated. The effectiveness of this is economy-specific.
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * Whether the balance was successfully set or not
      */
-    boolean setBalance(UUID uuid, long amount, boolean showMsg);
+    boolean setBalance(UUID uuid, long amount, Boolean isPlayer);
 
     /**
      * Gets the name of the currency for the given amount.
@@ -61,22 +63,35 @@ public interface IEconHandler {
     String getCurrencyName(long amount);
 
     /**
+     * Gets the currency amount with the currency name attached
+     * @param amount
+     * The currency amount
+     * @return
+     * The currency amount with the name attached
+     */
+    String toString(long amount);
+
+    /**
      * Try to make sure an account exists.
      * @param uuid
      * the account to check
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * True if it exists, false otherwise.
      */
-    boolean ensureAccountExists(UUID uuid);
+    boolean ensureAccountExists(UUID uuid, Boolean isPlayer);
 
     /**
-     * Forcibly saves the account.
+     * Forcibly saves the account. The effectiveness of this is economy-specific.
      * @param uuid
      * The account to save
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * true if saved, false if not saved, or null if not implemented
      */
-    Boolean forceSave(UUID uuid);
+    Boolean forceSave(UUID uuid, Boolean isPlayer);
 
     /**
      * Get the modid of the economy mod this is using.
