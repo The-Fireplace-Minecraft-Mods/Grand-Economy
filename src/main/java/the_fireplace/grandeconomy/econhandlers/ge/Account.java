@@ -1,4 +1,4 @@
-package the_fireplace.grandeconomy.economy;
+package the_fireplace.grandeconomy.econhandlers.ge;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -74,7 +74,7 @@ public class Account {
         Account.location = location;
     }
 
-    public boolean update() {
+    boolean update() {
         long now = TimeUtils.getCurrentDay();
         long activityDeltaDays = now - this.lastCountActivity;
         this.lastCountActivity = now;
@@ -91,7 +91,7 @@ public class Account {
         return activityDeltaDays > 0;
     }
 
-    public void writeIfChanged() throws IOException {
+    void writeIfChanged() throws IOException {
         if (changed) write();
     }
 
@@ -145,7 +145,7 @@ public class Account {
         return balance;
     }
 
-    public void setBalance(long v, boolean showMsg) {
+    void setBalance(long v, boolean showMsg) {
         if(balance != v) {
             balance = v;
             changed = true;
@@ -154,7 +154,7 @@ public class Account {
             Objects.requireNonNull(getPlayerMP()).sendMessage(new TranslationTextComponent("Your balance is now: %s", balance));
     }
 
-    public void addBalance(long v, boolean showMsg) {
+    void addBalance(long v, boolean showMsg) {
         setBalance(balance + v, showMsg);
     }
 

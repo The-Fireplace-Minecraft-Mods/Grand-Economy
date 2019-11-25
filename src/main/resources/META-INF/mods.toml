@@ -1,8 +1,8 @@
 modLoader="javafml"
-loaderVersion="[24,)"
+loaderVersion="[28,)"
 issueTrackerURL="https://github.com/The-Fireplace-Minecraft-Mods/Grand-Economy/issues"
-displayURL="https://minecraft.curseforge.com/projects/grand-economy"
-credits="Thanks to kamildanak for making EnderPay, which this is forked from."
+displayURL="https://www.curseforge.com/minecraft/mc-mods/grand-economy"
+credits=""
 authors="The_Fireplace"
 
 [[mods]] #mandatory
@@ -10,18 +10,18 @@ modId="grandeconomy"
 version="${file.jarVersion}"
 displayName="Grand Economy"
 description='''
-Adds Economy to your Forge server.
+A server-side economy mod/api that supports using currency from sponge/forgeessentials/others.
 '''
 
 [[dependencies.grandeconomy]]
     modId="forge"
     mandatory=true
-    versionRange="[25,)"
+    versionRange="[28,)"
     ordering="NONE"
     side="SERVER"
 [[dependencies.grandeconomy]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.13.2,1.14)"
+    versionRange="[1.14,)"
     ordering="NONE"
     side="SERVER"

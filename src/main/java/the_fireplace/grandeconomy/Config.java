@@ -16,23 +16,29 @@ public class Config
     public static String currencyNameSingular;
     public static String currencyNameMultiple;
     public static boolean showBalanceOnJoin;
-    public static int pvpMoneyDrop;
+    public static int pvpMoneyTransfer;
 
     public static boolean basicIncome;
     public static int basicIncomeAmount;
     public static int startBalance;
     public static long maxBasicIncomeDays;
 
+    public static String economyBridge;
+    public static String locale;
+
     public static void load() {
         currencyNameSingular = SERVER.currencyNameSingular.get();
         currencyNameMultiple = SERVER.currencyNameMultiple.get();
         showBalanceOnJoin = SERVER.showBalanceOnJoin.get();
-        pvpMoneyDrop = SERVER.pvpMoneyTransfer.get();
+        pvpMoneyTransfer = SERVER.pvpMoneyTransfer.get();
 
         basicIncome = SERVER.basicIncome.get();
         basicIncomeAmount = SERVER.basicIncomeAmount.get();
         startBalance = SERVER.startBalance.get();
         maxBasicIncomeDays = SERVER.maxBasicIncomeSavings.get();
+
+        economyBridge = SERVER.economyBridge.get();
+        locale = SERVER.locale.get();
     }
 
     public static class ServerConfig
@@ -47,16 +53,19 @@ public class Config
         public ForgeConfigSpec.IntValue startBalance;
         public ForgeConfigSpec.IntValue maxBasicIncomeSavings;
 
+        public ForgeConfigSpec.ConfigValue<String> economyBridge;
+        public ForgeConfigSpec.ConfigValue<String> locale;
+
         ServerConfig(ForgeConfigSpec.Builder builder) {
-            builder.push("general");
-            currencyNameSingular = builder
-                    .comment("Currency name (max 20 char)")
-                    .translation("Currency Name (singular)")
-                    .define("currencyNameSingular", "gp", o -> o instanceof String && ((String) o).length() <= 20);
-            currencyNameMultiple = builder
-                    .comment("Currency name (max 20 char)")
-                    .translation("Currency Name (multiple)")
-                    .define("currencyNameMultiple", "gp", o -> o instanceof String && ((String) o).length() <= 20);
+            builder.push("any-economy");
+            economyBridge = builder
+                    .comment("Which economy to bridge to, if any. This means Grand Economy and all mods using it will use the target mod's currency. Choices are \"none\", \"sponge\", \"enderpay\", \"forgeessentials\", and \"vault\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded. If you are using Vault, make sure you have a Vault-compatible economy loaded.")
+                    .translation("Economy Bridge")
+                    .define("economyBridge", "none", o -> o instanceof String && ((String) o).length() <= 15);
+            locale = builder
+                    .comment("Server locale - the client's locale takes precedence if Grand Economy is installed there.")
+                    .translation("Locale")
+                    .define("locale", "en_us", o -> o instanceof String && ((String) o).matches("[a-z][a-z]_[a-z][a-z]"));
             showBalanceOnJoin = builder
                     .comment("If enabled, players will be shown a message with their account balance when they join the server.")
                     .translation("Show Balance On Join")
@@ -67,7 +76,15 @@ public class Config
                     .defineInRange("pvpMoneyTransfer", 0, Integer.MIN_VALUE, 100);
             builder.pop();
 
-            builder.push("income");
+            builder.push("native-economy");
+            currencyNameSingular = builder
+                    .comment("Currency name (max 20 char)")
+                    .translation("Currency Name (singular)")
+                    .define("currencyNameSingular", "gp", o -> o instanceof String && ((String) o).length() <= 20);
+            currencyNameMultiple = builder
+                    .comment("Currency name (max 20 char)")
+                    .translation("Currency Name (multiple)")
+                    .define("currencyNameMultiple", "gp", o -> o instanceof String && ((String) o).length() <= 20);
             basicIncome = builder
                     .comment("Give each player credits every so often. The exact amount of time can be configured, and defaults to daily.")
                     .translation("Enable Basic Income")
