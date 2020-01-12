@@ -17,8 +17,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
-import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
-import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 import the_fireplace.grandeconomy.econhandlers.vault.VaultEconHandler;
@@ -102,14 +100,14 @@ public class GrandEconomy {
             case "spongeforge":
                 economy = new SpongeEconHandler();
                 break;
-            case "forgeessentials":
+            /*case "forgeessentials":
             case "fe":
                 economy = new ForgeEssentialsEconHandler();
-                break;
-            case "enderpay":
+                break;*/
+            /*case "enderpay":
             case "ep":
                 economy = new EnderPayEconHandler();
-                break;
+                break;*/
             case "vault":
             case "bukkit":
                 economy = new VaultEconHandler();
