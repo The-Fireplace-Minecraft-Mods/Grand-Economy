@@ -1,6 +1,7 @@
 package the_fireplace.grandeconomy.translation;
 
 import com.google.common.collect.Lists;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
@@ -58,6 +59,13 @@ public class TranslationUtil {
      */
     public static ITextComponent getTranslation(String translationKey, Object... args) {
         return getTranslation((UUID)null, translationKey, args);
+    }
+
+    /**
+     * Returns the TranslationTextComponent if the target is able to translate it, or the translated StringTextComponent otherwise.
+     */
+    public static ITextComponent getTranslation(CommandSource target, String translationKey, Object... args) {
+        return target.getEntity() != null ? getTranslation(target.getEntity(), translationKey, args) : getTranslation(target.getServer(), translationKey, args);
     }
 
     /**

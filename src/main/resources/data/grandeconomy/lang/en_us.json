@@ -6,6 +6,7 @@
 
   "commands.grandeconomy.common.console": "%s can only be used by players.",
   "commands.grandeconomy.common.balance": "Balance: %s",
+  "commands.grandeconomy.common.insufficient_credit": "You don't have enough %s to do that.",
 
   "commands.grandeconomy.balance.usage": "/balance",
   "commands.grandeconomy.balance.description": "Shows your current account balance.",
