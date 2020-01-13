@@ -28,9 +28,7 @@ public class NetworkEvents {
     private static final String GRANDECONOMY_VERIFICATION_MESSAGE = "Grand Economy loaded on client";
 
     @SubscribeEvent
-    public static void packetRecieved(NetworkEvent.ServerCustomPayloadEvent event) {
-        if(event.getPayload().asReadOnly().capacity() >= GRANDECONOMY_VERIFICATION_MESSAGE.getBytes().length)
-            System.out.println(event.getPayload().asReadOnly().readCharSequence(GRANDECONOMY_VERIFICATION_MESSAGE.getBytes().length, StandardCharsets.UTF_8));
+    public static void packetRecieved(NetworkEvent.ClientCustomPayloadEvent event) {
         if(event.getPayload().asReadOnly().capacity() >= GRANDECONOMY_VERIFICATION_MESSAGE.getBytes().length && event.getPayload().asReadOnly().readCharSequence(GRANDECONOMY_VERIFICATION_MESSAGE.getBytes().length, StandardCharsets.UTF_8).equals(GRANDECONOMY_VERIFICATION_MESSAGE)) {
             TranslationUtil.geClients.add(Objects.requireNonNull(event.getSource().get().getSender()).getUniqueID());
             event.getSource().get().setPacketHandled(true);
@@ -51,7 +49,7 @@ public class NetworkEvents {
     }
 
     @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof PlayerEntity && !event.getEntity().world.isRemote) {
             GrandEconomyApi.ensureAccountExists(event.getEntity().getUniqueID(), true);
             if(Config.showBalanceOnJoin)

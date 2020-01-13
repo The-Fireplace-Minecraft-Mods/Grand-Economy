@@ -56,7 +56,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.94'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.114'
     compile 'org.spongepowered:spongeapi:7.1.0'
     compile (group: "com.forgeessentials", name: "forgeessentials", version: "1.4.6-SNAPSHOT", classifier: "dev", changing: true) {
         exclude module: "unspecified"

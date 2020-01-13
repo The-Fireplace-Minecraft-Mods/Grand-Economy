@@ -2,9 +2,7 @@ package the_fireplace.grandeconomy;
 
 import com.google.common.collect.Maps;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -17,12 +15,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
+import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 import the_fireplace.grandeconomy.econhandlers.vault.VaultEconHandler;
-import the_fireplace.grandeconomy.economy.Account;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Map;
 
@@ -69,10 +66,6 @@ public class GrandEconomy {
 
     public void serverConfig(ModConfig.ModConfigEvent event) {
         if (event.getConfig().getType() == ModConfig.Type.SERVER) {
-            configDir = new File(event.getConfig().getFullPath().toFile(), "grandeconomy-extra");
-            configDir.mkdirs();
-            //Initialize ConversionItems
-            ConversionItems.hasValue(null);
             //Load the config
             Config.load();
         }
@@ -83,12 +76,11 @@ public class GrandEconomy {
         Account.clear();
 
         minecraftServer = event.getServer();
-        File file = getWorldDir(getServer().getWorld(DimensionType.OVERWORLD));
-        if (file == null)
-            return;
-
-        Account.setLocation(new File(file, "GrandEconomy-accounts"));
-
+        configDir = new File(minecraftServer.getActiveAnvilConverter().getFile(minecraftServer.getFolderName(), "serverconfig"), "grandeconomy-extra");
+        configDir.mkdirs();
+        //Initialize ConversionItems
+        ConversionItems.hasValue(null);
+        Account.setLocation(new File(getServer().getWorld(DimensionType.OVERWORLD).getSaveHandler().getWorldDirectory(), "GrandEconomy-accounts"));
         GeCommands.register(event.getCommandDispatcher());
     }
 
@@ -116,12 +108,5 @@ public class GrandEconomy {
                 economy = econHandlers.getOrDefault(Config.economyBridge, new GrandEconomyEconHandler());
         }
         getEconomy().init();
-    }
-
-    @Nullable
-    private File getWorldDir(World world) {
-        if (!(world instanceof ServerWorld))
-            return null;
-        return ((ServerWorld) world).getSaveHandler().getWorldDirectory();
     }
 }
