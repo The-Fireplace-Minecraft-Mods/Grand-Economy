@@ -19,6 +19,7 @@ import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 import the_fireplace.grandeconomy.econhandlers.vault.VaultEconHandler;
+import the_fireplace.grandeconomy.events.NetworkEvents;
 
 import java.io.File;
 import java.util.Map;
@@ -56,6 +57,7 @@ public class GrandEconomy {
     public GrandEconomy() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_SPEC);
         MinecraftForge.EVENT_BUS.register(this);
+        NetworkEvents.init();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverConfig);
         instance = this;
     }
