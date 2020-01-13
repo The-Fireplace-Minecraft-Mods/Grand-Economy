@@ -30,7 +30,7 @@ public class GrandEconomyLanguageMap {
     private long lastUpdateTimeInMilliseconds;
 
     GrandEconomyLanguageMap(String locale) {
-        try (InputStream inputstream = GrandEconomyLanguageMap.class.getResourceAsStream("/assets/grandeconomy/lang/" + locale + ".json")) {
+        try (InputStream inputstream = GrandEconomyLanguageMap.class.getResourceAsStream("/data/grandeconomy/lang/" + locale + ".json")) {
             JsonElement jsonelement = (new Gson()).fromJson(new InputStreamReader(inputstream, StandardCharsets.UTF_8), JsonElement.class);
             JsonObject jsonobject = JSONUtils.getJsonObject(jsonelement, "strings");
 
@@ -41,7 +41,7 @@ public class GrandEconomyLanguageMap {
             //LanguageHook.captureLanguageMap(this.languageList);
             this.lastUpdateTimeInMilliseconds = Util.milliTime();
         } catch (JsonParseException | IOException ioexception) {
-            LOGGER.error("/assets/grandeconomy/lang/" + locale + ".json", ioexception);
+            LOGGER.error("/data/grandeconomy/lang/" + locale + ".json", ioexception);
         }
     }
 
