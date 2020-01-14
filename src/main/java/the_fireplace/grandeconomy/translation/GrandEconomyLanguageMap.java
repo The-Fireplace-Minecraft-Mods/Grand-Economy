@@ -6,9 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.Util;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.Config;
@@ -27,10 +24,9 @@ public class GrandEconomyLanguageMap {
     private static final Pattern NUMERIC_VARIABLE_PATTERN = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
     private static final GrandEconomyLanguageMap instance = new GrandEconomyLanguageMap(Config.locale);
     private final Map<String, String> languageList = Maps.newHashMap();
-    private long lastUpdateTimeInMilliseconds;
 
     GrandEconomyLanguageMap(String locale) {
-        try (InputStream inputstream = GrandEconomyLanguageMap.class.getResourceAsStream("/data/grandeconomy/lang/" + locale + ".json")) {
+        try (InputStream inputstream = GrandEconomyLanguageMap.class.getResourceAsStream("/assets/grandeconomy/lang/" + locale + ".json")) {
             JsonElement jsonelement = (new Gson()).fromJson(new InputStreamReader(inputstream, StandardCharsets.UTF_8), JsonElement.class);
             JsonObject jsonobject = JSONUtils.getJsonObject(jsonelement, "strings");
 
@@ -38,25 +34,13 @@ public class GrandEconomyLanguageMap {
                 String s = NUMERIC_VARIABLE_PATTERN.matcher(JSONUtils.getString(entry.getValue(), entry.getKey())).replaceAll("%$1s");
                 this.languageList.put(entry.getKey(), s);
             }
-            //LanguageHook.captureLanguageMap(this.languageList);
-            this.lastUpdateTimeInMilliseconds = Util.milliTime();
         } catch (JsonParseException | IOException ioexception) {
-            LOGGER.error("/data/grandeconomy/lang/" + locale + ".json", ioexception);
+            LOGGER.error("/assets/grandeconomy/lang/" + locale + ".json", ioexception);
         }
     }
 
     static GrandEconomyLanguageMap getInstance() {
         return instance;
-    }
-
-    /**
-     * Replaces all the current instance's translations with the ones that are passed in.
-     */
-    @OnlyIn(Dist.CLIENT)
-    public static synchronized void replaceWith(Map<String, String> p_135063_0_) {
-        instance.languageList.clear();
-        instance.languageList.putAll(p_135063_0_);
-        instance.lastUpdateTimeInMilliseconds = Util.milliTime();
     }
 
     synchronized String translateKeyFormat(String key, Object... format) {
@@ -76,12 +60,5 @@ public class GrandEconomyLanguageMap {
 
     synchronized boolean isKeyTranslated(String key) {
         return this.languageList.containsKey(key);
-    }
-
-    /**
-     * Gets the time, in milliseconds since epoch, that this instance was last updated
-     */
-    public long getLastUpdateTimeInMilliseconds() {
-        return this.lastUpdateTimeInMilliseconds;
     }
 }
