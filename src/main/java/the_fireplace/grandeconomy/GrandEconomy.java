@@ -55,9 +55,9 @@ public class GrandEconomy {
     }
 
     public GrandEconomy() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_SPEC);
         MinecraftForge.EVENT_BUS.register(this);
         NetworkEvents.init();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverConfig);
         instance = this;
     }
@@ -67,7 +67,7 @@ public class GrandEconomy {
     }
 
     public void serverConfig(ModConfig.ModConfigEvent event) {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER) {
+        if (event.getConfig().getType() == ModConfig.Type.COMMON) {
             //Load the config
             Config.load();
         }

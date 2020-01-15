@@ -19,6 +19,8 @@
   "commands.grandeconomy.pay.usage": "/pay <player> <amount>",
   "commands.grandeconomy.pay.description": "Pay a player money from your account.",
   "commands.grandeconomy.pay.negative": "You cannot pay someone negative amount.",
+  "commands.grandeconomy.pay.paid": "You sent %s to %s.",
+  "commands.grandeconomy.pay.recieved": "You recieved %s from %s.",
 
   "commands.grandeconomy.wallet.usage": "/wallet <give|take|set|balance> <player> <amount>",
   "commands.grandeconomy.wallet.description": "The admin command for managing account balances.",

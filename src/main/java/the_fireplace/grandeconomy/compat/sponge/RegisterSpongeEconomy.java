@@ -70,7 +70,7 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
         @Override
         public Text format(BigDecimal amount, int numFractionDigits) {
-            return Text.of(GrandEconomyApi.toString(amount.longValue()));
+            return Text.of(GrandEconomyApi.formatCurrency(amount.longValue()));
         }
 
         @Override

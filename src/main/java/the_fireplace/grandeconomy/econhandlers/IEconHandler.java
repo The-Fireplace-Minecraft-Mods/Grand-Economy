@@ -1,5 +1,6 @@
 package the_fireplace.grandeconomy.econhandlers;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public interface IEconHandler {
@@ -12,7 +13,7 @@ public interface IEconHandler {
      * @return
      * The balance
      */
-    long getBalance(UUID uuid, Boolean isPlayer);
+    long getBalance(UUID uuid, @Nullable Boolean isPlayer);
 
     /**
      * Add to the account's balance
@@ -25,7 +26,7 @@ public interface IEconHandler {
      * @return
      * Whether the amount was successfully added or not
      */
-    boolean addToBalance(UUID uuid, long amount, Boolean isPlayer);
+    boolean addToBalance(UUID uuid, long amount, @Nullable Boolean isPlayer);
 
     /**
      * Take from the account's balance
@@ -38,7 +39,7 @@ public interface IEconHandler {
      * @return
      * Whether the amount was successfully taken or not
      */
-    boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer);
+    boolean takeFromBalance(UUID uuid, long amount, @Nullable Boolean isPlayer);
 
     /**
      * Sets the account's balance
@@ -51,7 +52,7 @@ public interface IEconHandler {
      * @return
      * Whether the balance was successfully set or not
      */
-    boolean setBalance(UUID uuid, long amount, Boolean isPlayer);
+    boolean setBalance(UUID uuid, long amount, @Nullable Boolean isPlayer);
 
     /**
      * Gets the name of the currency for the given amount.
@@ -80,7 +81,7 @@ public interface IEconHandler {
      * @return
      * True if it exists, false otherwise.
      */
-    boolean ensureAccountExists(UUID uuid, Boolean isPlayer);
+    boolean ensureAccountExists(UUID uuid, @Nullable Boolean isPlayer);
 
     /**
      * Forcibly saves the account. The effectiveness of this is economy-specific.
@@ -91,6 +92,7 @@ public interface IEconHandler {
      * @return
      * true if saved, false if not saved, or null if not implemented
      */
+    @Nullable
     Boolean forceSave(UUID uuid, Boolean isPlayer);
 
     /**

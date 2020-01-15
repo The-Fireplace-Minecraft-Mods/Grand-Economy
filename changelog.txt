@@ -1,1 +1,5 @@
-Fixed config error
+Updated to 1.14.4
+Added feedback messages when you use /pay
+Updated feedback messages to include currency name
+Added API method to retrieve an account's balance with the currency name attached
+Renamed toString API method to formatCurrency

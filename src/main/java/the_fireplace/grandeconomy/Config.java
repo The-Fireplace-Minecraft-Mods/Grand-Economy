@@ -5,12 +5,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class Config
 {
-    public static final ServerConfig SERVER;
-    public static final ForgeConfigSpec SERVER_SPEC;
+    public static final ServerConfig COMMON;
+    public static final ForgeConfigSpec COMMON_SPEC;
     static {
         final Pair<ServerConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
-        SERVER_SPEC = specPair.getRight();
-        SERVER = specPair.getLeft();
+        COMMON_SPEC = specPair.getRight();
+        COMMON = specPair.getLeft();
     }
 
     public static String currencyNameSingular;
@@ -27,18 +27,18 @@ public class Config
     public static String locale;
 
     public static void load() {
-        currencyNameSingular = SERVER.currencyNameSingular.get();
-        currencyNameMultiple = SERVER.currencyNameMultiple.get();
-        showBalanceOnJoin = SERVER.showBalanceOnJoin.get();
-        pvpMoneyTransfer = SERVER.pvpMoneyTransfer.get();
+        currencyNameSingular = COMMON.currencyNameSingular.get();
+        currencyNameMultiple = COMMON.currencyNameMultiple.get();
+        showBalanceOnJoin = COMMON.showBalanceOnJoin.get();
+        pvpMoneyTransfer = COMMON.pvpMoneyTransfer.get();
 
-        basicIncome = SERVER.basicIncome.get();
-        basicIncomeAmount = SERVER.basicIncomeAmount.get();
-        startBalance = SERVER.startBalance.get();
-        maxBasicIncomeDays = SERVER.maxBasicIncomeSavings.get();
+        basicIncome = COMMON.basicIncome.get();
+        basicIncomeAmount = COMMON.basicIncomeAmount.get();
+        startBalance = COMMON.startBalance.get();
+        maxBasicIncomeDays = COMMON.maxBasicIncomeSavings.get();
 
-        economyBridge = SERVER.economyBridge.get();
-        locale = SERVER.locale.get();
+        economyBridge = COMMON.economyBridge.get();
+        locale = COMMON.locale.get();
     }
 
     public static class ServerConfig

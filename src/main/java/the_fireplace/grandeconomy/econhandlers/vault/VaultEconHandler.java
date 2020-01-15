@@ -15,65 +15,65 @@ public class VaultEconHandler implements IEconHandler {
     private Economy econ;
 
     private boolean shouldUsePlayerAccount(UUID uuid, Boolean isPlayer) {
-        return isPlayer == null && Bukkit.getOfflinePlayer(uuid).hasPlayedBefore() || isPlayer == Boolean.TRUE || !econ.hasBankSupport();
+        return isPlayer == null && Bukkit.getOfflinePlayer(uuid).hasPlayedBefore() || isPlayer == Boolean.TRUE || !getEcon().hasBankSupport();
     }
 
     @Override
     public long getBalance(UUID uuid, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer))
-            return (long) econ.getBalance(Bukkit.getOfflinePlayer(uuid));
+            return (long) getEcon().getBalance(Bukkit.getOfflinePlayer(uuid));
         else
-            return (long) econ.bankBalance(uuid.toString()).balance;
+            return (long) getEcon().bankBalance(uuid.toString()).balance;
     }
 
     @Override
     public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer))
-            return econ.depositPlayer(Bukkit.getOfflinePlayer(uuid), amount).transactionSuccess();
+            return getEcon().depositPlayer(Bukkit.getOfflinePlayer(uuid), amount).transactionSuccess();
         else
-            return econ.bankDeposit(uuid.toString(), amount).transactionSuccess();
+            return getEcon().bankDeposit(uuid.toString(), amount).transactionSuccess();
     }
 
     @Override
     public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer))
-            return econ.withdrawPlayer(Bukkit.getOfflinePlayer(uuid), amount).transactionSuccess();
+            return getEcon().withdrawPlayer(Bukkit.getOfflinePlayer(uuid), amount).transactionSuccess();
         else
-            return econ.bankWithdraw(uuid.toString(), amount).transactionSuccess();
+            return getEcon().bankWithdraw(uuid.toString(), amount).transactionSuccess();
     }
 
     @Override
     public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer)) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
-            if(econ.getBalance(p) > amount)
-                return econ.withdrawPlayer(p, amount-econ.getBalance(p)).transactionSuccess();
+            if(getEcon().getBalance(p) > amount)
+                return getEcon().withdrawPlayer(p, amount- getEcon().getBalance(p)).transactionSuccess();
             else
-                return econ.depositPlayer(p, econ.getBalance(p)-amount).transactionSuccess();
+                return getEcon().depositPlayer(p, getEcon().getBalance(p)-amount).transactionSuccess();
         } else {
-            if(econ.bankBalance(uuid.toString()).balance > amount)
-                return econ.bankWithdraw(uuid.toString(), amount-econ.bankBalance(uuid.toString()).balance).transactionSuccess();
+            if(getEcon().bankBalance(uuid.toString()).balance > amount)
+                return getEcon().bankWithdraw(uuid.toString(), amount- getEcon().bankBalance(uuid.toString()).balance).transactionSuccess();
             else
-                return econ.bankDeposit(uuid.toString(), econ.bankBalance(uuid.toString()).balance-amount).transactionSuccess();
+                return getEcon().bankDeposit(uuid.toString(), getEcon().bankBalance(uuid.toString()).balance-amount).transactionSuccess();
         }
     }
 
     @Override
     public String getCurrencyName(long amount) {
-        return amount == 1 ? econ.currencyNameSingular() : econ.currencyNamePlural();
+        return amount == 1 ? getEcon().currencyNameSingular() : getEcon().currencyNamePlural();
     }
 
     @Override
     public String toString(long amount) {
-        return econ.format(amount);
+        return getEcon().format(amount);
     }
 
     @Override
     public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
         if(shouldUsePlayerAccount(uuid, isPlayer))
-            return econ.hasAccount(Bukkit.getOfflinePlayer(uuid)) || econ.createPlayerAccount(Bukkit.getOfflinePlayer(uuid));
+            return getEcon().hasAccount(Bukkit.getOfflinePlayer(uuid)) || getEcon().createPlayerAccount(Bukkit.getOfflinePlayer(uuid));
         else
-            return econ.getBanks().contains(uuid.toString()) || econ.createBank(uuid.toString(), Bukkit.getOfflinePlayer(uuid)).transactionSuccess();
+            return getEcon().getBanks().contains(uuid.toString()) || getEcon().createBank(uuid.toString(), Bukkit.getOfflinePlayer(uuid)).transactionSuccess();
     }
 
     @Override
@@ -88,7 +88,14 @@ public class VaultEconHandler implements IEconHandler {
 
     @Override
     public void init() {
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
-        econ = economyProvider.getProvider();
+
+    }
+
+    private Economy getEcon() {
+        if(econ == null) {
+            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+            econ = economyProvider.getProvider();
+        }
+        return econ;
     }
 }
