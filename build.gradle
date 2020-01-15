@@ -25,7 +25,7 @@ apply plugin: 'net.cazzar.gradle.modsio'
 
 version = "1.4.0"
 group = "the_fireplace.grandeconomy"
-archivesBaseName = "GrandEconomy-1.14.4"
+archivesBaseName = "GrandEconomy-1.15.1"
 
 allprojects {
     sourceCompatibility = 1.8
@@ -56,14 +56,14 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.114'
+    minecraft 'net.minecraftforge:forge:1.15.1-30.0.39'
     compile 'org.spongepowered:spongeapi:7.1.0'
-    compile (group: "com.forgeessentials", name: "forgeessentials", version: "1.4.6-SNAPSHOT", classifier: "dev", changing: true) {
+    /*compile (group: "com.forgeessentials", name: "forgeessentials", version: "1.4.6-SNAPSHOT", classifier: "dev", changing: true) {
         exclude module: "unspecified"
-    }
-    compile "org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT"
+    }*/
+    compile "org.spigotmc:spigot-api:1.15.1-R0.1-SNAPSHOT"
     compile group: "net.milkbowl.vault", name: "VaultAPI", version: "1.7"
-    compile name:'enderpay-1.12.2-1.0.1.0-deobf'
+    //compile name:'enderpay-1.12.2-1.0.1.0-deobf'
 }
 
 repositories {
@@ -117,7 +117,8 @@ curseforge {
   project {
     id = '312141'
     changelog = file('changelog.txt')
-    releaseType = 'beta'
+    releaseType = 'release'
+    addGameVersion '1.15.1'
     addGameVersion '1.14.4'
 	addGameVersion 'Java 8'
     mainArtifact(jar) {
@@ -135,7 +136,7 @@ modsIO {
     project{
 		artifact = new File(jar.destinationDir, archivesBaseName+"-"+version+".jar")
 		modid = "1278"
-		minecraft = "1.14.4"
+		minecraft = "1.15.1"
 		try{changelog = file('changelog.txt').text}catch(Exception e){changelog=""}
 		tag = ""
 		current = true
