@@ -30,11 +30,11 @@ public class KillingEvents {
             long amountTaken = (moneyDropValue > 0) ?
                     (GrandEconomyApi.getBalance(event.getEntity().getUniqueID()) * GrandEconomy.cfg.pvpMoneyTransfer) / 100 :
                     Math.max(Math.min(GrandEconomyApi.getBalance(event.getEntity().getUniqueID()), -GrandEconomy.cfg.pvpMoneyTransfer), 0);
-            GrandEconomyApi.takeFromBalance(event.getEntity().getUniqueID(), amountTaken, false);
+            GrandEconomyApi.takeFromBalance(event.getEntity().getUniqueID(), amountTaken, true);
 
             entity.sendMessage(TranslationUtil.getTranslation(entity.getUniqueID(), "grandeconomy.killed_balance", GrandEconomyApi.getBalance(event.getEntity().getUniqueID())));
 
-            GrandEconomyApi.addToBalance(killer.getUniqueID(), amountTaken, false);
+            GrandEconomyApi.addToBalance(killer.getUniqueID(), amountTaken, true);
             killer.sendMessage(TranslationUtil.getTranslation(killer.getUniqueID(), "grandeconomy.killer_balance", GrandEconomyApi.getBalance(killer.getUniqueID())));
         }
     }

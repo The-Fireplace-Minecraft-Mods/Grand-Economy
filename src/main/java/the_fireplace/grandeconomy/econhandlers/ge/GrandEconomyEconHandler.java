@@ -32,7 +32,7 @@ public class GrandEconomyEconHandler implements IEconHandler {
         }
         if(account.getBalance() + amount < 0)
             return false;
-        account.addBalance(amount, false);
+        account.addBalance(amount);
         return true;
     }
 
@@ -45,7 +45,7 @@ public class GrandEconomyEconHandler implements IEconHandler {
         }
         if (account.getBalance() < amount)
             return false;
-        account.addBalance(-amount, false);
+        account.addBalance(-amount);
         return true;
     }
 
@@ -59,7 +59,7 @@ public class GrandEconomyEconHandler implements IEconHandler {
         if(amount < 0)
             return false;
 
-        account.setBalance(amount, false);
+        account.setBalance(amount);
         return true;
     }
 

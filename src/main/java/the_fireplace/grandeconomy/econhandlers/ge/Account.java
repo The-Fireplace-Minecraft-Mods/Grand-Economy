@@ -145,17 +145,15 @@ public class Account {
         return balance;
     }
 
-    void setBalance(long v, boolean showMsg) {
+    void setBalance(long v) {
         if(balance != v) {
             balance = v;
             changed = true;
         }
-        if(showMsg)
-            Objects.requireNonNull(getPlayerMP()).sendMessage(new TextComponentTranslation("Your balance is now: %s", balance));
     }
 
-    void addBalance(long v, boolean showMsg) {
-        setBalance(balance + v, showMsg);
+    void addBalance(long v) {
+        setBalance(balance + v);
     }
 
     @SuppressWarnings("ConstantConditions")

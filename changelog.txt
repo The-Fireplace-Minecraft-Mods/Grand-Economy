@@ -1,1 +1,1 @@
-Fixed crash when attempting to use Vault support
+Fixed some potential issues with using Vault

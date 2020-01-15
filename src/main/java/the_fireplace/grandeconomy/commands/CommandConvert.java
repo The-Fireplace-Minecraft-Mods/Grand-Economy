@@ -38,7 +38,7 @@ public class CommandConvert extends CommandBase {
             if(ConversionItems.hasValue(heldResource, heldMeta)) {
                 int value = ConversionItems.getValue(heldResource, heldMeta);
                 int count = ((EntityPlayer) sender).getHeldItemMainhand().getCount();
-                GrandEconomyApi.addToBalance(((EntityPlayer) sender).getUniqueID(), value * count, false);
+                GrandEconomyApi.addToBalance(((EntityPlayer) sender).getUniqueID(), value * count, true);
                 ((EntityPlayer) sender).setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
                 sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayer) sender).getUniqueID(), "commands.grandeconomy.convert.success", count, heldResource.toString(), value, value * count, GrandEconomyApi.getBalance(((EntityPlayer)sender).getUniqueID())));
             } else
