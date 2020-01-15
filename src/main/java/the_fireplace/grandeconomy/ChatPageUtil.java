@@ -1,6 +1,7 @@
 package the_fireplace.grandeconomy;
 
 import com.google.common.collect.Lists;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.ICommandSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -12,12 +13,19 @@ import java.util.List;
 
 public class ChatPageUtil {
 
-    public static void showPaginatedChat(ICommandSource sender, String command, List<ITextComponent> items, int page) {
+    public static void showPaginatedChat(CommandSource target, String command, List<ITextComponent> items, int page) {
+        if(target.getEntity() != null)
+            showPaginatedChat(target.getEntity(), command, items, page);
+        else
+            showPaginatedChat(target.getServer(), command, items, page);
+    }
+
+    public static void showPaginatedChat(ICommandSource target, String command, List<ITextComponent> items, int page) {
         int resultsOnPage = 7;
         int current = page;
         int totalPageCount = items.size() % resultsOnPage > 0 ? (items.size()/resultsOnPage)+1 : items.size()/resultsOnPage;
 
-        ITextComponent counter = TranslationUtil.getTranslation(sender, "grandeconomy.chat.page.num", current, totalPageCount);
+        ITextComponent counter = TranslationUtil.getTranslation(target, "grandeconomy.chat.page.num", current, totalPageCount);
         ITextComponent top = new StringTextComponent("-----------------").setStyle(TextStyles.GREEN).appendSibling(counter).appendText("-------------------").setStyle(TextStyles.GREEN);
 
         //Expand page to be the first entry on the page
@@ -35,19 +43,15 @@ public class ChatPageUtil {
             printItems.add(item);
         }
 
-        ITextComponent nextButton = current < totalPageCount ? TranslationUtil.getTranslation(sender, "grandeconomy.chat.page.next").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format(command, current+1)))) : new StringTextComponent("-----");
-        ITextComponent prevButton = current > 1 ? TranslationUtil.getTranslation(sender, "grandeconomy.chat.page.prev").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format(command, current-1)))) : new StringTextComponent("------");
+        ITextComponent nextButton = current < totalPageCount ? TranslationUtil.getTranslation(target, "grandeconomy.chat.page.next").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format(command, current+1)))) : new StringTextComponent("-----");
+        ITextComponent prevButton = current > 1 ? TranslationUtil.getTranslation(target, "grandeconomy.chat.page.prev").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format(command, current-1)))) : new StringTextComponent("------");
         ITextComponent bottom = new StringTextComponent("---------------").setStyle(TextStyles.GREEN).appendSibling(prevButton).appendText("---").setStyle(TextStyles.GREEN).appendSibling(nextButton).appendText("-------------").setStyle(TextStyles.GREEN);
 
-        sender.sendMessage(top);
+        target.sendMessage(top);
 
         for(ITextComponent item: printItems)
-            sender.sendMessage(item);
+            target.sendMessage(item);
 
-        sender.sendMessage(bottom);
-    }
-
-    public static void showPaginatedChat(ICommandSource target, String command, List<ITextComponent> items) {
-        showPaginatedChat(target, command, items, 1);
+        target.sendMessage(bottom);
     }
 }

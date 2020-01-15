@@ -1,10 +1,12 @@
 package the_fireplace.grandeconomy;
 
+import com.google.common.collect.Lists;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -14,13 +16,18 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.translation.TranslationUtil;
 
-public class GeCommands {
+import java.util.Comparator;
+import java.util.List;
 
-    @SuppressWarnings("Duplicates")
+public class GeCommands {
+    //Used for the help command, each command in this list should have a corresponding command usage and description in the lang files
+    private static final List<String> commands = Lists.newArrayList("balance", "convert", "pay", "wallet", "gehelp");
+
     public static void register(CommandDispatcher<CommandSource> commandDispatcher) {
         commandDispatcher.register(Commands.literal("balance").requires((iCommandSender) -> iCommandSender.getEntity() instanceof PlayerEntity).executes((command) -> {
             command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.common.balance", GrandEconomyApi.getBalanceFormatted(command.getSource().asPlayer().getUniqueID(), true)), false);
@@ -114,5 +121,26 @@ public class GeCommands {
                                 command.getSource().asPlayer().sendMessage(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.convert.failure"));
                             return Command.SINGLE_SUCCESS;
                         }));
+
+        commandDispatcher.register(Commands.literal("gehelp").requires((iCommandSender) -> iCommandSender.hasPermissionLevel(0))
+                .executes((command) -> {
+                    ChatPageUtil.showPaginatedChat(command.getSource(), "/gehelp %s", getHelpsList(command), 1);
+                    return Command.SINGLE_SUCCESS;
+                })
+                .then(Commands.argument("page", IntegerArgumentType.integer(1))
+                .executes((command) -> {
+                    ChatPageUtil.showPaginatedChat(command.getSource(), "/gehelp %s", getHelpsList(command), command.getArgument("page", Integer.class));
+                    return Command.SINGLE_SUCCESS;
+                })));
+    }
+
+    private static List<ITextComponent> getHelpsList(CommandContext<CommandSource> command) {
+        List<ITextComponent> helps = Lists.newArrayList();
+        for(String commandName: commands)
+            helps.add(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.gehelp.format",
+                    TranslationUtil.getStringTranslation(command.getSource(), "commands.grandeconomy."+commandName+".usage"),
+                    TranslationUtil.getStringTranslation(command.getSource(), "commands.grandeconomy."+commandName+".description")));
+        helps.sort(Comparator.comparing(ITextComponent::getUnformattedComponentText));
+        return helps;
     }
 }

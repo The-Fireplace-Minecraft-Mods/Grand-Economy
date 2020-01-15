@@ -26,8 +26,15 @@ public class TranslationUtil {
     /**
      * Gets the translation for the given key and arguments and returns the formatted string.
      */
-    public static String getStringTranslation(ICommandSource sender, String translationKey, Object... args) {
-        return getTranslation(sender, translationKey, args).getFormattedText();
+    public static String getStringTranslation(CommandSource target, String translationKey, Object... args) {
+        return target.getEntity() != null ? getStringTranslation(target.getEntity(), translationKey, args) : getStringTranslation(target.getServer(), translationKey, args);
+    }
+
+    /**
+     * Gets the translation for the given key and arguments and returns the formatted string.
+     */
+    public static String getStringTranslation(ICommandSource target, String translationKey, Object... args) {
+        return getTranslation(target, translationKey, args).getFormattedText();
     }
 
     /**
@@ -40,8 +47,8 @@ public class TranslationUtil {
     /**
      * Returns the translation key if the sender is able to translate it, or the translated string otherwise.
      */
-    public static String getRawTranslationString(ICommandSource sender, String translationKey) {
-        return getRawTranslationString(sender instanceof ServerPlayerEntity ? ((ServerPlayerEntity) sender).getUniqueID() : null, translationKey);
+    public static String getRawTranslationString(ICommandSource target, String translationKey) {
+        return getRawTranslationString(target instanceof ServerPlayerEntity ? ((ServerPlayerEntity) target).getUniqueID() : null, translationKey);
     }
 
     /**
