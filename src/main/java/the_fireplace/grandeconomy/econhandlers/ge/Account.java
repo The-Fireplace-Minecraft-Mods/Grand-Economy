@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
 import the_fireplace.grandeconomy.Config;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.TimeUtils;
@@ -15,7 +14,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Account {
@@ -145,17 +143,15 @@ public class Account {
         return balance;
     }
 
-    void setBalance(long v, boolean showMsg) {
+    void setBalance(long v) {
         if(balance != v) {
             balance = v;
             changed = true;
         }
-        if(showMsg)
-            Objects.requireNonNull(getPlayerMP()).sendMessage(new TranslationTextComponent("Your balance is now: %s", balance));
     }
 
-    void addBalance(long v, boolean showMsg) {
-        setBalance(balance + v, showMsg);
+    void addBalance(long v) {
+        setBalance(balance + v);
     }
 
     @Nullable

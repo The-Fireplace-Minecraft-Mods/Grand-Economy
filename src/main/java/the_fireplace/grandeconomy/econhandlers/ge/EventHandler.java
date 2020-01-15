@@ -31,6 +31,7 @@ public class EventHandler {
             return;
         lastTickEvent = now;
         MinecraftServer server = GrandEconomy.getServer();
+        //noinspection ConstantConditions
         if (server == null)
             return;
         for (ServerPlayerEntity playerEntity : server.getPlayerList().getPlayers()) {
