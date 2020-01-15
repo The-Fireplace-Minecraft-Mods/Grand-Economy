@@ -5,6 +5,7 @@ import com.google.gson.*;
 import net.minecraft.util.ResourceLocation;
 import the_fireplace.grandeconomy.GrandEconomy;
 
+import javax.annotation.Nullable;
 import java.io.*;
 import java.util.Map;
 
@@ -19,11 +20,11 @@ public final class ConversionItems {
 
     private Map<ResourceLocation, Integer> items = Maps.newHashMap();
 
-    public static boolean hasValue(ResourceLocation itemResource) {
+    public static boolean hasValue(@Nullable ResourceLocation itemResource) {
         return getInstance().items.containsKey(itemResource) && getInstance().items.get(itemResource) > 0;
     }
 
-    public static int getValue(ResourceLocation itemResource) {
+    public static int getValue(@Nullable ResourceLocation itemResource) {
         return getInstance().items.getOrDefault(itemResource, 0);
     }
 

@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -86,9 +87,12 @@ public class GrandEconomy {
         GeCommands.register(event.getCommandDispatcher());
     }
 
-    @SubscribeEvent
+    //Low priority in case other mods decide to ignore the API documentation and register their economy bridges during FMLServerStartedEvent.
+    //This is not foolproof, as the lifecycle events are threaded in 1.13+, so it is possible that this gets run at the same time as other mods' FMLServerStartedEvents.
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onServerStart(FMLServerStartedEvent event) {
         switch(Config.economyBridge) {
+            //Do not use registerEconHandler for the built in econ handlers because we do not know at register time if the corresponding mods/plugins are loaded.
             case "sponge":
             case "spongeapi":
             case "spongeforge":
