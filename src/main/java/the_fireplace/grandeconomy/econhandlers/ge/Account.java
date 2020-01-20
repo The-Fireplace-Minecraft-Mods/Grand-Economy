@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.TimeUtils;
@@ -15,7 +14,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Account {

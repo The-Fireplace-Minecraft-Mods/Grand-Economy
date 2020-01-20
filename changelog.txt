@@ -1,1 +1,1 @@
-Fixed some potential issues with using Vault
+Fixed 32 being added to display amount.
