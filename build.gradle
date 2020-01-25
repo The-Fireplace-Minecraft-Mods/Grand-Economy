@@ -38,7 +38,7 @@ allprojects {
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2838"
+    version = "1.12.2-14.23.5.2847"
     runDir = "run"
     replace '${version}', project.version
     mappings = "stable_39"
@@ -80,8 +80,13 @@ shadowJar {
     exclude 'enderpay*.jar'
 }
 
-processResources
-{
+reobf {
+    shadowJar {}
+}
+
+build.dependsOn reobfShadowJar
+
+processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
@@ -102,7 +107,8 @@ task deobfJar(type: Jar) {
 }
 
 artifacts {
-    archives jar
+    //archives jar
+    archives shadowJar
     archives deobfJar
     archives sourceJar
 }
