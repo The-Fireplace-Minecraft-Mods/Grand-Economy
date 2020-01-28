@@ -83,7 +83,7 @@ public class GrandEconomy {
         configDir.mkdirs();
         //Initialize ConversionItems
         ConversionItems.hasValue(null);
-        Account.setLocation(new File(getServer().getWorld(DimensionType.OVERWORLD).getSaveHandler().getWorldDirectory(), "GrandEconomy-accounts"));
+        Account.setLocation(new File(getServer().forgeGetWorldMap().get(DimensionType.OVERWORLD).getSaveHandler().getWorldDirectory(), "GrandEconomy-accounts"));
         GeCommands.register(event.getCommandDispatcher());
     }
 
