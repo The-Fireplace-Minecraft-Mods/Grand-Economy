@@ -28,14 +28,14 @@ public class CommandPay extends CommandBase {
 
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
-        if (args.length > 2) {
+        if (args.length == 2) {
             if(sender instanceof EntityPlayerMP) {
                 EntityPlayerMP targetPlayer = getPlayer(server, sender, args[0]);
-                GrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID());
+                GrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID(), true);
                 long amount = parseLong(args[1]);
                 if (amount < 0)
                     throw new NumberInvalidException(TranslationUtil.getStringTranslation(((EntityPlayerMP) sender).getUniqueID(), "commands.grandeconomy.pay.negative"));
-                if (GrandEconomyApi.getBalance(((EntityPlayerMP) sender).getUniqueID()) < amount)
+                if (GrandEconomyApi.getBalance(((EntityPlayerMP) sender).getUniqueID(), true) < amount)
                     throw new InsufficientCreditException(((EntityPlayerMP) sender).getUniqueID());
                 GrandEconomyApi.takeFromBalance(((EntityPlayerMP) sender).getUniqueID(), amount, true);
                 GrandEconomyApi.addToBalance(targetPlayer.getUniqueID(), amount, true);

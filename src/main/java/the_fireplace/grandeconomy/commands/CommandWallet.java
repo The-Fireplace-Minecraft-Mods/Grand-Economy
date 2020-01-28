@@ -37,7 +37,7 @@ public class CommandWallet extends CommandBase {
             if(target == null)
                 throw new PlayerNotFoundException("commands.generic.player.notFound", args[1]);
             if ("balance".equals(args[0])) {
-                sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.balance", target.getName(), GrandEconomyApi.getBalance(target.getId())));
+                sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.balance", target.getName(), GrandEconomyApi.getBalance(target.getId(), true)));
                 return;
             }
             if(args.length > 2) {
@@ -46,7 +46,7 @@ public class CommandWallet extends CommandBase {
                     if(amount < 0)
                         throw new CommandException("commands.grandeconomy.wallet.negative", target.getName());
                     GrandEconomyApi.setBalance(target.getId(), amount, true);
-                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.set", target.getName(), GrandEconomyApi.getBalance(target.getId())));
+                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.set", target.getName(), GrandEconomyApi.getBalance(target.getId(), true)));
                     return;
                 }
                 if ("give".equals(args[0]) || "add".equals(args[0])) {
