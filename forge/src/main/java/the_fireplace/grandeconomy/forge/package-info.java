@@ -1,0 +1,6 @@
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package the_fireplace.grandeconomy.forge;
+
+import mcp.MethodsReturnNonnullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;
