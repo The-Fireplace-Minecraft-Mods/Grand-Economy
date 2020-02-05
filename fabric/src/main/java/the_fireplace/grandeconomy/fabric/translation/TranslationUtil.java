@@ -1,8 +1,12 @@
 package the_fireplace.grandeconomy.fabric.translation;
 
 import com.google.common.collect.Lists;
-import net.minecraft.server.command.CommandSource;
+import net.minecraft.server.command.CommandOutput;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,35 +19,35 @@ public class TranslationUtil {
      * Gets the translation for the given key and arguments and returns the formatted string.
      */
     public static String getStringTranslation(String translationKey, Object... args) {
-        return getTranslation(translationKey, args).getFormattedText();
+        return getTranslation(translationKey, args).getString();
     }
 
     /**
      * Gets the translation for the given key and arguments and returns the formatted string.
      */
-    public static String getStringTranslation(net.minecraft. target, String translationKey, Object... args) {
-        return target.get() != null ? getStringTranslation(target.getEntity(), translationKey, args) : getStringTranslation(target.getServer(), translationKey, args);
+    public static String getStringTranslation(ServerCommandSource target, String translationKey, Object... args) {
+        return target.getEntity() != null ? getStringTranslation(target.getEntity(), translationKey, args) : getStringTranslation(target.getMinecraftServer(), translationKey, args);
     }
 
     /**
      * Gets the translation for the given key and arguments and returns the formatted string.
      */
-    public static String getStringTranslation(ICommandSource target, String translationKey, Object... args) {
-        return getTranslation(target, translationKey, args).getFormattedText();
+    public static String getStringTranslation(CommandOutput target, String translationKey, Object... args) {
+        return getTranslation(target, translationKey, args).getString();
     }
 
     /**
      * Gets the translation for the given key and arguments and returns the formatted string.
      */
     public static String getStringTranslation(UUID target, String translationKey, Object... args) {
-        return getTranslation(target, translationKey, args).getUnformattedComponentText();
+        return getTranslation(target, translationKey, args).getString();
     }
 
     /**
      * Returns the translation key if the sender is able to translate it, or the translated string otherwise.
      */
-    public static String getRawTranslationString(ICommandSource target, String translationKey) {
-        return getRawTranslationString(target instanceof ServerPlayerEntity ? ((ServerPlayerEntity) target).getUniqueID() : null, translationKey);
+    public static String getRawTranslationString(CommandOutput target, String translationKey) {
+        return getRawTranslationString(target instanceof ServerPlayerEntity ? ((ServerPlayerEntity) target).getUuid() : null, translationKey);
     }
 
     /**
@@ -57,33 +61,33 @@ public class TranslationUtil {
     }
 
     /**
-     * Returns the translated StringTextComponent for the supplied key and arguments
+     * Returns the translated LiteralText for the supplied key and arguments
      */
-    public static ITextComponent getTranslation(String translationKey, Object... args) {
+    public static Text getTranslation(String translationKey, Object... args) {
         return getTranslation((UUID)null, translationKey, args);
     }
 
     /**
-     * Returns the TranslationTextComponent if the target is able to translate it, or the translated StringTextComponent otherwise.
+     * Returns the TranslatableText if the target is able to translate it, or the translated LiteralText otherwise.
      */
-    public static ITextComponent getTranslation(CommandSource target, String translationKey, Object... args) {
-        return target.getEntity() != null ? getTranslation(target.getEntity(), translationKey, args) : getTranslation(target.getServer(), translationKey, args);
+    public static Text getTranslation(ServerCommandSource target, String translationKey, Object... args) {
+        return target.getEntity() != null ? getTranslation(target.getEntity(), translationKey, args) : getTranslation(target.getMinecraftServer(), translationKey, args);
     }
 
     /**
-     * Returns the TranslationTextComponent if the target is able to translate it, or the translated StringTextComponent otherwise.
+     * Returns the TranslatableText if the target is able to translate it, or the translated LiteralText otherwise.
      */
-    public static ITextComponent getTranslation(ICommandSource target, String translationKey, Object... args) {
-        return getTranslation(target instanceof ServerPlayerEntity ? ((ServerPlayerEntity) target).getUniqueID() : null, translationKey, args);
+    public static Text getTranslation(CommandOutput target, String translationKey, Object... args) {
+        return getTranslation(target instanceof ServerPlayerEntity ? ((ServerPlayerEntity) target).getUuid() : null, translationKey, args);
     }
 
     /**
-     * Returns the TranslationTextComponent if the target is able to translate it, or the translated StringTextComponent otherwise.
+     * Returns the TranslatableText if the target is able to translate it, or the translated LiteralText otherwise.
      */
-    public static ITextComponent getTranslation(UUID target, String translationKey, Object... args) {
+    public static Text getTranslation(UUID target, String translationKey, Object... args) {
         if(target == null || !geClients.contains(target))
-            return new StringTextComponent(I18n.translateToLocalFormatted(translationKey, args));
+            return new LiteralText(I18n.translateToLocalFormatted(translationKey, args));
         else
-            return new TranslationTextComponent(translationKey, args);
+            return new TranslatableText(translationKey, args);
     }
 }
