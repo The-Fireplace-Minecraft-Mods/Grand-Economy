@@ -63,7 +63,7 @@ public class Config
                     .translation("Economy Bridge")
                     .define("economyBridge", "none", o -> o instanceof String && ((String) o).length() <= 15);
             locale = builder
-                    .comment("Server locale - the client's locale takes precedence if Grand Economy is installed there.")
+                    .comment("Server locale - the client's locale takes precedence if Grand Economy for Forge is installed there.")
                     .translation("Locale")
                     .define("locale", "en_us", o -> o instanceof String && ((String) o).matches("[a-z][a-z]_[a-z][a-z]"));
             showBalanceOnJoin = builder
@@ -86,7 +86,7 @@ public class Config
                     .translation("Currency Name (multiple)")
                     .define("currencyNameMultiple", "gp", o -> o instanceof String && ((String) o).length() <= 20);
             basicIncome = builder
-                    .comment("Give each player credits every so often. The exact amount of time can be configured, and defaults to daily.")
+                    .comment("Give each player credits daily.")
                     .translation("Enable Basic Income")
                     .define("basicIncome", true);
             basicIncomeAmount = builder
@@ -98,7 +98,7 @@ public class Config
                     .translation("Starting Account Balance")
                     .defineInRange("startBalance", 100, 0, Integer.MAX_VALUE);
             maxBasicIncomeSavings = builder
-                    .comment("The max number of time periods since last login the player will be paid for. Ex. If the basic income is daily, and this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when he/she logs in.")
+                    .comment("The max number of days since last login the player will be paid for. Ex. If this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when he/she logs in.")
                     .translation("Max Basic Income Savings")
                     .defineInRange("maxBasicIncomeSavings", 5, 0, Integer.MAX_VALUE);
             builder.pop();
