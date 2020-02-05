@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import the_fireplace.grandeconomy.api.IGrandEconomyApi;
+import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.forge.earnings.ConversionItems;
 import the_fireplace.grandeconomy.forge.translation.TranslationUtil;
 
@@ -30,7 +30,7 @@ public class GeCommands {
 
     public static void register(CommandDispatcher<CommandSource> commandDispatcher) {
         commandDispatcher.register(Commands.literal("balance").requires((iCommandSender) -> iCommandSender.getEntity() instanceof PlayerEntity).executes((command) -> {
-            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.common.balance", IGrandEconomyApi.getBalanceFormatted(command.getSource().asPlayer().getUniqueID(), true)), false);
+            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.common.balance", GrandEconomyApi.getBalanceFormatted(command.getSource().asPlayer().getUniqueID(), true)), false);
             return Command.SINGLE_SUCCESS;
         }));
 
@@ -39,16 +39,16 @@ public class GeCommands {
                         .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                         .executes((command) -> {
                             ServerPlayerEntity targetPlayer = EntityArgument.getPlayer(command, "player");
-                            IGrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID(), true);
+                            GrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID(), true);
                             long amount = command.getArgument("amount", Integer.class);
                             if (amount < 0)
                                 throw new CommandException(TranslationUtil.getTranslation(targetPlayer.getUniqueID(), "commands.grandeconomy.pay.negative").setStyle(TextStyles.RED));
-                            if (IGrandEconomyApi.getBalance(targetPlayer.getUniqueID(), true) < amount)
-                                throw new CommandException(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.common.insufficient_credit", IGrandEconomyApi.getCurrencyName(2)).setStyle(TextStyles.RED));
-                            IGrandEconomyApi.takeFromBalance(command.getSource().asPlayer().getUniqueID(), amount, true);
-                            IGrandEconomyApi.addToBalance(targetPlayer.getUniqueID(), amount, true);
-                            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.pay.paid", IGrandEconomyApi.formatCurrency(amount), targetPlayer.getName()), false);
-                            targetPlayer.sendMessage(TranslationUtil.getTranslation(targetPlayer.getUniqueID(), "commands.grandeconomy.pay.recieved", IGrandEconomyApi.formatCurrency(amount), command.getSource().getName()));
+                            if (GrandEconomyApi.getBalance(targetPlayer.getUniqueID(), true) < amount)
+                                throw new CommandException(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.common.insufficient_credit", GrandEconomyApi.getCurrencyName(2)).setStyle(TextStyles.RED));
+                            GrandEconomyApi.takeFromBalance(command.getSource().asPlayer().getUniqueID(), amount, true);
+                            GrandEconomyApi.addToBalance(targetPlayer.getUniqueID(), amount, true);
+                            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.pay.paid", GrandEconomyApi.formatCurrency(amount), targetPlayer.getName()), false);
+                            targetPlayer.sendMessage(TranslationUtil.getTranslation(targetPlayer.getUniqueID(), "commands.grandeconomy.pay.recieved", GrandEconomyApi.formatCurrency(amount), command.getSource().getName()));
                             return Command.SINGLE_SUCCESS;
                         }))));
 
@@ -56,13 +56,13 @@ public class GeCommands {
         LiteralArgumentBuilder<CommandSource> walletCommand = Commands.literal("wallet").requires((iCommandSender) -> iCommandSender.getEntity() instanceof PlayerEntity && iCommandSender.hasPermissionLevel(2));
 
         walletCommand.then(Commands.literal("balance").executes((command) -> {
-            IGrandEconomyApi.ensureAccountExists(command.getSource().asPlayer().getUniqueID(), true);
-            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.common.balance", IGrandEconomyApi.getBalanceFormatted(command.getSource().asPlayer().getUniqueID(), true)), false);
+            GrandEconomyApi.ensureAccountExists(command.getSource().asPlayer().getUniqueID(), true);
+            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.common.balance", GrandEconomyApi.getBalanceFormatted(command.getSource().asPlayer().getUniqueID(), true)), false);
             return Command.SINGLE_SUCCESS;
         }).then(Commands.argument("player", EntityArgument.player()).executes((command) -> {
             ServerPlayerEntity targetPlayer = EntityArgument.getPlayer(command, "player");
-            IGrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID(), true);
-            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.balance", targetPlayer.getName(), IGrandEconomyApi.getBalanceFormatted(targetPlayer.getUniqueID(), true)), false);
+            GrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID(), true);
+            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.balance", targetPlayer.getName(), GrandEconomyApi.getBalanceFormatted(targetPlayer.getUniqueID(), true)), false);
             return Command.SINGLE_SUCCESS;
         })));
         walletCommand.then(Commands.literal("set")
@@ -70,12 +70,12 @@ public class GeCommands {
                 .then(Commands.argument("amount", IntegerArgumentType.integer(0))
                 .executes((command) -> {
                     PlayerEntity targetPlayer = EntityArgument.getPlayer(command, "player");
-                    IGrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID(), true);
+                    GrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID(), true);
                     long amount = command.getArgument("amount", Integer.class);
                     if (amount < 0)
                         throw new CommandException(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.negative", targetPlayer.getName()).setStyle(TextStyles.RED));
-                    IGrandEconomyApi.setBalance(targetPlayer.getUniqueID(), amount, true);
-                    command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.set", targetPlayer.getName(), IGrandEconomyApi.formatCurrency(amount)), false);
+                    GrandEconomyApi.setBalance(targetPlayer.getUniqueID(), amount, true);
+                    command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.set", targetPlayer.getName(), GrandEconomyApi.formatCurrency(amount)), false);
                     return Command.SINGLE_SUCCESS;
         }))));
         ArgumentBuilder<CommandSource, ?> giveArgs =
@@ -84,10 +84,10 @@ public class GeCommands {
                         .executes((command) -> {
                             PlayerEntity targetPlayer = EntityArgument.getPlayer(command, "player");
                             long amount = command.getArgument("amount", Integer.class);
-                            if(IGrandEconomyApi.getBalance(targetPlayer.getUniqueID(), true) + amount < 0)
+                            if(GrandEconomyApi.getBalance(targetPlayer.getUniqueID(), true) + amount < 0)
                                 throw new CommandException(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.negative", targetPlayer.getName()).setStyle(TextStyles.RED));
-                            IGrandEconomyApi.addToBalance(targetPlayer.getUniqueID(), amount, true);
-                            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.given", IGrandEconomyApi.formatCurrency(amount), targetPlayer.getName()), false);
+                            GrandEconomyApi.addToBalance(targetPlayer.getUniqueID(), amount, true);
+                            command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.given", GrandEconomyApi.formatCurrency(amount), targetPlayer.getName()), false);
                             return Command.SINGLE_SUCCESS;
                         }));
         walletCommand.then(Commands.literal("give")
@@ -100,9 +100,9 @@ public class GeCommands {
                 .executes((command) -> {
                     PlayerEntity targetPlayer = EntityArgument.getPlayer(command, "target");
                     long amount = command.getArgument("amount", Integer.class);
-                    if(IGrandEconomyApi.getBalance(targetPlayer.getUniqueID(), true) - amount < 0)
+                    if(GrandEconomyApi.getBalance(targetPlayer.getUniqueID(), true) - amount < 0)
                         throw new CommandException(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.negative", targetPlayer.getName()).setStyle(TextStyles.RED));
-                    command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.taken", IGrandEconomyApi.formatCurrency(amount), targetPlayer.getName()), false);
+                    command.getSource().sendFeedback(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.wallet.taken", GrandEconomyApi.formatCurrency(amount), targetPlayer.getName()), false);
                     return Command.SINGLE_SUCCESS;
                 }))));
 
@@ -114,9 +114,9 @@ public class GeCommands {
                             if(heldResource != null && ConversionItems.hasValue(heldResource)) {
                                 int value = ConversionItems.getValue(heldResource);
                                 int count = command.getSource().asPlayer().getHeldItemMainhand().getCount();
-                                IGrandEconomyApi.addToBalance(command.getSource().asPlayer().getUniqueID(), value * count, true);
+                                GrandEconomyApi.addToBalance(command.getSource().asPlayer().getUniqueID(), value * count, true);
                                 command.getSource().asPlayer().setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-                                command.getSource().asPlayer().sendMessage(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.convert.success", count, heldResource.toString(), value, value * count, IGrandEconomyApi.getBalanceFormatted(command.getSource().asPlayer().getUniqueID(), true)));
+                                command.getSource().asPlayer().sendMessage(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.convert.success", count, heldResource.toString(), value, value * count, GrandEconomyApi.getBalanceFormatted(command.getSource().asPlayer().getUniqueID(), true)));
                             } else
                                 command.getSource().asPlayer().sendMessage(TranslationUtil.getTranslation(command.getSource().asPlayer().getUniqueID(), "commands.grandeconomy.convert.failure"));
                             return Command.SINGLE_SUCCESS;
