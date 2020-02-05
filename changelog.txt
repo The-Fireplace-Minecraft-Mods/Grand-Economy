@@ -1,1 +1,2 @@
 Added Fabric support
+Updated the descriptions of the config options

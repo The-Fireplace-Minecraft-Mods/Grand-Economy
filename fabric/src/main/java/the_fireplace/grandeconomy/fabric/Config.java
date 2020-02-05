@@ -32,17 +32,19 @@ public class Config {
             if(obj instanceof JsonObject) {
                 JsonObject jsonObject = (JsonObject) obj;
 
-                economyBridge = getJsonPrimitive(jsonObject, "economyBridge").getAsString();
-                locale = getJsonPrimitive(jsonObject, "locale").getAsString();
-                showBalanceOnJoin = getJsonPrimitive(jsonObject, "showBalanceOnJoin").getAsBoolean();
-                pvpMoneyTransfer = getJsonPrimitive(jsonObject, "pvpMoneyTransfer").getAsInt();
+                JsonObject anyEconomy = jsonObject.getAsJsonObject("any-economy");
+                economyBridge = getJsonPrimitive(anyEconomy, "economyBridge").getAsString();
+                locale = getJsonPrimitive(anyEconomy, "locale").getAsString();
+                showBalanceOnJoin = getJsonPrimitive(anyEconomy, "showBalanceOnJoin").getAsBoolean();
+                pvpMoneyTransfer = getJsonPrimitive(anyEconomy, "pvpMoneyTransfer").getAsInt();
 
-                currencyNameSingular = getJsonPrimitive(jsonObject, "currencyNameSingular").getAsString();
-                currencyNameMultiple = getJsonPrimitive(jsonObject, "currencyNameMultiple").getAsString();
-                basicIncome = getJsonPrimitive(jsonObject, "basicIncome").getAsBoolean();
-                basicIncomeAmount = getJsonPrimitive(jsonObject, "basicIncomeAmount").getAsInt();
-                startBalance = getJsonPrimitive(jsonObject, "startBalance").getAsInt();
-                maxBasicIncomeDays = getJsonPrimitive(jsonObject, "maxBasicIncomeDays").getAsLong();
+                JsonObject nativeEconomy = jsonObject.getAsJsonObject("native-economy");
+                currencyNameSingular = getJsonPrimitive(nativeEconomy, "currencyNameSingular").getAsString();
+                currencyNameMultiple = getJsonPrimitive(nativeEconomy, "currencyNameMultiple").getAsString();
+                basicIncome = getJsonPrimitive(nativeEconomy, "basicIncome").getAsBoolean();
+                basicIncomeAmount = getJsonPrimitive(nativeEconomy, "basicIncomeAmount").getAsInt();
+                startBalance = getJsonPrimitive(nativeEconomy, "startBalance").getAsInt();
+                maxBasicIncomeDays = getJsonPrimitive(nativeEconomy, "maxBasicIncomeDays").getAsLong();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,17 +73,21 @@ public class Config {
     private static void create() {
         JsonObject obj = new JsonObject();
 
-        obj.add("economyBridge", createObject(new JsonPrimitive(economyBridge), "Which economy to bridge to, if any. This means Grand Economy and all mods using it will use the target mod's currency. There are currently no possible options built in for Fabric. The game will crash if you choose one that is not loaded."));
-        obj.add("locale", createObject(new JsonPrimitive(locale), "Server locale - the client's locale takes precedence if Grand Economy for Fabric is installed there."));
-        obj.add("showBalanceOnJoin", createObject(new JsonPrimitive(showBalanceOnJoin), "If enabled, players will be shown a message with their account balance when they join the server."));
-        obj.add("pvpMoneyTransfer", createObject(new JsonPrimitive(pvpMoneyTransfer), "What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer"));
+        JsonObject anyEconomy = new JsonObject();
+        anyEconomy.add("economyBridge", createObject(new JsonPrimitive(economyBridge), "Which economy to bridge to, if any. This means Grand Economy and all mods using it will use the target mod's currency. There are currently no possible options built in for Fabric. The game will crash if you choose one that is not loaded."));
+        anyEconomy.add("locale", createObject(new JsonPrimitive(locale), "Server locale - the client's locale takes precedence if Grand Economy for Fabric is installed there."));
+        anyEconomy.add("showBalanceOnJoin", createObject(new JsonPrimitive(showBalanceOnJoin), "If enabled, players will be shown a message with their account balance when they join the server."));
+        anyEconomy.add("pvpMoneyTransfer", createObject(new JsonPrimitive(pvpMoneyTransfer), "What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer"));
+        obj.add("any-economy", anyEconomy);
 
-        obj.add("currencyNameSingular", createObject(new JsonPrimitive(currencyNameSingular), "Currency name (max 20 char)"));
-        obj.add("currencyNameMultiple", createObject(new JsonPrimitive(currencyNameMultiple), "Currency name (max 20 char)"));
-        obj.add("basicIncome", createObject(new JsonPrimitive(basicIncome), "Give each player credits daily."));
-        obj.add("basicIncomeAmount", createObject(new JsonPrimitive(basicIncomeAmount), "The amount of basic income to be given to a player."));
-        obj.add("startBalance", createObject(new JsonPrimitive(startBalance), "Amount of currency given to new players when they join the server"));
-        obj.add("maxBasicIncomeDays", createObject(new JsonPrimitive(maxBasicIncomeDays), "The max number of days since last login the player will be paid for. Ex. If this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when he/she logs in."));
+        JsonObject nativeEconomy = new JsonObject();
+        nativeEconomy.add("currencyNameSingular", createObject(new JsonPrimitive(currencyNameSingular), "Currency name (max 20 char)"));
+        nativeEconomy.add("currencyNameMultiple", createObject(new JsonPrimitive(currencyNameMultiple), "Currency name (max 20 char)"));
+        nativeEconomy.add("basicIncome", createObject(new JsonPrimitive(basicIncome), "Give each player credits daily."));
+        nativeEconomy.add("basicIncomeAmount", createObject(new JsonPrimitive(basicIncomeAmount), "The amount of basic income to be given to a player."));
+        nativeEconomy.add("startBalance", createObject(new JsonPrimitive(startBalance), "Amount of currency given to new players when they join the server"));
+        nativeEconomy.add("maxBasicIncomeDays", createObject(new JsonPrimitive(maxBasicIncomeDays), "The max number of days since last login the player will be paid for. Ex. If this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when he/she logs in."));
+        obj.add("native-economy", nativeEconomy);
 
         try {
             FileWriter file = new FileWriter(configFile);
