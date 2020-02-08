@@ -138,7 +138,7 @@ public final class GrandEconomyApi {
         return API.getEconomyModId();
     }
 
-    private static Map<String, IEconHandler> econHandlers = Maps.newHashMap();
+    private static final Map<String, IEconHandler> econHandlers = Maps.newHashMap();
     public static boolean hasEconHandler(String key) {
         return econHandlers.containsKey(key);
     }

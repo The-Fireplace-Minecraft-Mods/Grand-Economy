@@ -2,11 +2,12 @@ package the_fireplace.grandeconomy.forge.econhandlers.ge;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModList;
+import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.api.IEconHandler;
 import the_fireplace.grandeconomy.forge.Config;
 import the_fireplace.grandeconomy.forge.GrandEconomy;
 import the_fireplace.grandeconomy.forge.compat.sponge.ISpongeCompat;
 import the_fireplace.grandeconomy.forge.compat.sponge.RegisterSpongeEconomy;
-import the_fireplace.grandeconomy.api.IEconHandler;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -93,7 +94,7 @@ public class GrandEconomyEconHandler implements IEconHandler {
 
     @Override
     public String getId() {
-        return GrandEconomy.MODID;
+        return GrandEconomyApi.MODID;
     }
 
     @Override

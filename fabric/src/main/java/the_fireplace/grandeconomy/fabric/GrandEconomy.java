@@ -32,6 +32,7 @@ public class GrandEconomy implements ModInitializer {
             if(economy.getClass().equals(GrandEconomyEconHandler.class))
                 GrandEconomyApi.registerEconomyHandler(economy, GrandEconomyApi.MODID);
             economy.init();
+            GeCommands.register(s.getCommandManager().getDispatcher());
         });
     }
 }

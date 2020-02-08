@@ -7,6 +7,7 @@ import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.api.IEconHandler;
 import the_fireplace.grandeconomy.fabric.Config;
 import the_fireplace.grandeconomy.fabric.GrandEconomy;
+import the_fireplace.grandeconomy.fabric.translation.TranslationUtil;
 import the_fireplace.grandeconomy.utils.TimeUtils;
 
 import java.io.IOException;

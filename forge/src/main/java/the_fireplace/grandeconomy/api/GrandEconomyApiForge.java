@@ -1,11 +1,8 @@
 package the_fireplace.grandeconomy.api;
 
 import net.minecraftforge.common.MinecraftForge;
-import the_fireplace.grandeconomy.api.GrandEconomyApi;
-import the_fireplace.grandeconomy.api.IGrandEconomyApi;
 import the_fireplace.grandeconomy.forge.GrandEconomy;
 import the_fireplace.grandeconomy.forge.api.event.BalanceChangeEvent;
-import the_fireplace.grandeconomy.api.IEconHandler;
 
 import java.util.UUID;
 
@@ -76,10 +73,5 @@ public class GrandEconomyApiForge implements IGrandEconomyApi {
     @Override
     public String getEconomyModId() {
         return GrandEconomy.getEconomy().getId();
-    }
-
-    @Override
-    public boolean registerEconomyHandler(IEconHandler handler, String forModid, String... aliases) {
-        return GrandEconomy.registerEconHandler(handler, forModid, aliases);
     }
 }

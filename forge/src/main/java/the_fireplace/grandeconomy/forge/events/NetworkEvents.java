@@ -15,16 +15,15 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import org.apache.commons.lang3.tuple.Pair;
-import the_fireplace.grandeconomy.api.IGrandEconomyApi;
+import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.forge.Config;
-import the_fireplace.grandeconomy.forge.GrandEconomy;
 import the_fireplace.grandeconomy.forge.translation.TranslationUtil;
 
 import java.util.Objects;
 
 import static net.minecraftforge.fml.network.NetworkDirection.PLAY_TO_SERVER;
 
-@Mod.EventBusSubscriber(modid= GrandEconomy.MODID)
+@Mod.EventBusSubscriber(modid=GrandEconomyApi.MODID)
 public class NetworkEvents {
     private static final ResourceLocation channelName = new ResourceLocation("grandeconomy", "network");
     private static final String protocolId = "1";
@@ -62,9 +61,9 @@ public class NetworkEvents {
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof PlayerEntity && !event.getEntity().world.isRemote) {
-            IGrandEconomyApi.ensureAccountExists(event.getEntity().getUniqueID(), true);
+            GrandEconomyApi.ensureAccountExists(event.getEntity().getUniqueID(), true);
             if(Config.showBalanceOnJoin)
-                event.getEntity().sendMessage(TranslationUtil.getTranslation(event.getEntity().getUniqueID(), "commands.grandeconomy.common.balance", IGrandEconomyApi.getBalanceFormatted(event.getEntity().getUniqueID(), true)));
+                event.getEntity().sendMessage(TranslationUtil.getTranslation(event.getEntity().getUniqueID(), "commands.grandeconomy.common.balance", GrandEconomyApi.getBalanceFormatted(event.getEntity().getUniqueID(), true)));
         }
     }
 }
