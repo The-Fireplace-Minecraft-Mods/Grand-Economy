@@ -1,6 +1,5 @@
 package the_fireplace.grandeconomy.forge;
 
-import com.google.common.collect.Maps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,8 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.api.GrandEconomyApiForge;
-import the_fireplace.grandeconomy.forge.earnings.ConversionItems;
 import the_fireplace.grandeconomy.api.IEconHandler;
+import the_fireplace.grandeconomy.forge.earnings.ConversionItems;
 import the_fireplace.grandeconomy.forge.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.forge.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.forge.econhandlers.sponge.SpongeEconHandler;
@@ -25,7 +24,6 @@ import the_fireplace.grandeconomy.forge.econhandlers.vault.VaultEconHandler;
 import the_fireplace.grandeconomy.forge.events.NetworkEvents;
 
 import java.io.File;
-import java.util.Map;
 
 @Mod(GrandEconomyApi.MODID)
 public class GrandEconomy {

@@ -1,11 +1,11 @@
 {
   "required": true,
-  "package": "net.fabricmc.example.fabric.mixin",
+  "package": "the_fireplace.grandeconomy.fabric.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ServerPlayerEntityMixin"
   ],
   "client": [
-    "ExampleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

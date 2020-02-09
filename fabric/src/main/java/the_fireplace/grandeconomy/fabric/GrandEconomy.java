@@ -10,9 +10,13 @@ import the_fireplace.grandeconomy.api.GrandEconomyApiFabric;
 import the_fireplace.grandeconomy.api.IEconHandler;
 import the_fireplace.grandeconomy.fabric.econhandlers.ge.GrandEconomyEconHandler;
 
+import java.io.File;
+
 public class GrandEconomy implements ModInitializer {
     private static MinecraftServer minecraftServer;
     public static final Logger LOGGER = LogManager.getLogger(GrandEconomyApi.MODID);
+
+    public static File configDir;
 
     private static IEconHandler economy;
     public static IEconHandler getEconomy() {
@@ -32,6 +36,8 @@ public class GrandEconomy implements ModInitializer {
             if(economy.getClass().equals(GrandEconomyEconHandler.class))
                 GrandEconomyApi.registerEconomyHandler(economy, GrandEconomyApi.MODID);
             economy.init();
+            configDir = new File(new File(s.getRunDirectory(), "config"), "grandeconomy-extra");
+            configDir.mkdirs();
             GeCommands.register(s.getCommandManager().getDispatcher());
         });
     }
