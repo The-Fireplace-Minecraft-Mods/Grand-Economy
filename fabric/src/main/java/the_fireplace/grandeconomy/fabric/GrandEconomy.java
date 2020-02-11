@@ -9,6 +9,7 @@ import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.api.GrandEconomyApiFabric;
 import the_fireplace.grandeconomy.api.IEconHandler;
 import the_fireplace.grandeconomy.fabric.econhandlers.ge.GrandEconomyEconHandler;
+import the_fireplace.grandeconomy.fabric.events.NetworkEvents;
 
 import java.io.File;
 
@@ -40,5 +41,6 @@ public class GrandEconomy implements ModInitializer {
             configDir.mkdirs();
             GeCommands.register(s.getCommandManager().getDispatcher());
         });
+        NetworkEvents.init();
     }
 }

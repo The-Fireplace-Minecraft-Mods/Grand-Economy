@@ -25,7 +25,7 @@ import static net.minecraftforge.fml.network.NetworkDirection.PLAY_TO_SERVER;
 
 @Mod.EventBusSubscriber(modid=GrandEconomyApi.MODID)
 public class NetworkEvents {
-    private static final ResourceLocation channelName = new ResourceLocation("grandeconomy", "network");
+    private static final ResourceLocation channelName = new ResourceLocation(GrandEconomyApi.MODID, "network");
     private static final String protocolId = "1";
 
     public static void init(){
