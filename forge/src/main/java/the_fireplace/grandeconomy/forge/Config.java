@@ -21,7 +21,7 @@ public class Config
     public static boolean basicIncome;
     public static int basicIncomeAmount;
     public static int startBalance;
-    public static long maxBasicIncomeDays;
+    public static int maxBasicIncomeDays;
 
     public static String economyBridge;
     public static String locale;
