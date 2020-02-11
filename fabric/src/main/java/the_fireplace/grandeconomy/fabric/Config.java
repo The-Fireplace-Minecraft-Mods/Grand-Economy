@@ -11,17 +11,17 @@ import java.io.IOException;
 public class Config {
     public static final File configFile = new File("config", GrandEconomyApi.MODID+".json");
 
-    public static String economyBridge;
-    public static String locale;
-    public static boolean showBalanceOnJoin;
-    public static int pvpMoneyTransfer;
+    public static String economyBridge = "none";
+    public static String locale = "en_us";
+    public static boolean showBalanceOnJoin = false;
+    public static int pvpMoneyTransfer = 0;
 
-    public static String currencyNameSingular;
-    public static String currencyNameMultiple;
-    public static boolean basicIncome;
-    public static int basicIncomeAmount;
-    public static int startBalance;
-    public static long maxBasicIncomeDays;
+    public static String currencyNameSingular = "gp";
+    public static String currencyNameMultiple = "gp";
+    public static boolean basicIncome = true;
+    public static int basicIncomeAmount = 50;
+    public static int startBalance = 100;
+    public static int maxBasicIncomeDays = 5;
 
     public static void load() {
         if(!configFile.exists())
@@ -44,7 +44,7 @@ public class Config {
                 basicIncome = getJsonPrimitive(nativeEconomy, "basicIncome").getAsBoolean();
                 basicIncomeAmount = getJsonPrimitive(nativeEconomy, "basicIncomeAmount").getAsInt();
                 startBalance = getJsonPrimitive(nativeEconomy, "startBalance").getAsInt();
-                maxBasicIncomeDays = getJsonPrimitive(nativeEconomy, "maxBasicIncomeDays").getAsLong();
+                maxBasicIncomeDays = getJsonPrimitive(nativeEconomy, "maxBasicIncomeDays").getAsInt();
             }
         } catch (Exception e) {
             e.printStackTrace();

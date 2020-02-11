@@ -33,6 +33,7 @@ public class GrandEconomy implements ModInitializer {
         new GrandEconomyApiFabric();
         ServerStartCallback.EVENT.register(s -> {
             minecraftServer = s;
+            Config.load();
             economy = GrandEconomyApi.getEconHandlers().getOrDefault(Config.economyBridge, new GrandEconomyEconHandler());
             if(economy.getClass().equals(GrandEconomyEconHandler.class))
                 GrandEconomyApi.registerEconomyHandler(economy, GrandEconomyApi.MODID);
