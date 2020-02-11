@@ -9,8 +9,8 @@ import net.minecraft.util.JsonHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.fabric.Config;
+import the_fireplace.grandeconomy.fabric.GrandEconomy;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +27,12 @@ public class GrandEconomyLanguageMap {
     private final Map<String, String> languageList = Maps.newHashMap();
 
     GrandEconomyLanguageMap(String locale) {
-        try (InputStream inputstream = GrandEconomyLanguageMap.class.getResourceAsStream("/assets/grandeconomy/lang/" + locale + ".json")) {
+        try {
+            InputStream inputstream = GrandEconomyLanguageMap.class.getResourceAsStream("/assets/grandeconomy/lang/" + locale + ".json");
+            if(inputstream == null) {
+                GrandEconomy.LOGGER.error("Invalid locale: {}, defaulting to en_us.", locale);
+                inputstream = GrandEconomyLanguageMap.class.getResourceAsStream("/assets/grandeconomy/lang/en_us.json");
+            }
             JsonElement jsonelement = (new Gson()).fromJson(new InputStreamReader(inputstream, StandardCharsets.UTF_8), JsonElement.class);
             JsonObject jsonobject = JsonHelper.asObject(jsonelement, "strings");
 
@@ -35,8 +40,8 @@ public class GrandEconomyLanguageMap {
                 String s = NUMERIC_VARIABLE_PATTERN.matcher(JsonHelper.asString(entry.getValue(), entry.getKey())).replaceAll("%$1s");
                 this.languageList.put(entry.getKey(), s);
             }
-        } catch (JsonParseException | IOException ioexception) {
-            LOGGER.error("/assets/grandeconomy/lang/" + locale + ".json", ioexception);
+        } catch (JsonParseException e) {
+            LOGGER.error("/assets/grandeconomy/lang/" + locale + ".json is improperly formatted.", e);
         }
     }
 
