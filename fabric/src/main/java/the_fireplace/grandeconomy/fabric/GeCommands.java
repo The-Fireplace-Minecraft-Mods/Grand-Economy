@@ -139,8 +139,8 @@ public class GeCommands {
         List<Text> helps = Lists.newArrayList();
         for(String commandName: commands)
             helps.add(TranslationUtil.getTranslation(command.getSource(), "commands.grandeconomy.gehelp.format",
-                    TranslationUtil.getStringTranslation(command.getSource(), "commands.grandeconomy."+commandName+".usage"),
-                    TranslationUtil.getStringTranslation(command.getSource(), "commands.grandeconomy."+commandName+".description")));
+                    TranslationUtil.getStringTranslation("commands.grandeconomy."+commandName+".usage"),
+                    TranslationUtil.getStringTranslation("commands.grandeconomy."+commandName+".description")));
         helps.sort(Comparator.comparing(Text::getString));
         return helps;
     }

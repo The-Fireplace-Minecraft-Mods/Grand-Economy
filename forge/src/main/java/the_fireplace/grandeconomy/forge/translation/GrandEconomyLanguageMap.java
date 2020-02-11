@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 public class GrandEconomyLanguageMap {
     private static final Logger LOGGER = LogManager.getLogger();
     /** Pattern that matches numeric variable placeholders in a resource string, such as "%d", "%3$d", "%.2f" */
+    @SuppressWarnings("RegExpRedundantEscape")
     private static final Pattern NUMERIC_VARIABLE_PATTERN = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
     private static final GrandEconomyLanguageMap instance = new GrandEconomyLanguageMap(Config.locale);
     private final Map<String, String> languageList = Maps.newHashMap();
