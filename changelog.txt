@@ -1,3 +1,1 @@
-Added Fabric support
-Updated the descriptions of the config options
-Fixed /gehelp sending untranslated strings to clients who have GE installed.
+Fixed Fabric configs not generating

@@ -90,6 +90,7 @@ public class Config {
         obj.add("native-economy", nativeEconomy);
 
         try {
+            configFile.getParentFile().mkdirs();
             FileWriter file = new FileWriter(configFile);
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String json = gson.toJson(obj);

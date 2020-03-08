@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.api.GrandEconomyApiFabric;
 import the_fireplace.grandeconomy.api.IEconHandler;
+import the_fireplace.grandeconomy.fabric.earnings.ConversionItems;
 import the_fireplace.grandeconomy.fabric.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.fabric.events.NetworkEvents;
 
@@ -34,6 +35,8 @@ public class GrandEconomy implements ModInitializer {
         ServerStartCallback.EVENT.register(s -> {
             minecraftServer = s;
             Config.load();
+            //Initialize ConversionItems
+            ConversionItems.hasValue(null);
             economy = GrandEconomyApi.getEconHandlers().getOrDefault(Config.economyBridge, new GrandEconomyEconHandler());
             if(economy.getClass().equals(GrandEconomyEconHandler.class))
                 GrandEconomyApi.registerEconomyHandler(economy, GrandEconomyApi.MODID);
