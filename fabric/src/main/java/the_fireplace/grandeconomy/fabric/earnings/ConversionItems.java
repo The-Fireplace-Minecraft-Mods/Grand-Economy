@@ -63,7 +63,6 @@ public final class ConversionItems {
         obj.add("items", itemMap);
         try {
             File f = new File(GrandEconomy.configDir, "conversion_items.json");
-            f.getParentFile().mkdirs();
             FileWriter file = new FileWriter(f);
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String json = gson.toJson(obj);

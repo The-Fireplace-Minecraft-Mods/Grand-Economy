@@ -1,1 +1,1 @@
-Fixed Fabric configs not generating
+Hotfix for the startup crash in 1.5.1

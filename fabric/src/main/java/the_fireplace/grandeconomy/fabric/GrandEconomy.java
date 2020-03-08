@@ -35,14 +35,14 @@ public class GrandEconomy implements ModInitializer {
         ServerStartCallback.EVENT.register(s -> {
             minecraftServer = s;
             Config.load();
-            //Initialize ConversionItems
-            ConversionItems.hasValue(null);
             economy = GrandEconomyApi.getEconHandlers().getOrDefault(Config.economyBridge, new GrandEconomyEconHandler());
             if(economy.getClass().equals(GrandEconomyEconHandler.class))
                 GrandEconomyApi.registerEconomyHandler(economy, GrandEconomyApi.MODID);
             economy.init();
             configDir = new File(new File(s.getRunDirectory(), "config"), "grandeconomy-extra");
             configDir.mkdirs();
+            //Initialize ConversionItems
+            ConversionItems.hasValue(null);
             GeCommands.register(s.getCommandManager().getDispatcher());
         });
         NetworkEvents.init();
