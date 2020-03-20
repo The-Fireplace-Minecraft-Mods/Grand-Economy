@@ -1,10 +1,7 @@
 package the_fireplace.grandeconomy.econhandlers.ge;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.compat.sponge.ISpongeCompat;
-import the_fireplace.grandeconomy.compat.sponge.RegisterSpongeEconomy;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
 import java.io.IOException;
@@ -98,9 +95,5 @@ public class GrandEconomyEconHandler implements IEconHandler {
     @Override
     public void init() {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
-        if(Loader.isModLoaded("spongeapi")) {
-            ISpongeCompat compat = new RegisterSpongeEconomy();
-            compat.register();
-        }
     }
 }

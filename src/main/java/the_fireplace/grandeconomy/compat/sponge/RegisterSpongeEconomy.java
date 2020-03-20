@@ -20,6 +20,7 @@ import org.spongepowered.api.service.economy.transaction.TransferResult;
 import org.spongepowered.api.text.Text;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.compat.IRegisterable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.math.BigDecimal;
@@ -27,7 +28,7 @@ import java.util.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
+public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
     private TransactionType genericTransactionType = new TransactionType() {
         @Override

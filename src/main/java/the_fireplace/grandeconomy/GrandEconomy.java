@@ -11,12 +11,16 @@ import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.commands.*;
+import the_fireplace.grandeconomy.compat.IRegisterable;
+import the_fireplace.grandeconomy.compat.sponge.RegisterSpongeEconomy;
+import the_fireplace.grandeconomy.compat.vault.RegisterVaultEconomy;
 import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
@@ -27,6 +31,7 @@ import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 import the_fireplace.grandeconomy.econhandlers.vault.VaultEconHandler;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -140,7 +145,7 @@ public class GrandEconomy {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        switch(cfg.economyBridge) {
+        switch(cfg.economyBridge.toLowerCase()) {
             case "sponge":
             case "spongeapi":
             case "spongeforge":
@@ -162,6 +167,18 @@ public class GrandEconomy {
                 economy = econHandlers.getOrDefault(cfg.economyBridge, new GrandEconomyEconHandler());
         }
         getEconomy().init();
+        //Make the economy we are using get registered with Vault, if we aren't using Vault
+        if(!Lists.newArrayList("bukkit", "vault").contains(cfg.economyBridge.toLowerCase())
+                && vaultLoaded()) {
+            IRegisterable vaultRegisterable = new RegisterVaultEconomy();
+            vaultRegisterable.register();
+        }
+        //Make the economy we are using get registered with Sponge, if we aren't using Sponge
+        if(!Lists.newArrayList("sponge", "spongeapi", "spongeforge").contains(cfg.economyBridge.toLowerCase())
+                && Loader.isModLoaded("spongeapi")) {
+            IRegisterable spongeCompat = new RegisterSpongeEconomy();
+            spongeCompat.register();
+        }
     }
 
     @Mod.EventHandler
@@ -194,6 +211,18 @@ public class GrandEconomy {
         if (!(handler instanceof SaveHandler))
             return null;
         return handler.getWorldDirectory();
+    }
+
+    private boolean vaultLoaded() {
+        try {
+            Method m = ClassLoader.class.getDeclaredMethod("findLoadedClass", String.class);
+            m.setAccessible(true);
+            ClassLoader cl = ClassLoader.getSystemClassLoader();
+            Object test1 = m.invoke(cl, "net.milkbowl.vault.Vault");
+            return test1 != null;
+        } catch(Exception e) {
+            return false;
+        }
     }
 
     @Config(modid = MODID)

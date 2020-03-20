@@ -1,1 +1,2 @@
-Added an option to enforce balances not going below zero
+Grand Economy now registers itself with Sponge when using any non-Sponge economy.
+Grand Economy now registers itself with Vault when using any non-Vault economy.
