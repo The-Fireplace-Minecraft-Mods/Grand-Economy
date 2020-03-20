@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "grandeconomy",
+  "version": "${version}",
+
+  "name": "Grand Economy",
+  "description": "A server-side economy mod/api that supports using currency from sponge/forgeessentials/vault/others.",
+  "authors": [
+    "The_Fireplace"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/grand-economy",
+    "sources": "https://github.com/The-Fireplace-Minecraft-Mods/Grand-Economy",
+    "issues": "https://github.com/The-Fireplace-Minecraft-Mods/Grand-Economy/issues"
+  },
+
+  "license": "GPL-2.0",
+  "icon": "",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "the_fireplace.grandeconomy.fabric.GrandEconomy"
+    ]
+  },
+  "mixins": [
+    "grandeconomy.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.2",
+    "fabric": "*",
+    "minecraft": "1.15.2"
+  }
+}
