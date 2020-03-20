@@ -10,7 +10,7 @@ import the_fireplace.grandeconomy.fabric.translation.TranslationUtil;
 public class KillingEvents {
     public static void onPlayerDeath(ServerPlayerEntity entity, DamageSource source) {
         if(!entity.world.isClient()) {
-            int moneyDropValue = Config.pvpMoneyTransfer;
+            long moneyDropValue = Config.pvpMoneyTransfer;
             if (moneyDropValue == 0) return;
             Entity killer = source.getAttacker();
             if (!(killer instanceof ServerPlayerEntity))

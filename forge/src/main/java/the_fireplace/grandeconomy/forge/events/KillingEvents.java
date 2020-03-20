@@ -16,7 +16,7 @@ public class KillingEvents {
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
         if(!event.getEntity().world.isRemote) {
-            int moneyDropValue = Config.pvpMoneyTransfer;
+            long moneyDropValue = Config.pvpMoneyTransfer;
             if (moneyDropValue == 0) return;
             Entity entity = event.getEntity();
             if (!(entity instanceof PlayerEntity) || entity.world.isRemote)
