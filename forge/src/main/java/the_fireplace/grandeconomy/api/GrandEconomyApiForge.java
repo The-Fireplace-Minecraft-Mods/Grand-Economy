@@ -57,7 +57,7 @@ public class GrandEconomyApiForge implements IGrandEconomyApi {
 
     @Override
     public String formatCurrency(long amount) {
-        return GrandEconomy.getEconomy().toString(amount);
+        return GrandEconomy.getEconomy().getFormattedCurrency(amount);
     }
 
     @Override

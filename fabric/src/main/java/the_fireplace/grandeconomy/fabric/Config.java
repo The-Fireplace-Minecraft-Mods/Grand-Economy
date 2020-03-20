@@ -15,6 +15,7 @@ public class Config {
     public static String locale = "en_us";
     public static boolean showBalanceOnJoin = false;
     public static long pvpMoneyTransfer = 0;
+    public static boolean enforceNonNegativeBalance = true;
 
     public static String currencyNameSingular = "gp";
     public static String currencyNameMultiple = "gp";
@@ -40,6 +41,7 @@ public class Config {
                 showBalanceOnJoin = getJsonPrimitive(anyEconomy, "showBalanceOnJoin").getAsBoolean();
                 pvpMoneyTransfer = getJsonPrimitive(anyEconomy, "pvpMoneyTransfer").getAsLong();
                 pvpMoneyTransfer = rangeLong(pvpMoneyTransfer, Long.MIN_VALUE, 100);
+                enforceNonNegativeBalance = getJsonPrimitive(anyEconomy, "enforceNonNegativeBalance").getAsBoolean();
 
                 JsonObject nativeEconomy = jsonObject.getAsJsonObject("native-economy");
                 currencyNameSingular = getJsonPrimitive(nativeEconomy, "currencyNameSingular").getAsString();
@@ -102,6 +104,7 @@ public class Config {
         anyEconomy.add("locale", createObject(new JsonPrimitive(locale), "Server locale - the client's locale takes precedence if Grand Economy for Fabric is installed there."));
         anyEconomy.add("showBalanceOnJoin", createObject(new JsonPrimitive(showBalanceOnJoin), "If enabled, players will be shown a message with their account balance when they join the server."));
         anyEconomy.add("pvpMoneyTransfer", createObject(new JsonPrimitive(pvpMoneyTransfer), "What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer", Long.MIN_VALUE, 100));
+        anyEconomy.add("enforceNonNegativeBalance", createObject(new JsonPrimitive(enforceNonNegativeBalance), "Makes sure account balances cannot go below zero - useful when working with plugins that don't properly prevent negative balances."));
         obj.add("any-economy", anyEconomy);
 
         JsonObject nativeEconomy = new JsonObject();

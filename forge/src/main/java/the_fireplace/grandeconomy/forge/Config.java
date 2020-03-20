@@ -16,11 +16,12 @@ public class Config
     public static String currencyNameSingular;
     public static String currencyNameMultiple;
     public static boolean showBalanceOnJoin;
-    public static int pvpMoneyTransfer;
+    public static long pvpMoneyTransfer;
+    public static boolean enforceNonNegativeBalance;
 
     public static boolean basicIncome;
-    public static int basicIncomeAmount;
-    public static int startBalance;
+    public static long basicIncomeAmount;
+    public static long startBalance;
     public static int maxBasicIncomeDays;
 
     public static String economyBridge;
@@ -31,6 +32,7 @@ public class Config
         currencyNameMultiple = COMMON.currencyNameMultiple.get();
         showBalanceOnJoin = COMMON.showBalanceOnJoin.get();
         pvpMoneyTransfer = COMMON.pvpMoneyTransfer.get();
+        enforceNonNegativeBalance = COMMON.enforceNonNegativeBalance.get();
 
         basicIncome = COMMON.basicIncome.get();
         basicIncomeAmount = COMMON.basicIncomeAmount.get();
@@ -46,11 +48,12 @@ public class Config
         public ForgeConfigSpec.ConfigValue<String> currencyNameSingular;
         public ForgeConfigSpec.ConfigValue<String> currencyNameMultiple;
         public ForgeConfigSpec.BooleanValue showBalanceOnJoin;
-        public ForgeConfigSpec.IntValue pvpMoneyTransfer;
+        public ForgeConfigSpec.LongValue pvpMoneyTransfer;
+        public ForgeConfigSpec.BooleanValue enforceNonNegativeBalance;
 
         public ForgeConfigSpec.BooleanValue basicIncome;
-        public ForgeConfigSpec.IntValue basicIncomeAmount;
-        public ForgeConfigSpec.IntValue startBalance;
+        public ForgeConfigSpec.LongValue basicIncomeAmount;
+        public ForgeConfigSpec.LongValue startBalance;
         public ForgeConfigSpec.IntValue maxBasicIncomeSavings;
 
         public ForgeConfigSpec.ConfigValue<String> economyBridge;
@@ -73,7 +76,11 @@ public class Config
             pvpMoneyTransfer = builder
                     .comment("What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer")
                     .translation("PVP Money Transfer")
-                    .defineInRange("pvpMoneyTransfer", 0, Integer.MIN_VALUE, 100);
+                    .defineInRange("pvpMoneyTransfer", 0, Long.MIN_VALUE, 100);
+            enforceNonNegativeBalance = builder
+                    .comment("Makes sure account balances cannot go below zero - useful when working with plugins that don't properly prevent negative balances.")
+                    .translation("Enforce Non-negative Balance")
+                    .define("enforceNonNegativeBalance", true);
             builder.pop();
 
             builder.push("native-economy");
@@ -92,11 +99,11 @@ public class Config
             basicIncomeAmount = builder
                     .comment("The amount of basic income to be given to a player.")
                     .translation("Basic Income Amount")
-                    .defineInRange("basicIncomeAmount", 50, 0, Integer.MAX_VALUE);
+                    .defineInRange("basicIncomeAmount", 50, 0, Long.MAX_VALUE);
             startBalance = builder
                     .comment("Amount of currency given to new players when they join the server")
                     .translation("Starting Account Balance")
-                    .defineInRange("startBalance", 100, 0, Integer.MAX_VALUE);
+                    .defineInRange("startBalance", 100, 0, Long.MAX_VALUE);
             maxBasicIncomeSavings = builder
                     .comment("The max number of days since last login the player will be paid for. Ex. If this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when he/she logs in.")
                     .translation("Max Basic Income Savings")

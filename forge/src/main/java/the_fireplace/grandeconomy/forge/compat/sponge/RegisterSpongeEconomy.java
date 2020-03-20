@@ -20,6 +20,7 @@ import org.spongepowered.api.text.Text;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.forge.Config;
 import the_fireplace.grandeconomy.forge.GrandEconomy;
+import the_fireplace.grandeconomy.forge.compat.IRegisterable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.math.BigDecimal;
@@ -27,7 +28,7 @@ import java.util.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
+public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
     private TransactionType genericTransactionType = new TransactionType() {
         @Override
@@ -45,7 +46,7 @@ public class RegisterSpongeEconomy implements EconomyService, ISpongeCompat {
 
         @Override
         public String getId() {
-            return GrandEconomyApi.MODID+"-gp";
+            return GrandEconomyApi.MODID+"-api";
         }
 
         @Override

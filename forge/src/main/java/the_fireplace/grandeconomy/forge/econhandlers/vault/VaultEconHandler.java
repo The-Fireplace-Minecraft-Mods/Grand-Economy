@@ -64,7 +64,7 @@ public class VaultEconHandler implements IEconHandler {
     }
 
     @Override
-    public String toString(long amount) {
+    public String getFormattedCurrency(long amount) {
         return getEcon().format(amount);
     }
 

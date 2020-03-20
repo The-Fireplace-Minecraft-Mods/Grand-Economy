@@ -13,6 +13,7 @@ import the_fireplace.grandeconomy.fabric.econhandlers.ge.GrandEconomyEconHandler
 import the_fireplace.grandeconomy.fabric.events.NetworkEvents;
 
 import java.io.File;
+import java.util.UUID;
 
 public class GrandEconomy implements ModInitializer {
     private static MinecraftServer minecraftServer;
@@ -21,8 +22,69 @@ public class GrandEconomy implements ModInitializer {
     public static File configDir;
 
     private static IEconHandler economy;
+    private static IEconHandler economyWrapper = new IEconHandler() {
+        @Override
+        public long getBalance(UUID uuid, Boolean isPlayer) {
+            return economy.getBalance(uuid, isPlayer);
+        }
+
+        @Override
+        public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(Config.enforceNonNegativeBalance && amount < 0) {
+                if(getBalance(uuid, isPlayer)+amount < 0)
+                    return false;
+            }
+            return economy.addToBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(Config.enforceNonNegativeBalance && amount > 0) {
+                if(getBalance(uuid, isPlayer)-amount < 0)
+                    return false;
+            }
+            return economy.takeFromBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(Config.enforceNonNegativeBalance && amount < 0)
+                return false;
+            return economy.setBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public String getCurrencyName(long amount) {
+            return economy.getCurrencyName(amount);
+        }
+
+        @Override
+        public String getFormattedCurrency(long amount) {
+            return economy.getFormattedCurrency(amount);
+        }
+
+        @Override
+        public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
+            return economy.ensureAccountExists(uuid, isPlayer);
+        }
+
+        @Override
+        public Boolean forceSave(UUID uuid, Boolean isPlayer) {
+            return economy.forceSave(uuid, isPlayer);
+        }
+
+        @Override
+        public String getId() {
+            return economy.getId();
+        }
+
+        @Override
+        public void init() {
+            economy.init();
+        }
+    };
     public static IEconHandler getEconomy() {
-        return economy;
+        return economyWrapper;
     }
 
     public static MinecraftServer getServer() {

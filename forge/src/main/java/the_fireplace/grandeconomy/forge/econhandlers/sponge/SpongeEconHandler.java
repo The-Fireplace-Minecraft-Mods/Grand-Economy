@@ -5,8 +5,8 @@ import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContext;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.service.economy.transaction.ResultType;
-import the_fireplace.grandeconomy.forge.GrandEconomy;
 import the_fireplace.grandeconomy.api.IEconHandler;
+import the_fireplace.grandeconomy.forge.GrandEconomy;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -55,7 +55,7 @@ public class SpongeEconHandler implements IEconHandler {
     }
 
     @Override
-    public String toString(long amount) {
+    public String getFormattedCurrency(long amount) {
         return getEcon().getDefaultCurrency().format(BigDecimal.valueOf(amount)).toPlain();
     }
 

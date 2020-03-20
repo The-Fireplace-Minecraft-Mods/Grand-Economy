@@ -1,10 +1,12 @@
 package the_fireplace.grandeconomy.forge;
 
+import com.google.common.collect.Lists;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -16,6 +18,8 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.api.GrandEconomyApiForge;
 import the_fireplace.grandeconomy.api.IEconHandler;
+import the_fireplace.grandeconomy.forge.compat.IRegisterable;
+import the_fireplace.grandeconomy.forge.compat.sponge.RegisterSpongeEconomy;
 import the_fireplace.grandeconomy.forge.earnings.ConversionItems;
 import the_fireplace.grandeconomy.forge.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.forge.econhandlers.ge.GrandEconomyEconHandler;
@@ -24,6 +28,7 @@ import the_fireplace.grandeconomy.forge.econhandlers.vault.VaultEconHandler;
 import the_fireplace.grandeconomy.forge.events.NetworkEvents;
 
 import java.io.File;
+import java.util.UUID;
 
 @Mod(GrandEconomyApi.MODID)
 public class GrandEconomy {
@@ -35,8 +40,69 @@ public class GrandEconomy {
     public static File configDir;
 
     private static IEconHandler economy;
+    private static IEconHandler economyWrapper = new IEconHandler() {
+        @Override
+        public long getBalance(UUID uuid, Boolean isPlayer) {
+            return economy.getBalance(uuid, isPlayer);
+        }
+
+        @Override
+        public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(Config.enforceNonNegativeBalance && amount < 0) {
+                if(getBalance(uuid, isPlayer)+amount < 0)
+                    return false;
+            }
+            return economy.addToBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(Config.enforceNonNegativeBalance && amount > 0) {
+                if(getBalance(uuid, isPlayer)-amount < 0)
+                    return false;
+            }
+            return economy.takeFromBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(Config.enforceNonNegativeBalance && amount < 0)
+                return false;
+            return economy.setBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public String getCurrencyName(long amount) {
+            return economy.getCurrencyName(amount);
+        }
+
+        @Override
+        public String getFormattedCurrency(long amount) {
+            return economy.getFormattedCurrency(amount);
+        }
+
+        @Override
+        public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
+            return economy.ensureAccountExists(uuid, isPlayer);
+        }
+
+        @Override
+        public Boolean forceSave(UUID uuid, Boolean isPlayer) {
+            return economy.forceSave(uuid, isPlayer);
+        }
+
+        @Override
+        public String getId() {
+            return economy.getId();
+        }
+
+        @Override
+        public void init() {
+            economy.init();
+        }
+    };
     public static IEconHandler getEconomy() {
-        return economy;
+        return economyWrapper;
     }
 
     public GrandEconomy() {
@@ -104,5 +170,11 @@ public class GrandEconomy {
                     GrandEconomyApi.registerEconomyHandler(economy, GrandEconomyApi.MODID);
         }
         getEconomy().init();
+        //Make the economy we are using get registered with Sponge, if we aren't using Sponge
+        if(!Lists.newArrayList("sponge", "spongeapi", "spongeforge").contains(Config.economyBridge.toLowerCase())
+                && ModList.get().isLoaded("spongeapi")) {
+            IRegisterable compat = new RegisterSpongeEconomy();
+            compat.register();
+        }
     }
 }

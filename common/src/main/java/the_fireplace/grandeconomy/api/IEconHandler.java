@@ -63,13 +63,21 @@ public interface IEconHandler {
     String getCurrencyName(long amount);
 
     /**
-     * Gets the currency amount with the currency name attached
+     * @deprecated Use {@link IEconHandler#getFormattedCurrency(long)}
+     */
+    @Deprecated
+    default String toString(long amount) {
+        return this.getFormattedCurrency(amount);
+    }
+
+    /**
+     * Gets the currency amount with the currency name/symbol attached
      * @param amount
      * The currency amount
      * @return
      * The currency amount with the name attached
      */
-    String toString(long amount);
+    String getFormattedCurrency(long amount);
 
     /**
      * Try to make sure an account exists.
@@ -83,7 +91,7 @@ public interface IEconHandler {
     boolean ensureAccountExists(UUID uuid, Boolean isPlayer);
 
     /**
-     * Forcibly saves the account. The effectiveness of this is economy-specific.
+     * Forcibly saves the account. The effectiveness of this is economy-specific. Typically used to force save accounts for economies such as EnderPay and Grand Economy native currency which assume the account is a player and as such save when the player saves.
      * @param uuid
      * The account to save
      * @param isPlayer

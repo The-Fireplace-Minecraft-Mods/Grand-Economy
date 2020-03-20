@@ -1,13 +1,10 @@
 package the_fireplace.grandeconomy.forge.econhandlers.ge;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ModList;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.api.IEconHandler;
 import the_fireplace.grandeconomy.forge.Config;
 import the_fireplace.grandeconomy.forge.GrandEconomy;
-import the_fireplace.grandeconomy.forge.compat.sponge.ISpongeCompat;
-import the_fireplace.grandeconomy.forge.compat.sponge.RegisterSpongeEconomy;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -73,8 +70,8 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public String toString(long amount) {
-        return amount + ' ' + getCurrencyName(amount);
+    public String getFormattedCurrency(long amount) {
+        return amount + " " + getCurrencyName(amount);
     }
 
     @Override
@@ -100,9 +97,5 @@ public class GrandEconomyEconHandler implements IEconHandler {
     @Override
     public void init() {
         MinecraftForge.EVENT_BUS.register(new EventHandler());
-        if(ModList.get().isLoaded("spongeapi")) {
-            ISpongeCompat compat = new RegisterSpongeEconomy();
-            compat.register();
-        }
     }
 }

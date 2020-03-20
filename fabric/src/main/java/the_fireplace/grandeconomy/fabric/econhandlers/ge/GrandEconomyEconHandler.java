@@ -74,8 +74,8 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public String toString(long amount) {
-        return amount + ' ' + getCurrencyName(amount);
+    public String getFormattedCurrency(long amount) {
+        return amount + " " + getCurrencyName(amount);
     }
 
     @Override

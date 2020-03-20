@@ -1,3 +1,6 @@
 Fixed Fabric config not checking if values are in valid range
-Allow long currency values for Fabric config
+Allow long currency values in the config
 Change maxIncomeDays to a byte in Fabric config
+Added an option to enforce balances not going below zero
+API Change: toString(amount) should now be replaced with getFormattedCurrency(amount)
+Grand Economy (Forge) now registers itself with Sponge when using any non-Sponge economy.
