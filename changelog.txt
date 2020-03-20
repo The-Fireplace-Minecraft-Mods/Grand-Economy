@@ -1,1 +1,3 @@
-Hotfix for the startup crash in 1.5.1
+Fixed Fabric config not checking if values are in valid range
+Allow long currency values for Fabric config
+Change maxIncomeDays to a byte in Fabric config
