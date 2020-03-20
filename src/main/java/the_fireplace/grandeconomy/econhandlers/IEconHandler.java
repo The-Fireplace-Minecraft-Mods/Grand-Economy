@@ -83,7 +83,7 @@ public interface IEconHandler {
     boolean ensureAccountExists(UUID uuid, Boolean isPlayer);
 
     /**
-     * Forcibly saves the account. The effectiveness of this is economy-specific.
+     * Forcibly saves the account. The effectiveness of this is economy-specific. Typically used to force save accounts for economies such as EnderPay and Grand Economy native currency which assume the account is a player and as such save when the player saves.
      * @param uuid
      * The account to save
      * @param isPlayer

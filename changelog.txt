@@ -1,1 +1,1 @@
-Fixed /pay always showing usage
+Added an option to enforce balances not going below zero

@@ -29,6 +29,7 @@ import the_fireplace.grandeconomy.econhandlers.vault.VaultEconHandler;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Mod(modid = GrandEconomy.MODID, name = GrandEconomy.MODNAME, version = GrandEconomy.VERSION, acceptedMinecraftVersions = "[1.12,1.13)", acceptableRemoteVersions = "*")
 public class GrandEconomy {
@@ -41,9 +42,70 @@ public class GrandEconomy {
     public static MinecraftServer minecraftServer;
 
     private static IEconHandler economy;
+    private static IEconHandler economyWrapper = new IEconHandler() {
+        @Override
+        public long getBalance(UUID uuid, Boolean isPlayer) {
+            return economy.getBalance(uuid, isPlayer);
+        }
+
+        @Override
+        public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(GrandEconomy.cfg.enforceNonNegativeBalance && amount < 0) {
+                if(getBalance(uuid, isPlayer)+amount < 0)
+                    return false;
+            }
+            return economy.addToBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(GrandEconomy.cfg.enforceNonNegativeBalance && amount > 0) {
+                if(getBalance(uuid, isPlayer)-amount < 0)
+                    return false;
+            }
+            return economy.takeFromBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+            if(GrandEconomy.cfg.enforceNonNegativeBalance && amount < 0)
+                return false;
+            return economy.setBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public String getCurrencyName(long amount) {
+            return economy.getCurrencyName(amount);
+        }
+
+        @Override
+        public String toString(long amount) {
+            return economy.toString(amount);
+        }
+
+        @Override
+        public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
+            return economy.ensureAccountExists(uuid, isPlayer);
+        }
+
+        @Override
+        public Boolean forceSave(UUID uuid, Boolean isPlayer) {
+            return economy.forceSave(uuid, isPlayer);
+        }
+
+        @Override
+        public String getId() {
+            return economy.getId();
+        }
+
+        @Override
+        public void init() {
+            economy.init();
+        }
+    };
 
     public static IEconHandler getEconomy() {
-        return economy;
+        return economyWrapper;
     }
 
     @Mod.Instance(MODID)
@@ -145,6 +207,8 @@ public class GrandEconomy {
         public static String economyBridge = "none";
         @Config.Comment("Server locale - the client's locale takes precedence if Grand Economy is installed there.")
         public static String locale = "en_us";
+        @Config.Comment("Makes sure account balances cannot go below zero - useful when working with plugins that don't properly prevent negative balances")
+        public static boolean enforceNonNegativeBalance = true;
 
         @Config.Comment("Currency name (Singular). This option only works when not using an economy bridge.")
         public static String currencyNameSingular = "gp";
