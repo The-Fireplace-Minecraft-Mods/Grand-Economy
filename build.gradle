@@ -28,7 +28,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'net.cazzar.gradle.modsio'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-version = "1.3.8"
+version = "1.3.9"
 group = "the_fireplace.grandeconomy"
 archivesBaseName = "GrandEconomy-1.12.2"
 

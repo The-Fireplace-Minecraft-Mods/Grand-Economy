@@ -1,2 +1,1 @@
-Grand Economy now registers itself with Sponge when using any non-Sponge economy.
-Grand Economy now registers itself with Vault when using any non-Vault economy.
+Should fix Grand Economy native currency displaying with 32 added to the amount
