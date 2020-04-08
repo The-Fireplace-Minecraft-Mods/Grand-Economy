@@ -59,7 +59,7 @@ public class EnderPayEconHandler implements IEconHandler {
 
     @Override
     public String toString(long amount) {
-        return amount + ' ' + getCurrencyName(amount);
+        return amount + " " + getCurrencyName(amount);
     }
 
     @Override

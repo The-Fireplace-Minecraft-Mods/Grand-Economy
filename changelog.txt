@@ -1,1 +1,1 @@
-Should fix Grand Economy native currency displaying with 32 added to the amount
+Fixed EnderPay currency displaying with 32 added to the amount
