@@ -160,25 +160,35 @@ public class GrandEconomy {
                 economy = new EnderPayEconHandler();
                 break;
             case "vault":
-            case "bukkit":
-                economy = new VaultEconHandler();
+            case "bukkit"://Wait because we will load it when the bukkit plugin loads
+                //economy = new VaultEconHandler();
                 break;
             default:
                 economy = econHandlers.getOrDefault(cfg.economyBridge, new GrandEconomyEconHandler());
         }
         getEconomy().init();
+        //Wait because we will load it when the bukkit plugin loads
         //Make the economy we are using get registered with Vault, if we aren't using Vault
-        if(!Lists.newArrayList("bukkit", "vault").contains(cfg.economyBridge.toLowerCase())
+        /*if(!Lists.newArrayList("bukkit", "vault").contains(cfg.economyBridge.toLowerCase())
                 && vaultLoaded()) {
             IRegisterable vaultRegisterable = new RegisterVaultEconomy();
             vaultRegisterable.register();
-        }
+        }*/
         //Make the economy we are using get registered with Sponge, if we aren't using Sponge
         if(!Lists.newArrayList("sponge", "spongeapi", "spongeforge").contains(cfg.economyBridge.toLowerCase())
                 && Loader.isModLoaded("spongeapi")) {
             IRegisterable spongeCompat = new RegisterSpongeEconomy();
             spongeCompat.register();
         }
+    }
+
+    /**
+     * @deprecated INTERNAL USE ONLY, use {@link the_fireplace.grandeconomy.api.GrandEconomyApi#registerEconomyHandler(IEconHandler, String, String...)} instead
+     */
+    @Deprecated
+    public static void setEconomy(IEconHandler handler) {
+        if(economy == null)
+            economy = handler;
     }
 
     @Mod.EventHandler

@@ -1,0 +1,8 @@
+name: Grand-Economy-API-Vault-Integration
+main: the_fireplace.grandeconomy.compat.vault.RegisterVaultEconomy
+version: {$version}
+author: The_Fireplace
+description: Vault integration layer for Grand Economy.
+website: https://www.curseforge.com/minecraft/mc-mods/grand-economy
+depend:
+  - Vault
