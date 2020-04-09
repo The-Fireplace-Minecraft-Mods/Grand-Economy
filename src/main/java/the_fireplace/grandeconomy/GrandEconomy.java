@@ -47,7 +47,7 @@ public class GrandEconomy {
     public static MinecraftServer minecraftServer;
 
     private static IEconHandler economy;
-    private static IEconHandler economyWrapper = new IEconHandler() {
+    private static final IEconHandler economyWrapper = new IEconHandler() {
         @Override
         public long getBalance(UUID uuid, Boolean isPlayer) {
             return economy.getBalance(uuid, isPlayer);
@@ -166,7 +166,8 @@ public class GrandEconomy {
             default:
                 economy = econHandlers.getOrDefault(cfg.economyBridge, new GrandEconomyEconHandler());
         }
-        getEconomy().init();
+        if(economy != null)
+            getEconomy().init();
         //Wait because we will load it when the bukkit plugin loads
         //Make the economy we are using get registered with Vault, if we aren't using Vault
         /*if(!Lists.newArrayList("bukkit", "vault").contains(cfg.economyBridge.toLowerCase())
@@ -187,8 +188,10 @@ public class GrandEconomy {
      */
     @Deprecated
     public static void setEconomy(IEconHandler handler) {
-        if(economy == null)
+        if(economy == null) {
             economy = handler;
+            getEconomy().init();
+        }
     }
 
     @Mod.EventHandler

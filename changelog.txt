@@ -1,2 +1,1 @@
-Fixed EnderPay currency displaying with 32 added to the amount
-Changed the method of loading alongside Vault to help prevent issues
+Fixed crash with Vault
