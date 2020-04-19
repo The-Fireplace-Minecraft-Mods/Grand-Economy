@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.commands.*;
 import the_fireplace.grandeconomy.compat.IRegisterable;
 import the_fireplace.grandeconomy.compat.sponge.RegisterSpongeEconomy;
-import the_fireplace.grandeconomy.compat.vault.RegisterVaultEconomy;
 import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
@@ -28,7 +27,6 @@ import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
-import the_fireplace.grandeconomy.econhandlers.vault.VaultEconHandler;
 
 import java.io.File;
 import java.lang.reflect.Method;
