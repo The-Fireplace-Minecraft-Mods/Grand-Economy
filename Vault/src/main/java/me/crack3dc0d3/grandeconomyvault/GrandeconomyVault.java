@@ -1,19 +1,27 @@
-package the_fireplace.grandeconomy.econhandlers.vault;
+package me.crack3dc0d3.grandeconomyvault;
 
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
-import net.milkbowl.vault.economy.Economy;
 
 import java.util.UUID;
 
-import static org.bukkit.Bukkit.getServer;
-
-public class VaultEconHandler implements IEconHandler {
-
+public final class GrandeconomyVault extends JavaPlugin implements IEconHandler {
     private Economy econ;
+    @Override
+    public void onEnable() {
+        // Plugin startup logic
+        GrandEconomy.setEconomy(this);
+    }
 
+    @Override
+    public void onDisable() {
+        // Plugin shutdown logic
+    }
     private boolean shouldUsePlayerAccount(UUID uuid, Boolean isPlayer) {
         return isPlayer == null && Bukkit.getOfflinePlayer(uuid).hasPlayedBefore() || isPlayer == Boolean.TRUE || !getEcon().hasBankSupport();
     }
@@ -91,7 +99,7 @@ public class VaultEconHandler implements IEconHandler {
 
     public Economy getEcon() {
         if(econ == null) {
-            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+            RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
             econ = economyProvider.getProvider();
         }
         return econ;
