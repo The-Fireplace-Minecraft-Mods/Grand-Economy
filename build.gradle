@@ -9,15 +9,10 @@ buildscript {
             name = "Modmuss50"
             url = "http://maven.modmuss50.me/"
         }
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'ModsIOUpload:ModsIOUpload:+'
-        //Shadow 1.2.4 is the last version of Shadow supporting Gradle 2.X
-        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
 
@@ -26,7 +21,6 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'net.cazzar.gradle.modsio'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 version = "1.4.0"
 group = "the_fireplace.grandeconomy"
@@ -65,22 +59,7 @@ repositories {
 		name = "sk89q"
 		url = "http://maven.sk89q.com/repo/"
 	}
-	//Spigot
-	maven { url = ("https://hub.spigotmc.org/nexus/content/groups/public/") }
-	// Vault
-	maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
 }
-
-shadowJar {
-    classifier = ''
-    exclude 'enderpay*.jar'
-}
-
-reobf {
-    shadowJar {}
-}
-
-build.dependsOn reobfShadowJar
 
 processResources {
     inputs.property "version", project.version
@@ -103,8 +82,7 @@ task deobfJar(type: Jar) {
 }
 
 artifacts {
-    //archives jar
-    archives shadowJar
+    archives jar
     archives deobfJar
     archives sourceJar
 }
@@ -119,8 +97,8 @@ curseforge {
     addGameVersion '1.12.1'
     addGameVersion '1.12'
 	addGameVersion 'Java 8'
-    mainArtifact(shadowJar) {
-        displayName = shadowJar.archiveName.replace(".jar", "")
+    mainArtifact(jar) {
+        displayName = jar.archiveName.replace(".jar", "")
     }
     addArtifact(sourceJar) {
         displayName = sourceJar.archiveName.replace(".jar", "")
@@ -136,7 +114,7 @@ curseforge {
 modsIO {
     key = project.hasProperty("modsioApiKey")? project.modsioApiKey : "empty"
     project{
-		artifact = new File(shadowJar.destinationDir, archivesBaseName+"-"+version+".jar")
+		artifact = new File(jar.destinationDir, archivesBaseName+"-"+version+".jar")
 		modid = "1278"
 		minecraft = "1.12.2"
 		try{changelog = file('changelog.txt').text}catch(Exception e){changelog=""}

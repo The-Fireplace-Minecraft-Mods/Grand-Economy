@@ -1,2 +1,2 @@
-Moved Vault integration into its own plugin to fix issues
+Moved Vault integration into its own plugin to fix issues - https://dev.bukkit.org/projects/grand-economy-vault-compat
 Renamed /gehelp to /geconhelp
