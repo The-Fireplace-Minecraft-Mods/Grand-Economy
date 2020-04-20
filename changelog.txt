@@ -1,1 +1,1 @@
-Fixed crash with Vault
+Moved Vault integration into its own plugin to fix issues

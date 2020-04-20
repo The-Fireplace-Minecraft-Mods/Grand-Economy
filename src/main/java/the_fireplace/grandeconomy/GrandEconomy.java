@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.commands.*;
 import the_fireplace.grandeconomy.compat.IRegisterable;
 import the_fireplace.grandeconomy.compat.sponge.RegisterSpongeEconomy;
-import the_fireplace.grandeconomy.compat.vault.RegisterVaultEconomy;
 import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
@@ -28,7 +27,6 @@ import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
-import the_fireplace.grandeconomy.econhandlers.vault.VaultEconHandler;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -118,7 +116,7 @@ public class GrandEconomy {
 
     public static File configDir;
 
-    private static Map<String, IEconHandler> econHandlers = Maps.newHashMap();
+    private static final Map<String, IEconHandler> econHandlers = Maps.newHashMap();
 
     public static boolean hasEconHandler(String key) {
         return econHandlers.containsKey(key);
@@ -160,21 +158,15 @@ public class GrandEconomy {
                 economy = new EnderPayEconHandler();
                 break;
             case "vault":
-            case "bukkit"://Wait because we will load it when the bukkit plugin loads
-                //economy = new VaultEconHandler();
+            case "bukkit":
+                //Wait because we will load it when the bukkit plugin loads
                 break;
             default:
                 economy = econHandlers.getOrDefault(cfg.economyBridge, new GrandEconomyEconHandler());
         }
+        //Null check because the Vault economy can't be initialized until later
         if(economy != null)
             getEconomy().init();
-        //Wait because we will load it when the bukkit plugin loads
-        //Make the economy we are using get registered with Vault, if we aren't using Vault
-        /*if(!Lists.newArrayList("bukkit", "vault").contains(cfg.economyBridge.toLowerCase())
-                && vaultLoaded()) {
-            IRegisterable vaultRegisterable = new RegisterVaultEconomy();
-            vaultRegisterable.register();
-        }*/
         //Make the economy we are using get registered with Sponge, if we aren't using Sponge
         if(!Lists.newArrayList("sponge", "spongeapi", "spongeforge").contains(cfg.economyBridge.toLowerCase())
                 && Loader.isModLoaded("spongeapi")) {
@@ -245,7 +237,7 @@ public class GrandEconomy {
         @Config.Comment("What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer")
         @Config.RangeInt(max=100)
         public static int pvpMoneyTransfer = 0;
-        @Config.Comment("Which economy to bridge to, if any. Choices are \"none\", \"sponge\", \"enderpay\", \"forgeessentials\", and \"vault\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded.")
+        @Config.Comment("Which economy to bridge to, if any. Choices are \"none\", \"sponge\", \"enderpay\", \"forgeessentials\", and \"vault\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded. If using Vault, make sure the Grand Economy Vault Compat plugin is loaded.")
         public static String economyBridge = "none";
         @Config.Comment("Server locale - the client's locale takes precedence if Grand Economy is installed there.")
         public static String locale = "en_us";
