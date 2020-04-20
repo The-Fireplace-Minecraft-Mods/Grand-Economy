@@ -1,1 +1,2 @@
 Moved Vault integration into its own plugin to fix issues
+Renamed /gehelp to /geconhelp

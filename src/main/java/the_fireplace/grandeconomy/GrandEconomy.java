@@ -218,18 +218,6 @@ public class GrandEconomy {
         return handler.getWorldDirectory();
     }
 
-    private boolean vaultLoaded() {
-        try {
-            Method m = ClassLoader.class.getDeclaredMethod("findLoadedClass", String.class);
-            m.setAccessible(true);
-            ClassLoader cl = ClassLoader.getSystemClassLoader();
-            Object test1 = m.invoke(cl, "net.milkbowl.vault.Vault");
-            return test1 != null;
-        } catch(Exception e) {
-            return false;
-        }
-    }
-
     @Config(modid = MODID)
     public static class cfg {
         @Config.Comment("If enabled, players will be shown a message with their account balance when they join the server")

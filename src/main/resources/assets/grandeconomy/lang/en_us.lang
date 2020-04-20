@@ -26,7 +26,7 @@ commands.grandeconomy.wallet.set=%s balance set to %s
 commands.grandeconomy.wallet.balance=%s balance: %s
 commands.grandeconomy.wallet.negative=You cannot do this because it would set the %s's balance below zero.
 
-commands.grandeconomy.gehelp.usage=/gehelp [page]
+commands.grandeconomy.gehelp.usage=/geconhelp [page]
 commands.grandeconomy.gehelp.description=The Grand Economy help command.
 commands.grandeconomy.gehelp.format=%s: %s
 

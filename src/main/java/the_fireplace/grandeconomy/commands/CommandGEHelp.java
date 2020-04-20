@@ -19,7 +19,7 @@ public class CommandGEHelp extends CommandBase {
     @Override
     @Nonnull
     public String getName() {
-        return "gehelp";
+        return "geconhelp";
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CommandGEHelp extends CommandBase {
                     TranslationUtil.getStringTranslation(sender, "commands.grandeconomy."+command.getName()+".description")));
         helps.sort(Comparator.comparing(ITextComponent::getUnformattedText));
 
-        ChatPageUtil.showPaginatedChat(sender, "/gehelp %s", helps, args == null || args.length < 1 ? 1 : parseInt(args[0]));
+        ChatPageUtil.showPaginatedChat(sender, "/geconhelp %s", helps, args == null || args.length < 1 ? 1 : parseInt(args[0]));
     }
 
     @Override
