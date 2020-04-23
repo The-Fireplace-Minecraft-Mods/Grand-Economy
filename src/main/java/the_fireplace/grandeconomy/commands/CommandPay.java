@@ -39,6 +39,8 @@ public class CommandPay extends CommandBase {
                     throw new InsufficientCreditException(((EntityPlayerMP) sender).getUniqueID());
                 GrandEconomyApi.takeFromBalance(((EntityPlayerMP) sender).getUniqueID(), amount, true);
                 GrandEconomyApi.addToBalance(targetPlayer.getUniqueID(), amount, true);
+                sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayerMP) sender).getUniqueID(), "commands.grandeconomy.pay.paid", GrandEconomyApi.toString(amount), targetPlayer.getName()));
+                targetPlayer.sendMessage(TranslationUtil.getTranslation(targetPlayer.getUniqueID(), "commands.grandeconomy.pay.received", GrandEconomyApi.toString(amount), sender.getName()));
             } else
                 throw new WrongUsageException(TranslationUtil.getStringTranslation("commands.grandeconomy.common.console", getUsage(sender)));
         } else

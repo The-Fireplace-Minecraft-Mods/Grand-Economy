@@ -30,6 +30,17 @@ public class GrandEconomyApi {
     }
 
     /**
+     * Check the account's balance
+     * @param uuid
+     * The account to check the balance of
+     * @return
+     * The balance, formatted with the currency name
+     */
+    public static String getBalanceFormatted(UUID uuid, Boolean isPlayer) {
+        return toString(GrandEconomy.getEconomy().getBalance(uuid, isPlayer));
+    }
+
+    /**
      * Add to the account's balance
      * @param uuid
      * The account to increase the balance of

@@ -17,6 +17,8 @@ commands.grandeconomy.convert.failure=此物品没有任何价值
 commands.grandeconomy.pay.usage=/pay <玩家> <金额>
 commands.grandeconomy.pay.description=Pay a player money from your account.
 commands.grandeconomy.pay.negative=支付金额不能为负
+commands.grandeconomy.pay.received=You received %s from %s.
+commands.grandeconomy.pay.paid=You sent %s to %s.
 
 commands.grandeconomy.wallet.usage=/wallet <give|take|set|balance> <玩家> <金额>
 commands.grandeconomy.wallet.description=The admin command for managing account balances.
@@ -32,4 +34,4 @@ commands.grandeconomy.gehelp.format=%s: %s
 
 grandeconomy.chat.page.next=[Next]
 grandeconomy.chat.page.prev=[Previous]
-grandeconomy.chat.page.num=Page: %s/%s
+grandeconomy.chat.page.num=Page: %s/%scommands.grandeconomy.pay.paid=You sent %s to %s.

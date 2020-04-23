@@ -1,2 +1,4 @@
-Moved Vault integration into its own plugin to fix issues - https://dev.bukkit.org/projects/grand-economy-vault-compat
-Renamed /gehelp to /geconhelp
+Reminder: Vault integration now uses its own plugin - https://dev.bukkit.org/projects/grand-economy-vault-compat
+Added feedback messages when you use /pay
+Updated feedback messages to include currency name
+Added API method to retrieve an account's balance with the currency name attached
