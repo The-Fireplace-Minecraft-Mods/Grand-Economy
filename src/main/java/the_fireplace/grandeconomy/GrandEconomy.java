@@ -229,10 +229,10 @@ public class GrandEconomy {
         public static double startBalance = 100;
         @Config.Comment("Give each player credits every day they log in. This option only works when not using an economy bridge.")
         public static boolean basicIncome = true;
-        @Config.Comment("The amount of basic income to be given to a player")
+        @Config.Comment("The amount of basic income to be given to a player each day.")
         @Config.RangeDouble(min=0)
         public static double basicIncomeAmount = 50;
-        @Config.Comment("The max number of days since last login the player will be paid basic income for")
+        @Config.Comment("The max number of days since last login the player will be paid basic income for. Ex. If this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when they log in.")
         @Config.RangeInt(min=0)
         public static int maxBasicIncomeDays = 5;
     }
