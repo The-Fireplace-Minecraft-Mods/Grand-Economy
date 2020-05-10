@@ -37,30 +37,30 @@ public class CommandWallet extends CommandBase {
             if(target == null)
                 throw new PlayerNotFoundException("commands.generic.player.notFound", args[1]);
             if ("balance".equals(args[0])) {
-                sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.balance", target.getName(), GrandEconomyApi.getBalanceFormatted(target.getId(), true)));
+                sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.balance", target.getName(), GrandEconomyApi.getFormattedBalance(target.getId(), true)));
                 return;
             }
             if(args.length > 2) {
-                long amount = parseLong(args[2]);
+                double amount = parseLong(args[2]);
                 if ("set".equals(args[0])) {
                     if(amount < 0)
                         throw new CommandException("commands.grandeconomy.wallet.negative", target.getName());
                     GrandEconomyApi.setBalance(target.getId(), amount, true);
-                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.set", target.getName(), GrandEconomyApi.getBalanceFormatted(target.getId(), true)));
+                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.set", target.getName(), GrandEconomyApi.getFormattedBalance(target.getId(), true)));
                     return;
                 }
                 if ("give".equals(args[0]) || "add".equals(args[0])) {
                     if(GrandEconomyApi.getBalance(target.getId(), true) + amount < 0)
                         throw new CommandException("commands.grandeconomy.wallet.negative", target.getName());
                     GrandEconomyApi.addToBalance(target.getId(), amount, true);
-                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.given", GrandEconomyApi.toString(amount), target.getName()));
+                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.given", GrandEconomyApi.getFormattedCurrency(amount), target.getName()));
                     return;
                 }
                 if ("take".equals(args[0])) {
                     if(GrandEconomyApi.getBalance(target.getId(), true) - amount < 0)
                         throw new CommandException("commands.grandeconomy.wallet.negative", target.getName());
                     GrandEconomyApi.takeFromBalance(target.getId(), amount, true);
-                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.taken", GrandEconomyApi.toString(amount), target.getName()));
+                    sender.sendMessage(TranslationUtil.getTranslation(sender, "commands.grandeconomy.wallet.taken", GrandEconomyApi.getFormattedCurrency(amount), target.getName()));
                     return;
                 }
             }

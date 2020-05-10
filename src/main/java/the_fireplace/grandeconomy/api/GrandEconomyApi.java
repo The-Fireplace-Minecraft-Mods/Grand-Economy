@@ -10,15 +10,6 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class GrandEconomyApi {
     /**
-     * @deprecated
-     * Use {@link GrandEconomyApi#getBalance(UUID, Boolean)}
-     */
-    @Deprecated
-    public static long getBalance(UUID uuid) {
-        return getBalance(uuid, null);
-    }
-
-    /**
      * Check the account's balance
      * @param uuid
      * The account to check the balance of
@@ -36,8 +27,8 @@ public class GrandEconomyApi {
      * @return
      * The balance, formatted with the currency name
      */
-    public static String getBalanceFormatted(UUID uuid, Boolean isPlayer) {
-        return toString(GrandEconomy.getEconomy().getBalance(uuid, isPlayer));
+    public static String getFormattedBalance(UUID uuid, Boolean isPlayer) {
+        return getFormattedCurrency(GrandEconomy.getEconomy().getBalance(uuid, isPlayer));
     }
 
     /**
@@ -51,11 +42,11 @@ public class GrandEconomyApi {
      * @return
      * Whether the amount was successfully added or not
      */
-    public static boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
-        long oldAmount = getBalance(uuid);
+    public static boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
+        long oldAmount = getBalance(uuid, isPlayer);
         boolean added = GrandEconomy.getEconomy().addToBalance(uuid, amount, isPlayer);
         if(added)
-            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
+            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid, isPlayer), uuid));
         return added;
     }
 
@@ -70,11 +61,11 @@ public class GrandEconomyApi {
      * @return
      * Whether the balance was successfully set or not
      */
-    public static boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
-        long oldAmount = getBalance(uuid);
+    public static boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
+        long oldAmount = getBalance(uuid, isPlayer);
         boolean balanceSet = GrandEconomy.getEconomy().setBalance(uuid, amount, isPlayer);
         if(balanceSet)
-            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
+            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid, isPlayer), uuid));
         return balanceSet;
     }
 
@@ -89,11 +80,11 @@ public class GrandEconomyApi {
      * @return
      * Whether the amount was successfully taken or not
      */
-    public static boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
-        long oldAmount = getBalance(uuid);
+    public static boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
+        long oldAmount = getBalance(uuid, isPlayer);
         boolean taken = GrandEconomy.getEconomy().takeFromBalance(uuid, amount, isPlayer);
         if(taken)
-            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid), uuid));
+            MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid, isPlayer), uuid));
         return taken;
     }
 
@@ -104,7 +95,7 @@ public class GrandEconomyApi {
      * @return
      * The currency name
      */
-    public static String getCurrencyName(long amount) {
+    public static String getCurrencyName(double amount) {
         return GrandEconomy.getEconomy().getCurrencyName(amount);
     }
 
@@ -115,50 +106,8 @@ public class GrandEconomyApi {
      * @return
      * The currency amount with the name attached
      */
-    public static String toString(long amount) {
-        return GrandEconomy.getEconomy().toString(amount);
-    }
-
-    /**
-     * @deprecated
-     * Use {@link GrandEconomyApi#ensureAccountExists(UUID, Boolean)}
-     */
-    @Deprecated
-    public static boolean ensureAccountExists(UUID uuid) {
-        return ensureAccountExists(uuid, null);
-    }
-
-    /**
-     * Try to make sure an account exists.
-     * @param uuid
-     * the account to check
-     * @param isPlayer
-     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
-     * @return
-     * True if it exists, false otherwise.
-     */
-    public static boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
-        return GrandEconomy.getEconomy().ensureAccountExists(uuid, isPlayer);
-    }
-
-    /**
-     * @deprecated
-     * Use {@link GrandEconomyApi#forceSave(UUID, Boolean)}
-     */
-    @Deprecated
-    public static Boolean forceSave(UUID uuid) {
-        return forceSave(uuid, null);
-    }
-
-    /**
-     * Forcibly saves the account.
-     * @param uuid
-     * The account to save
-     * @return
-     * true if saved, false if not saved, or null if not implemented
-     */
-    public static Boolean forceSave(UUID uuid, Boolean isPlayer) {
-        return GrandEconomy.getEconomy().forceSave(uuid, isPlayer);
+    public static String getFormattedCurrency(double amount) {
+        return GrandEconomy.getEconomy().getFormattedCurrency(amount);
     }
 
     /**

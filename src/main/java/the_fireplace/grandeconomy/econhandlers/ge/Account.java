@@ -17,19 +17,19 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Account {
-    private static HashMap<String, Account> objects = new HashMap<>();
+    private static final HashMap<String, Account> objects = new HashMap<>();
     private static File location;
     private boolean changed;
 
-    private UUID uuid;
-    private long balance;
+    private final UUID uuid;
+    private double balance;
     private long lastLogin;
     private long lastCountActivity;
     private boolean isPlayer = false;
 
     private Account(UUID uuid) {
         this.uuid = uuid;
-        this.balance = GrandEconomy.cfg.startBalance;
+        this.balance = GrandEconomy.nativeConfig.startBalance;
         long now = TimeUtils.getCurrentDay();
         this.lastLogin = now;
         this.lastCountActivity = now;
@@ -79,12 +79,12 @@ public class Account {
 
         if (!isPlayer || activityDeltaDays == 0) return false;
 
-        if (GrandEconomy.cfg.basicIncome && getPlayerMP() != null) {
+        if (GrandEconomy.nativeConfig.basicIncome && getPlayerMP() != null) {
             long loginDeltaDays = (now - this.lastLogin);
-            if (loginDeltaDays > GrandEconomy.cfg.maxBasicIncomeDays)
-                loginDeltaDays = GrandEconomy.cfg.maxBasicIncomeDays;
+            if (loginDeltaDays > GrandEconomy.nativeConfig.maxBasicIncomeDays)
+                loginDeltaDays = GrandEconomy.nativeConfig.maxBasicIncomeDays;
             this.lastLogin = now;
-            this.balance += loginDeltaDays * GrandEconomy.cfg.basicIncomeAmount;
+            this.balance += loginDeltaDays * GrandEconomy.nativeConfig.basicIncomeAmount;
         }
         return activityDeltaDays > 0;
     }
@@ -108,7 +108,7 @@ public class Account {
         try {
             Object obj = jsonParser.parse(new FileReader(file));
             JsonObject jsonObject = (JsonObject) obj;
-            balance = jsonObject.get("balance").getAsLong();
+            balance = jsonObject.get("balance").getAsDouble();
             lastLogin = jsonObject.get("lastLogin").getAsLong();
             lastCountActivity = jsonObject.get("lastCountActivity").getAsLong();
             if(jsonObject.has("isPlayer"))
@@ -139,18 +139,18 @@ public class Account {
         changed = false;
     }
 
-    public long getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    void setBalance(long v) {
+    void setBalance(double v) {
         if(balance != v) {
             balance = v;
             changed = true;
         }
     }
 
-    void addBalance(long v) {
+    void addBalance(double v) {
         setBalance(balance + v);
     }
 

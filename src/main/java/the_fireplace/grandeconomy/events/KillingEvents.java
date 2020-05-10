@@ -16,8 +16,9 @@ public class KillingEvents {
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
         if(!event.getEntity().world.isRemote) {
-            int moneyDropValue = GrandEconomy.cfg.pvpMoneyTransfer;
-            if (moneyDropValue == 0) return;
+            double flatMoneyTransferAmount = GrandEconomy.globalConfig.pvpMoneyTransferFlat;
+            double percentMoneyTransferAmount = GrandEconomy.globalConfig.pvpMoneyTransferPercent;
+            if (flatMoneyTransferAmount == 0 && percentMoneyTransferAmount == 0) return;
             Entity entity = event.getEntity();
             if (!(entity instanceof EntityPlayer) || entity.world.isRemote)
                 return;
@@ -25,17 +26,21 @@ public class KillingEvents {
             if (!(killer instanceof EntityPlayerMP))
                 return;
 
-            if (GrandEconomyApi.getBalance(event.getEntity().getUniqueID()) <= 0)
+            if (GrandEconomyApi.getBalance(event.getEntity().getUniqueID(), true) <= 0)
                 return;
-            long amountTaken = (moneyDropValue > 0) ?
-                    (GrandEconomyApi.getBalance(event.getEntity().getUniqueID()) * GrandEconomy.cfg.pvpMoneyTransfer) / 100 :
-                    Math.max(Math.min(GrandEconomyApi.getBalance(event.getEntity().getUniqueID()), -GrandEconomy.cfg.pvpMoneyTransfer), 0);
+            double amountTaken =
+                    Math.max(
+                        Math.min(
+                            GrandEconomyApi.getBalance(event.getEntity().getUniqueID(), true),
+                            (GrandEconomyApi.getBalance(event.getEntity().getUniqueID(), true) * percentMoneyTransferAmount) / 100 + flatMoneyTransferAmount),
+                        0
+                    );
             GrandEconomyApi.takeFromBalance(event.getEntity().getUniqueID(), amountTaken, true);
 
-            entity.sendMessage(TranslationUtil.getTranslation(entity.getUniqueID(), "grandeconomy.killed_balance", GrandEconomyApi.getBalance(event.getEntity().getUniqueID())));
+            entity.sendMessage(TranslationUtil.getTranslation(entity.getUniqueID(), "grandeconomy.killed_balance", GrandEconomyApi.getBalance(event.getEntity().getUniqueID(), true)));
 
             GrandEconomyApi.addToBalance(killer.getUniqueID(), amountTaken, true);
-            killer.sendMessage(TranslationUtil.getTranslation(killer.getUniqueID(), "grandeconomy.killer_balance", GrandEconomyApi.getBalance(killer.getUniqueID())));
+            killer.sendMessage(TranslationUtil.getTranslation(killer.getUniqueID(), "grandeconomy.killer_balance", GrandEconomyApi.getBalance(killer.getUniqueID(), true)));
         }
     }
 }

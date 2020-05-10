@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.commands.*;
 import the_fireplace.grandeconomy.compat.IRegisterable;
 import the_fireplace.grandeconomy.compat.sponge.RegisterSpongeEconomy;
-import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
 import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
@@ -39,6 +38,7 @@ public class GrandEconomy {
     public static final String MODNAME = "Grand Economy";
     public static final String VERSION = "${version}";
 
+    @SuppressWarnings("deprecation")
     public static Logger LOGGER = FMLLog.getLogger();
 
     public static MinecraftServer minecraftServer;
@@ -46,13 +46,13 @@ public class GrandEconomy {
     private static IEconHandler economy;
     private static final IEconHandler economyWrapper = new IEconHandler() {
         @Override
-        public long getBalance(UUID uuid, Boolean isPlayer) {
+        public double getBalance(UUID uuid, Boolean isPlayer) {
             return economy.getBalance(uuid, isPlayer);
         }
 
         @Override
-        public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
-            if(GrandEconomy.cfg.enforceNonNegativeBalance && amount < 0) {
+        public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
+            if(globalConfig.enforceNonNegativeBalance && amount < 0) {
                 if(getBalance(uuid, isPlayer)+amount < 0)
                     return false;
             }
@@ -60,8 +60,8 @@ public class GrandEconomy {
         }
 
         @Override
-        public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
-            if(GrandEconomy.cfg.enforceNonNegativeBalance && amount > 0) {
+        public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
+            if(globalConfig.enforceNonNegativeBalance && amount > 0) {
                 if(getBalance(uuid, isPlayer)-amount < 0)
                     return false;
             }
@@ -69,30 +69,20 @@ public class GrandEconomy {
         }
 
         @Override
-        public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
-            if(GrandEconomy.cfg.enforceNonNegativeBalance && amount < 0)
+        public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
+            if(globalConfig.enforceNonNegativeBalance && amount < 0)
                 return false;
             return economy.setBalance(uuid, amount, isPlayer);
         }
 
         @Override
-        public String getCurrencyName(long amount) {
+        public String getCurrencyName(double amount) {
             return economy.getCurrencyName(amount);
         }
 
         @Override
-        public String toString(long amount) {
-            return economy.toString(amount);
-        }
-
-        @Override
-        public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
-            return economy.ensureAccountExists(uuid, isPlayer);
-        }
-
-        @Override
-        public Boolean forceSave(UUID uuid, Boolean isPlayer) {
-            return economy.forceSave(uuid, isPlayer);
+        public String getFormattedCurrency(double amount) {
+            return economy.getFormattedCurrency(amount);
         }
 
         @Override
@@ -113,8 +103,6 @@ public class GrandEconomy {
     @Mod.Instance(MODID)
     public static GrandEconomy instance;
 
-    public static File configDir;
-
     private static final Map<String, IEconHandler> econHandlers = Maps.newHashMap();
 
     public static boolean hasEconHandler(String key) {
@@ -133,16 +121,11 @@ public class GrandEconomy {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
-        configDir = new File(event.getModConfigurationDirectory(), "grandeconomy-extra");
-        //noinspection ResultOfMethodCallIgnored
-        configDir.mkdirs();
-        //Initialize ConversionItems
-        ConversionItems.hasValue(null, 0);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        switch(cfg.economyBridge.toLowerCase()) {
+        switch(globalConfig.economyBridge.toLowerCase()) {
             case "sponge":
             case "spongeapi":
             case "spongeforge":
@@ -161,13 +144,13 @@ public class GrandEconomy {
                 //Wait because we will load it when the bukkit plugin loads
                 break;
             default:
-                economy = econHandlers.getOrDefault(cfg.economyBridge, new GrandEconomyEconHandler());
+                economy = econHandlers.getOrDefault(globalConfig.economyBridge, new GrandEconomyEconHandler());
         }
         //Null check because the Vault economy can't be initialized until later
         if(economy != null)
             getEconomy().init();
         //Make the economy we are using get registered with Sponge, if we aren't using Sponge
-        if(!Lists.newArrayList("sponge", "spongeapi", "spongeforge").contains(cfg.economyBridge.toLowerCase())
+        if(!Lists.newArrayList("sponge", "spongeapi", "spongeforge").contains(globalConfig.economyBridge.toLowerCase())
                 && Loader.isModLoaded("spongeapi")) {
             IRegisterable spongeCompat = new RegisterSpongeEconomy();
             spongeCompat.register();
@@ -203,7 +186,6 @@ public class GrandEconomy {
                 new CommandWallet(),
                 new CommandBalance(),
                 new CommandPay(),
-                new CommandConvert(),
                 new CommandGEHelp()
         ));
         for(CommandBase command: commands)
@@ -217,35 +199,39 @@ public class GrandEconomy {
         return handler.getWorldDirectory();
     }
 
-    @Config(modid = MODID)
-    public static class cfg {
+    @Config(modid = MODID, category = "anyCurrency")
+    public static class globalConfig {
         @Config.Comment("If enabled, players will be shown a message with their account balance when they join the server")
-        public static boolean showBalanceOnJoin = true;
-        @Config.Comment("What percentage (0-100) or what amount (pvpMoneyTransfer<0) of players money should be transferred to killer")
-        @Config.RangeInt(max=100)
-        public static int pvpMoneyTransfer = 0;
+        public static boolean showBalanceOnJoin = false;
+        @Config.Comment("What percentage of players money should be transferred to killer")
+        @Config.RangeDouble(min=0, max=100)
+        public static double pvpMoneyTransferPercent = 0;
+        @Config.Comment("What amount of players money should be transferred to killer")
+        @Config.RangeDouble(min=0)
+        public static double pvpMoneyTransferFlat = 0;
         @Config.Comment("Which economy to bridge to, if any. Choices are \"none\", \"sponge\", \"enderpay\", \"forgeessentials\", and \"vault\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded. If using Vault, make sure the Grand Economy Vault Compat ( https://dev.bukkit.org/projects/grand-economy-vault-compat ) plugin is loaded.")
         public static String economyBridge = "none";
         @Config.Comment("Server locale - the client's locale takes precedence if Grand Economy is installed there.")
         public static String locale = "en_us";
         @Config.Comment("Makes sure account balances cannot go below zero - useful when working with plugins that don't properly prevent negative balances")
         public static boolean enforceNonNegativeBalance = true;
-
+    }
+    @Config(modid = MODID, category = "nativeCurrency")
+    public static class nativeConfig {
         @Config.Comment("Currency name (Singular). This option only works when not using an economy bridge.")
         public static String currencyNameSingular = "gp";
         @Config.Comment("Currency name (Multiple). This option only works when not using an economy bridge.")
         public static String currencyNameMultiple = "gp";
         @Config.Comment("Thousands separator. This option only works when not using an economy bridge.")
         public static String thousandsSeparator = ",";
-
         @Config.Comment("Amount of currency given to new players when they join the server. This option only works when not using an economy bridge.")
-        @Config.RangeInt(min=0)
-        public static int startBalance = 100;
+        @Config.RangeDouble(min=0)
+        public static double startBalance = 100;
         @Config.Comment("Give each player credits every day they log in. This option only works when not using an economy bridge.")
         public static boolean basicIncome = true;
         @Config.Comment("The amount of basic income to be given to a player")
-        @Config.RangeInt(min=0)
-        public static int basicIncomeAmount = 50;
+        @Config.RangeDouble(min=0)
+        public static double basicIncomeAmount = 50;
         @Config.Comment("The max number of days since last login the player will be paid basic income for")
         @Config.RangeInt(min=0)
         public static int maxBasicIncomeDays = 5;

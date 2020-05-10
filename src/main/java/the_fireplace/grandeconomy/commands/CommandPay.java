@@ -31,16 +31,15 @@ public class CommandPay extends CommandBase {
         if (args.length == 2) {
             if(sender instanceof EntityPlayerMP) {
                 EntityPlayerMP targetPlayer = getPlayer(server, sender, args[0]);
-                GrandEconomyApi.ensureAccountExists(targetPlayer.getUniqueID(), true);
-                long amount = parseLong(args[1]);
+                double amount = parseLong(args[1]);
                 if (amount < 0)
                     throw new NumberInvalidException(TranslationUtil.getStringTranslation(((EntityPlayerMP) sender).getUniqueID(), "commands.grandeconomy.pay.negative"));
                 if (GrandEconomyApi.getBalance(((EntityPlayerMP) sender).getUniqueID(), true) < amount)
                     throw new InsufficientCreditException(((EntityPlayerMP) sender).getUniqueID());
                 GrandEconomyApi.takeFromBalance(((EntityPlayerMP) sender).getUniqueID(), amount, true);
                 GrandEconomyApi.addToBalance(targetPlayer.getUniqueID(), amount, true);
-                sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayerMP) sender).getUniqueID(), "commands.grandeconomy.pay.paid", GrandEconomyApi.toString(amount), targetPlayer.getName()));
-                targetPlayer.sendMessage(TranslationUtil.getTranslation(targetPlayer.getUniqueID(), "commands.grandeconomy.pay.received", GrandEconomyApi.toString(amount), sender.getName()));
+                sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayerMP) sender).getUniqueID(), "commands.grandeconomy.pay.paid", GrandEconomyApi.getFormattedCurrency(amount), targetPlayer.getName()));
+                targetPlayer.sendMessage(TranslationUtil.getTranslation(targetPlayer.getUniqueID(), "commands.grandeconomy.pay.received", GrandEconomyApi.getFormattedCurrency(amount), sender.getName()));
             } else
                 throw new WrongUsageException(TranslationUtil.getStringTranslation("commands.grandeconomy.common.console", getUsage(sender)));
         } else
@@ -56,10 +55,12 @@ public class CommandPay extends CommandBase {
         return Collections.emptyList();
     }
 
+    @Override
     public boolean isUsernameIndex(String[] args, int index) {
         return index == 0;
     }
 
+    @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
         return sender instanceof EntityPlayerMP;
     }

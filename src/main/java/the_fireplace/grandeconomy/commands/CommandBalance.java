@@ -29,7 +29,7 @@ public class CommandBalance extends CommandBase {
     @Override
     public void execute(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nullable String[] args) throws CommandException {
         if (sender instanceof EntityPlayer) {
-            sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayer) sender).getUniqueID(), "commands.grandeconomy.common.balance", GrandEconomyApi.getBalanceFormatted(((EntityPlayer) sender).getUniqueID(), true)));
+            sender.sendMessage(TranslationUtil.getTranslation(((EntityPlayer) sender).getUniqueID(), "commands.grandeconomy.common.balance", GrandEconomyApi.getFormattedBalance(((EntityPlayer) sender).getUniqueID(), true)));
             return;
         }
         throw new WrongUsageException(TranslationUtil.getStringTranslation("commands.grandeconomy.common.console", getUsage(sender)));

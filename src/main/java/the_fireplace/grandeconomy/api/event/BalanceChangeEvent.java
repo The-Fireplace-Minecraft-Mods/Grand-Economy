@@ -12,24 +12,25 @@ import java.util.UUID;
  * This event is fired on the {@link MinecraftForge#EVENT_BUS}.
  */
 public class BalanceChangeEvent extends Event {
-    private long oldBalance, newBalance;
-    private UUID accountId;
+    private final long oldBalance;
+    private final long newBalance;
+    private final UUID accountId;
 
-    public BalanceChangeEvent(long oldBalance, long newBalance, UUID accountId) {
+    public BalanceChangeEvent(final long oldBalance, final long newBalance, final UUID accountId) {
         this.oldBalance = oldBalance;
         this.newBalance = newBalance;
         this.accountId = accountId;
     }
 
-    public UUID getAccountId() {
+    public final UUID getAccountId() {
         return accountId;
     }
 
-    public long getOldBalance() {
+    public final long getOldBalance() {
         return oldBalance;
     }
 
-    public long getNewBalance() {
+    public final long getNewBalance() {
         return newBalance;
     }
 }
