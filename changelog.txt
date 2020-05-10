@@ -1,4 +1,6 @@
-Reminder: Vault integration now uses its own plugin - https://dev.bukkit.org/projects/grand-economy-vault-compat
-Added feedback messages when you use /pay
-Updated feedback messages to include currency name
-Added API method to retrieve an account's balance with the currency name attached
+Additions:
+Added the ability to use a thousands separator for more readable currency amounts.
+Added support for decimal amounts.
+
+Changes:
+Numerous API changes. This may break mods that use Grand Economy until they update.

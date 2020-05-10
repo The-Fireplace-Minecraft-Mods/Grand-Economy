@@ -29,7 +29,6 @@ import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -236,6 +235,8 @@ public class GrandEconomy {
         public static String currencyNameSingular = "gp";
         @Config.Comment("Currency name (Multiple). This option only works when not using an economy bridge.")
         public static String currencyNameMultiple = "gp";
+        @Config.Comment("Thousands separator. This option only works when not using an economy bridge.")
+        public static String thousandsSeparator = ",";
 
         @Config.Comment("Amount of currency given to new players when they join the server. This option only works when not using an economy bridge.")
         @Config.RangeInt(min=0)

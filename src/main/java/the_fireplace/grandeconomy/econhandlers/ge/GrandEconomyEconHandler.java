@@ -5,6 +5,8 @@ import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -68,8 +70,8 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public String toString(long amount) {
-        return amount + " " + getCurrencyName(amount);
+    public String getFormattedCurrency(long amount) {
+        return new DecimalFormat("#"+GrandEconomy.cfg.thousandsSeparator+"###").format(amount) + " " + getCurrencyName(amount);
     }
 
     @Override
