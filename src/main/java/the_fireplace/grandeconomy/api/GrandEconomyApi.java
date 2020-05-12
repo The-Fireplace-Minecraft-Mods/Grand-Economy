@@ -16,7 +16,7 @@ public class GrandEconomyApi {
      * @return
      * The balance
      */
-    public static long getBalance(UUID uuid, Boolean isPlayer) {
+    public static double getBalance(UUID uuid, Boolean isPlayer) {
         return GrandEconomy.getEconomy().getBalance(uuid, isPlayer);
     }
 
@@ -43,7 +43,7 @@ public class GrandEconomyApi {
      * Whether the amount was successfully added or not
      */
     public static boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
-        long oldAmount = getBalance(uuid, isPlayer);
+        double oldAmount = getBalance(uuid, isPlayer);
         boolean added = GrandEconomy.getEconomy().addToBalance(uuid, amount, isPlayer);
         if(added)
             MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid, isPlayer), uuid));
@@ -62,7 +62,7 @@ public class GrandEconomyApi {
      * Whether the balance was successfully set or not
      */
     public static boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
-        long oldAmount = getBalance(uuid, isPlayer);
+        double oldAmount = getBalance(uuid, isPlayer);
         boolean balanceSet = GrandEconomy.getEconomy().setBalance(uuid, amount, isPlayer);
         if(balanceSet)
             MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid, isPlayer), uuid));
@@ -81,7 +81,7 @@ public class GrandEconomyApi {
      * Whether the amount was successfully taken or not
      */
     public static boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
-        long oldAmount = getBalance(uuid, isPlayer);
+        double oldAmount = getBalance(uuid, isPlayer);
         boolean taken = GrandEconomy.getEconomy().takeFromBalance(uuid, amount, isPlayer);
         if(taken)
             MinecraftForge.EVENT_BUS.post(new BalanceChangeEvent(oldAmount, getBalance(uuid, isPlayer), uuid));

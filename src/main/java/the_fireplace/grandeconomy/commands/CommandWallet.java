@@ -41,7 +41,7 @@ public class CommandWallet extends CommandBase {
                 return;
             }
             if(args.length > 2) {
-                double amount = parseLong(args[2]);
+                double amount = parseDouble(args[2]);
                 if ("set".equals(args[0])) {
                     if(amount < 0)
                         throw new CommandException("commands.grandeconomy.wallet.negative", target.getName());

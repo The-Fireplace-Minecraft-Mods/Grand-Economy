@@ -76,7 +76,7 @@ public class GrandEconomyEconHandler implements IEconHandler {
 
     @Override
     public String getFormattedCurrency(double amount) {
-        return new DecimalFormat("#"+ GrandEconomy.nativeConfig.thousandsSeparator+"###").format(amount) + " " + getCurrencyName(amount);
+        return new DecimalFormat("#"+ GrandEconomy.nativeConfig.thousandsSeparator+"###.00").format(amount) + " " + getCurrencyName(amount);
     }
 
     private void forceSave(UUID uuid) {

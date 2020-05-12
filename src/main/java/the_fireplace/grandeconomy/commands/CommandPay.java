@@ -31,7 +31,7 @@ public class CommandPay extends CommandBase {
         if (args.length == 2) {
             if(sender instanceof EntityPlayerMP) {
                 EntityPlayerMP targetPlayer = getPlayer(server, sender, args[0]);
-                double amount = parseLong(args[1]);
+                double amount = parseDouble(args[1]);
                 if (amount < 0)
                     throw new NumberInvalidException(TranslationUtil.getStringTranslation(((EntityPlayerMP) sender).getUniqueID(), "commands.grandeconomy.pay.negative"));
                 if (GrandEconomyApi.getBalance(((EntityPlayerMP) sender).getUniqueID(), true) < amount)
