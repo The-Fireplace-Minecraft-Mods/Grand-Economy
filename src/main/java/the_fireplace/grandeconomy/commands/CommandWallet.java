@@ -33,7 +33,12 @@ public class CommandWallet extends CommandBase {
     @Override
     public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
         if (args.length > 1) {
-            GameProfile target = server.getPlayerProfileCache().getGameProfileForUsername(args[1]);
+            GameProfile target = null;
+            try {
+                target = getPlayer(server, sender, args[1]).getGameProfile();
+            } catch(CommandException|NullPointerException ignored) {}
+            if(target == null)
+                target = server.getPlayerProfileCache().getGameProfileForUsername(args[1]);
             if(target == null)
                 throw new PlayerNotFoundException("commands.generic.player.notFound", args[1]);
             if ("balance".equals(args[0])) {

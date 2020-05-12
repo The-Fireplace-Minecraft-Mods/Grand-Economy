@@ -10,3 +10,4 @@ Numerous API changes. This may break mods that use Grand Economy until they upda
 Removed the /convert command. Use Grand Exchange's Admin Shops for all the same functionality and more. https://www.curseforge.com/minecraft/mc-mods/grand-exchange
 Improved the descriptions of various config options.
 Added backup saving system to ensure that non-player and offline player accounts get saved.
+Player name parsing for /wallet now accepts player selectors
