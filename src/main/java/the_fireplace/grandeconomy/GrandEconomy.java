@@ -26,6 +26,7 @@ import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
+import the_fireplace.grandeconomy.econhandlers.te.ThutEssentialsEconHandler;
 
 import java.io.File;
 import java.util.List;
@@ -138,6 +139,9 @@ public class GrandEconomy {
             case "enderpay":
             case "ep":
                 economy = new EnderPayEconHandler();
+                break;
+            case "thutessentials":
+                economy = new ThutEssentialsEconHandler();
                 break;
             case "vault":
             case "bukkit":

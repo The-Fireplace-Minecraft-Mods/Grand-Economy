@@ -43,6 +43,7 @@ minecraft {
 dependencies {
     provided 'org.spongepowered:spongeapi:7.1.0'
     provided group: "com.forgeessentials", name: "forgeessentials", version: "1.4.4-SNAPSHOT", classifier: "dev", changing: true
+    deobfCompile 'thut-essentials:thutessentials:1.12.2:2.2.23'
 }
 
 repositories {
@@ -59,6 +60,8 @@ repositories {
 		name = "sk89q"
 		url = "http://maven.sk89q.com/repo/"
 	}
+    //Thut Essentials
+    maven { url 'https://minecraft.curseforge.com/api/maven' }
 }
 
 processResources {
