@@ -159,4 +159,13 @@ public class Account {
     private EntityPlayerMP getPlayerMP() {
         return GrandEconomy.minecraftServer.getPlayerList().getPlayerByUUID(uuid);
     }
+
+    public static void saveAll() {
+        for(Account account: objects.values())
+            try {
+                account.writeIfChanged();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+    }
 }

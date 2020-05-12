@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.commands.*;
 import the_fireplace.grandeconomy.compat.IRegisterable;
@@ -181,6 +182,11 @@ public class GrandEconomy {
         Account.setLocation(new File(file, "GrandEconomy-accounts"));
 
         registerCommands((ServerCommandManager)minecraftServer.getCommandManager());
+    }
+
+    @Mod.EventHandler
+    public void onServerStopping(FMLServerStoppingEvent event) {
+        Account.saveAll();
     }
 
     public static final List<CommandBase> commands = Lists.newArrayList();

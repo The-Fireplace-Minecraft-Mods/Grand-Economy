@@ -4,9 +4,7 @@ import net.minecraftforge.common.MinecraftForge;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Objects;
 import java.util.UUID;
 
 public class GrandEconomyEconHandler implements IEconHandler {
@@ -31,8 +29,6 @@ public class GrandEconomyEconHandler implements IEconHandler {
         if(account.getBalance() + amount < 0)
             return false;
         account.addBalance(amount);
-        if(!Boolean.TRUE.equals(isPlayer))
-            forceSave(uuid);
         return true;
     }
 
@@ -46,8 +42,6 @@ public class GrandEconomyEconHandler implements IEconHandler {
         if (account.getBalance() < amount)
             return false;
         account.addBalance(-amount);
-        if(!Boolean.TRUE.equals(isPlayer))
-            forceSave(uuid);
         return true;
     }
 
@@ -62,8 +56,6 @@ public class GrandEconomyEconHandler implements IEconHandler {
             return false;
 
         account.setBalance(amount);
-        if(!Boolean.TRUE.equals(isPlayer))
-            forceSave(uuid);
         return true;
     }
 
@@ -77,12 +69,6 @@ public class GrandEconomyEconHandler implements IEconHandler {
     @Override
     public String getFormattedCurrency(double amount) {
         return new DecimalFormat("#"+ GrandEconomy.nativeConfig.thousandsSeparator+"###.00").format(amount) + " " + getCurrencyName(amount);
-    }
-
-    private void forceSave(UUID uuid) {
-        try {
-            Objects.requireNonNull(Account.get(uuid)).writeIfChanged();
-        } catch(IOException ignored) {}
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class EventHandler {
     private static long lastTickEvent = 0;
+    private static long saveTimer = 0;
 
     @SubscribeEvent
     public void onPlayerSaveToFile(PlayerEvent.SaveToFile event) {
@@ -26,6 +27,10 @@ public class EventHandler {
 
     @SubscribeEvent
     public void onServerTickEvent(TickEvent.ServerTickEvent event) {
+        if(saveTimer++ >= 20*60*5) {
+            saveTimer -= 20*60*5;
+            Account.saveAll();
+        }
         long now = TimeUtils.getCurrentDay();
         if (lastTickEvent == now)
             return;
