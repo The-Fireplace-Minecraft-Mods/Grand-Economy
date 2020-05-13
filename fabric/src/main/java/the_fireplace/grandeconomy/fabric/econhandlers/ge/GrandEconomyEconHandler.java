@@ -10,13 +10,11 @@ import the_fireplace.grandeconomy.fabric.GrandEconomy;
 import the_fireplace.grandeconomy.fabric.translation.TranslationUtil;
 import the_fireplace.grandeconomy.utils.TimeUtils;
 
-import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 
 public class GrandEconomyEconHandler implements IEconHandler {
     @Override
-    public long getBalance(UUID uuid, Boolean isPlayer) {
+    public double getBalance(UUID uuid, Boolean isPlayer) {
         Account account = Account.get(uuid);
         if (account == null){
             GrandEconomy.LOGGER.warn("Account for {} was null", uuid.toString());
@@ -27,7 +25,7 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
         Account account = Account.get(uuid);
         if(account == null) {
             GrandEconomy.LOGGER.warn("Account for {} was null", uuid.toString());
@@ -40,7 +38,7 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
         Account account = Account.get(uuid);
         if (account == null){
             GrandEconomy.LOGGER.warn("Account for {} was null", uuid.toString());
@@ -53,7 +51,7 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
         Account account = Account.get(uuid);
         if (account == null){
             GrandEconomy.LOGGER.warn("Account for {} was null", uuid.toString());
@@ -67,30 +65,15 @@ public class GrandEconomyEconHandler implements IEconHandler {
     }
 
     @Override
-    public String getCurrencyName(long amount) {
+    public String getCurrencyName(double amount) {
         if (amount == 1)
             return Config.currencyNameSingular;
         return Config.currencyNameMultiple;
     }
 
     @Override
-    public String getFormattedCurrency(long amount) {
+    public String getFormattedCurrency(double amount) {
         return amount + " " + getCurrencyName(amount);
-    }
-
-    @Override
-    public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
-        return Account.get(uuid) != null;
-    }
-
-    @Override
-    public Boolean forceSave(UUID uuid, Boolean isPlayer) {
-        try {
-            Objects.requireNonNull(Account.get(uuid)).writeIfChanged();
-            return true;
-        } catch(IOException e) {
-            return false;
-        }
     }
 
     @Override

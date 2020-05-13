@@ -16,7 +16,7 @@ public class KillingEvents {
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
         if(!event.getEntity().world.isRemote) {
-            long moneyDropValue = Config.pvpMoneyTransfer;
+            double moneyDropValue = Config.pvpMoneyTransfer;
             if (moneyDropValue == 0) return;
             Entity entity = event.getEntity();
             if (!(entity instanceof PlayerEntity) || entity.world.isRemote)
@@ -27,7 +27,7 @@ public class KillingEvents {
 
             if (GrandEconomyApi.getBalance(event.getEntity().getUniqueID(), true) <= 0)
                 return;
-            long amountTaken = (moneyDropValue > 0) ?
+            double amountTaken = (moneyDropValue > 0) ?
                     (GrandEconomyApi.getBalance(event.getEntity().getUniqueID(), true) * Config.pvpMoneyTransfer) / 100 :
                     Math.max(Math.min(GrandEconomyApi.getBalance(event.getEntity().getUniqueID(), true), -Config.pvpMoneyTransfer), 0);
             GrandEconomyApi.takeFromBalance(event.getEntity().getUniqueID(), amountTaken, true);

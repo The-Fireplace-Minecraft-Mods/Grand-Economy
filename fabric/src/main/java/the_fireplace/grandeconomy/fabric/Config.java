@@ -20,8 +20,8 @@ public class Config {
     public static String currencyNameSingular = "gp";
     public static String currencyNameMultiple = "gp";
     public static boolean basicIncome = true;
-    public static long basicIncomeAmount = 50;
-    public static long startBalance = 100;
+    public static double basicIncomeAmount = 50;
+    public static double startBalance = 100;
     public static byte maxBasicIncomeDays = 5;
 
     public static void load() {
@@ -47,10 +47,10 @@ public class Config {
                 currencyNameSingular = getJsonPrimitive(nativeEconomy, "currencyNameSingular").getAsString();
                 currencyNameMultiple = getJsonPrimitive(nativeEconomy, "currencyNameMultiple").getAsString();
                 basicIncome = getJsonPrimitive(nativeEconomy, "basicIncome").getAsBoolean();
-                basicIncomeAmount = getJsonPrimitive(nativeEconomy, "basicIncomeAmount").getAsLong();
-                basicIncomeAmount = rangeLong(basicIncomeAmount, 0, Long.MAX_VALUE);
-                startBalance = getJsonPrimitive(nativeEconomy, "startBalance").getAsLong();
-                startBalance = rangeLong(startBalance, 0, Long.MAX_VALUE);
+                basicIncomeAmount = getJsonPrimitive(nativeEconomy, "basicIncomeAmount").getAsDouble();
+                basicIncomeAmount = rangeDouble(basicIncomeAmount, 0, Double.MAX_VALUE);
+                startBalance = getJsonPrimitive(nativeEconomy, "startBalance").getAsDouble();
+                startBalance = rangeDouble(startBalance, 0, Double.MAX_VALUE);
                 maxBasicIncomeDays = getJsonPrimitive(nativeEconomy, "maxBasicIncomeDays").getAsByte();
                 maxBasicIncomeDays = rangeByte(maxBasicIncomeDays, (byte) 0, Byte.MAX_VALUE);
             } else
@@ -96,6 +96,15 @@ public class Config {
         return obj;
     }
 
+    private static JsonObject createObject(JsonPrimitive value, String comment, double min, double max) {
+        JsonObject obj = new JsonObject();
+        obj.add("value", value);
+        obj.addProperty("_comment", comment);
+        obj.addProperty("_minimum", min);
+        obj.addProperty("_maximum", max);
+        return obj;
+    }
+
     private static JsonObject getDefaultConfig() {
         JsonObject obj = new JsonObject();
 
@@ -111,8 +120,8 @@ public class Config {
         nativeEconomy.add("currencyNameSingular", createObject(new JsonPrimitive(currencyNameSingular), "Currency name (max 20 char)"));
         nativeEconomy.add("currencyNameMultiple", createObject(new JsonPrimitive(currencyNameMultiple), "Currency name (max 20 char)"));
         nativeEconomy.add("basicIncome", createObject(new JsonPrimitive(basicIncome), "Give each player credits daily."));
-        nativeEconomy.add("basicIncomeAmount", createObject(new JsonPrimitive(basicIncomeAmount), "The amount of basic income to be given to a player.", 0, Long.MAX_VALUE));
-        nativeEconomy.add("startBalance", createObject(new JsonPrimitive(startBalance), "Amount of currency given to new players when they join the server", 0, Long.MAX_VALUE));
+        nativeEconomy.add("basicIncomeAmount", createObject(new JsonPrimitive(basicIncomeAmount), "The amount of basic income to be given to a player.", 0, Double.MAX_VALUE));
+        nativeEconomy.add("startBalance", createObject(new JsonPrimitive(startBalance), "Amount of currency given to new players when they join the server", 0, Double.MAX_VALUE));
         nativeEconomy.add("maxBasicIncomeDays", createObject(new JsonPrimitive(maxBasicIncomeDays), "The max number of days since last login the player will be paid for. Ex. If this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when he/she logs in.", 0, Byte.MAX_VALUE));
         obj.add("native-economy", nativeEconomy);
 

@@ -25,7 +25,7 @@ public final class GrandEconomyApi {
      * @return
      * The balance
      */
-    public static long getBalance(UUID uuid, Boolean isPlayer) {
+    public static double getBalance(UUID uuid, Boolean isPlayer) {
         return API.getBalance(uuid, isPlayer);
     }
 
@@ -51,7 +51,7 @@ public final class GrandEconomyApi {
      * @return
      * Whether the amount was successfully added or not
      */
-    public static boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public static boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
         return API.addToBalance(uuid, amount, isPlayer);
     }
 
@@ -66,7 +66,7 @@ public final class GrandEconomyApi {
      * @return
      * Whether the balance was successfully set or not
      */
-    public static boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public static boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
         return API.setBalance(uuid, amount, isPlayer);
     }
 
@@ -81,7 +81,7 @@ public final class GrandEconomyApi {
      * @return
      * Whether the amount was successfully taken or not
      */
-    public static boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public static boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
         return API.takeFromBalance(uuid, amount, isPlayer);
     }
 
@@ -92,7 +92,7 @@ public final class GrandEconomyApi {
      * @return
      * The currency name
      */
-    public static String getCurrencyName(long amount) {
+    public static String getCurrencyName(double amount) {
         return API.getCurrencyName(amount);
     }
 
@@ -103,32 +103,8 @@ public final class GrandEconomyApi {
      * @return
      * The currency amount with the name attached
      */
-    public static String formatCurrency(long amount) {
+    public static String formatCurrency(double amount) {
         return API.formatCurrency(amount);
-    }
-
-    /**
-     * Try to make sure an account exists.
-     * @param uuid
-     * the account to check
-     * @param isPlayer
-     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
-     * @return
-     * True if it exists, false otherwise.
-     */
-    public static boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
-        return API.ensureAccountExists(uuid, isPlayer);
-    }
-
-    /**
-     * Forcibly saves the account.
-     * @param uuid
-     * The account to save
-     * @return
-     * true if saved, false if not saved, or null if not implemented
-     */
-    public static Boolean forceSave(UUID uuid, Boolean isPlayer) {
-        return API.forceSave(uuid, isPlayer);
     }
 
     /**

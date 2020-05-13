@@ -21,7 +21,7 @@ public class Account {
     private boolean changed;
 
     private UUID uuid;
-    private long balance;
+    private double balance;
     private long lastLogin;
     private long lastCountActivity;
     private boolean isPlayer = false;
@@ -106,7 +106,7 @@ public class Account {
         try {
             Object obj = jsonParser.parse(new FileReader(file));
             JsonObject jsonObject = (JsonObject) obj;
-            balance = jsonObject.get("balance").getAsLong();
+            balance = jsonObject.get("balance").getAsDouble();
             lastLogin = jsonObject.get("lastLogin").getAsLong();
             lastCountActivity = jsonObject.get("lastCountActivity").getAsLong();
             if(jsonObject.has("isPlayer"))
@@ -137,18 +137,18 @@ public class Account {
         changed = false;
     }
 
-    public long getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    void setBalance(long v) {
+    void setBalance(double v) {
         if(balance != v) {
             balance = v;
             changed = true;
         }
     }
 
-    void addBalance(long v) {
+    void addBalance(double v) {
         setBalance(balance + v);
     }
 

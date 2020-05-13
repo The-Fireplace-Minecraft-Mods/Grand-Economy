@@ -20,11 +20,9 @@ import the_fireplace.grandeconomy.api.GrandEconomyApiForge;
 import the_fireplace.grandeconomy.api.IEconHandler;
 import the_fireplace.grandeconomy.forge.compat.IRegisterable;
 import the_fireplace.grandeconomy.forge.compat.sponge.RegisterSpongeEconomy;
-import the_fireplace.grandeconomy.forge.earnings.ConversionItems;
 import the_fireplace.grandeconomy.forge.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.forge.econhandlers.ge.GrandEconomyEconHandler;
 import the_fireplace.grandeconomy.forge.econhandlers.sponge.SpongeEconHandler;
-import the_fireplace.grandeconomy.forge.econhandlers.vault.VaultEconHandler;
 import the_fireplace.grandeconomy.forge.events.NetworkEvents;
 
 import java.io.File;
@@ -40,14 +38,14 @@ public class GrandEconomy {
     public static File configDir;
 
     private static IEconHandler economy;
-    private static IEconHandler economyWrapper = new IEconHandler() {
+    private static final IEconHandler economyWrapper = new IEconHandler() {
         @Override
-        public long getBalance(UUID uuid, Boolean isPlayer) {
+        public double getBalance(UUID uuid, Boolean isPlayer) {
             return economy.getBalance(uuid, isPlayer);
         }
 
         @Override
-        public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+        public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
             if(Config.enforceNonNegativeBalance && amount < 0) {
                 if(getBalance(uuid, isPlayer)+amount < 0)
                     return false;
@@ -56,7 +54,7 @@ public class GrandEconomy {
         }
 
         @Override
-        public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+        public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
             if(Config.enforceNonNegativeBalance && amount > 0) {
                 if(getBalance(uuid, isPlayer)-amount < 0)
                     return false;
@@ -65,30 +63,20 @@ public class GrandEconomy {
         }
 
         @Override
-        public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+        public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
             if(Config.enforceNonNegativeBalance && amount < 0)
                 return false;
             return economy.setBalance(uuid, amount, isPlayer);
         }
 
         @Override
-        public String getCurrencyName(long amount) {
+        public String getCurrencyName(double amount) {
             return economy.getCurrencyName(amount);
         }
 
         @Override
-        public String getFormattedCurrency(long amount) {
+        public String getFormattedCurrency(double amount) {
             return economy.getFormattedCurrency(amount);
-        }
-
-        @Override
-        public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
-            return economy.ensureAccountExists(uuid, isPlayer);
-        }
-
-        @Override
-        public Boolean forceSave(UUID uuid, Boolean isPlayer) {
-            return economy.forceSave(uuid, isPlayer);
         }
 
         @Override
@@ -132,8 +120,6 @@ public class GrandEconomy {
         minecraftServer = event.getServer();
         configDir = new File(minecraftServer.getActiveAnvilConverter().getFile(minecraftServer.getFolderName(), "serverconfig"), "grandeconomy-extra");
         configDir.mkdirs();
-        //Initialize ConversionItems
-        ConversionItems.hasValue(null);
         Account.setLocation(new File(getServer().forgeGetWorldMap().get(DimensionType.OVERWORLD).getSaveHandler().getWorldDirectory(), "GrandEconomy-accounts"));
         GeCommands.register(event.getCommandDispatcher());
     }
@@ -161,8 +147,8 @@ public class GrandEconomy {
                 break;*/
             case "vault":
             case "bukkit":
-                economy = new VaultEconHandler();
-                GrandEconomyApi.registerEconomyHandler(economy, "vault", "bukkit");
+                //economy = new VaultEconHandler();
+                //GrandEconomyApi.registerEconomyHandler(economy, "vault", "bukkit");
                 break;
             default:
                 economy = GrandEconomyApi.getEconHandlers().getOrDefault(Config.economyBridge, new GrandEconomyEconHandler());

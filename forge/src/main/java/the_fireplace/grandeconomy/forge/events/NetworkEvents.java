@@ -61,7 +61,6 @@ public class NetworkEvents {
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof PlayerEntity && !event.getEntity().world.isRemote) {
-            GrandEconomyApi.ensureAccountExists(event.getEntity().getUniqueID(), true);
             if(Config.showBalanceOnJoin)
                 event.getEntity().sendMessage(TranslationUtil.getTranslation(event.getEntity().getUniqueID(), "commands.grandeconomy.common.balance", GrandEconomyApi.getBalanceFormatted(event.getEntity().getUniqueID(), true)));
         }

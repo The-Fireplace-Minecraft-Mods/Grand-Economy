@@ -10,7 +10,7 @@ public interface IGrandEconomyApi {
      * @return
      * The balance
      */
-    long getBalance(UUID uuid, Boolean isPlayer);
+    double getBalance(UUID uuid, Boolean isPlayer);
 
     /**
      * Check the account's balance
@@ -32,7 +32,7 @@ public interface IGrandEconomyApi {
      * @return
      * Whether the amount was successfully added or not
      */
-    boolean addToBalance(UUID uuid, long amount, Boolean isPlayer);
+    boolean addToBalance(UUID uuid, double amount, Boolean isPlayer);
 
     /**
      * Sets the account's balance
@@ -45,7 +45,7 @@ public interface IGrandEconomyApi {
      * @return
      * Whether the balance was successfully set or not
      */
-    boolean setBalance(UUID uuid, long amount, Boolean isPlayer);
+    boolean setBalance(UUID uuid, double amount, Boolean isPlayer);
 
     /**
      * Take from the account's balance
@@ -58,7 +58,7 @@ public interface IGrandEconomyApi {
      * @return
      * Whether the amount was successfully taken or not
      */
-    boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer);
+    boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer);
 
     /**
      * Gets the name of the currency for the given amount.
@@ -67,7 +67,7 @@ public interface IGrandEconomyApi {
      * @return
      * The currency name
      */
-    String getCurrencyName(long amount);
+    String getCurrencyName(double amount);
 
     /**
      * Gets the currency amount with the currency name attached
@@ -76,27 +76,7 @@ public interface IGrandEconomyApi {
      * @return
      * The currency amount with the name attached
      */
-    String formatCurrency(long amount);
-
-    /**
-     * Try to make sure an account exists.
-     * @param uuid
-     * the account to check
-     * @param isPlayer
-     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
-     * @return
-     * True if it exists, false otherwise.
-     */
-    boolean ensureAccountExists(UUID uuid, Boolean isPlayer);
-
-    /**
-     * Forcibly saves the account.
-     * @param uuid
-     * The account to save
-     * @return
-     * true if saved, false if not saved, or null if not implemented
-     */
-    Boolean forceSave(UUID uuid, Boolean isPlayer);
+    String formatCurrency(double amount);
 
     /**
      * Get the modid of the economy Grand Economy is using for currency.

@@ -30,7 +30,7 @@ import java.util.*;
 @MethodsReturnNonnullByDefault
 public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
-    private TransactionType genericTransactionType = new TransactionType() {
+    private final TransactionType genericTransactionType = new TransactionType() {
         @Override
         public String getId() {
             return GrandEconomyApi.MODID+"-generic";
@@ -42,7 +42,7 @@ public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
         }
     };
 
-    private Currency geCurrency = new Currency() {
+    private final Currency geCurrency = new Currency() {
 
         @Override
         public String getId() {
@@ -71,7 +71,7 @@ public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
         @Override
         public Text format(BigDecimal amount, int numFractionDigits) {
-            return Text.of(GrandEconomyApi.formatCurrency(amount.longValue()));
+            return Text.of(GrandEconomyApi.formatCurrency(amount.doubleValue()));
         }
 
         @Override
@@ -97,19 +97,15 @@ public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
     @Override
     public boolean hasAccount(UUID uuid) {
-        return GrandEconomyApi.ensureAccountExists(uuid, null);
+        return true;
     }
 
     @Override
     public boolean hasAccount(String identifier) {
-        try {
-            return GrandEconomyApi.ensureAccountExists(UUID.fromString(identifier), null);
-        } catch(IllegalArgumentException e) {
-            return false;
-        }
+        return true;
     }
 
-    private HashMap<UUID, UniqueAccount> accts = Maps.newHashMap();
+    private final HashMap<UUID, UniqueAccount> accts = Maps.newHashMap();
 
     @Override
     public Optional<UniqueAccount> getOrCreateAccount(UUID uuid) {
@@ -166,7 +162,7 @@ public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
                         @Override
                         public ResultType getResult() {
-                            return GrandEconomyApi.setBalance(getUniqueId(), amount.longValue(), null) ? ResultType.SUCCESS : ResultType.FAILED;
+                            return GrandEconomyApi.setBalance(getUniqueId(), amount.doubleValue(), null) ? ResultType.SUCCESS : ResultType.FAILED;
                         }
 
                         @Override
@@ -242,7 +238,7 @@ public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
                         @Override
                         public ResultType getResult() {
-                            GrandEconomyApi.addToBalance(getUniqueId(), amount.longValue(), null);
+                            GrandEconomyApi.addToBalance(getUniqueId(), amount.doubleValue(), null);
                             return ResultType.SUCCESS;
                         }
 
@@ -278,7 +274,7 @@ public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
                         @Override
                         public ResultType getResult() {
-                            return GrandEconomyApi.takeFromBalance(getUniqueId(), amount.longValue(), null) ? ResultType.SUCCESS : ResultType.FAILED;
+                            return GrandEconomyApi.takeFromBalance(getUniqueId(), amount.doubleValue(), null) ? ResultType.SUCCESS : ResultType.FAILED;
                         }
 
                         @Override
@@ -318,9 +314,9 @@ public class RegisterSpongeEconomy implements EconomyService, IRegisterable {
 
                         @Override
                         public ResultType getResult() {
-                            boolean taken = GrandEconomyApi.takeFromBalance(getUniqueId(), amount.longValue(), null);
+                            boolean taken = GrandEconomyApi.takeFromBalance(getUniqueId(), amount.doubleValue(), null);
                             if(taken)
-                                GrandEconomyApi.addToBalance(UUID.fromString(to.getIdentifier()), amount.longValue(), null);
+                                GrandEconomyApi.addToBalance(UUID.fromString(to.getIdentifier()), amount.doubleValue(), null);
                             return taken ? ResultType.SUCCESS : ResultType.FAILED;
                         }
 

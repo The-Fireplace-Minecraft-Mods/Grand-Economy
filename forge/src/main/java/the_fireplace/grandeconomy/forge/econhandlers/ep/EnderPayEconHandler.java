@@ -2,7 +2,7 @@ package the_fireplace.grandeconomy.forge.econhandlers.ep;
 
 /*public class EnderPayEconHandler implements IEconHandler {
     @Override
-    public long getBalance(UUID uuid, Boolean isPlayer) {
+    public double getBalance(UUID uuid, Boolean isPlayer) {
         try {
             return EnderPayApi.getBalance(uuid);
         } catch(NoSuchAccountException e) {
@@ -11,7 +11,7 @@ package the_fireplace.grandeconomy.forge.econhandlers.ep;
     }
 
     @Override
-    public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
         try {
             EnderPayApi.addToBalance(uuid, amount);
             return true;
@@ -21,7 +21,7 @@ package the_fireplace.grandeconomy.forge.econhandlers.ep;
     }
 
     @Override
-    public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
         try {
             EnderPayApi.takeFromBalance(uuid, amount);
             return true;
@@ -31,7 +31,7 @@ package the_fireplace.grandeconomy.forge.econhandlers.ep;
     }
 
     @Override
-    public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+    public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
         try {
             EnderPayApi.takeFromBalance(uuid, EnderPayApi.getBalance(uuid));
             EnderPayApi.addToBalance(uuid, amount);
@@ -42,12 +42,12 @@ package the_fireplace.grandeconomy.forge.econhandlers.ep;
     }
 
     @Override
-    public String getCurrencyName(long amount) {
+    public String getCurrencyName(double amount) {
         return EnderPayApi.getCurrencyName(amount);
     }
 
     @Override
-    public String toString(long amount) {
+    public String toString(double amount) {
         return amount + ' ' + getCurrencyName(amount);
     }
 

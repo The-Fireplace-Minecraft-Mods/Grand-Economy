@@ -20,8 +20,8 @@ public class Config
     public static boolean enforceNonNegativeBalance;
 
     public static boolean basicIncome;
-    public static long basicIncomeAmount;
-    public static long startBalance;
+    public static double basicIncomeAmount;
+    public static double startBalance;
     public static int maxBasicIncomeDays;
 
     public static String economyBridge;
@@ -52,8 +52,8 @@ public class Config
         public ForgeConfigSpec.BooleanValue enforceNonNegativeBalance;
 
         public ForgeConfigSpec.BooleanValue basicIncome;
-        public ForgeConfigSpec.LongValue basicIncomeAmount;
-        public ForgeConfigSpec.LongValue startBalance;
+        public ForgeConfigSpec.DoubleValue basicIncomeAmount;
+        public ForgeConfigSpec.DoubleValue startBalance;
         public ForgeConfigSpec.IntValue maxBasicIncomeSavings;
 
         public ForgeConfigSpec.ConfigValue<String> economyBridge;
@@ -99,11 +99,11 @@ public class Config
             basicIncomeAmount = builder
                     .comment("The amount of basic income to be given to a player.")
                     .translation("Basic Income Amount")
-                    .defineInRange("basicIncomeAmount", 50, 0, Long.MAX_VALUE);
+                    .defineInRange("basicIncomeAmount", 50, 0, Double.MAX_VALUE);
             startBalance = builder
                     .comment("Amount of currency given to new players when they join the server")
                     .translation("Starting Account Balance")
-                    .defineInRange("startBalance", 100, 0, Long.MAX_VALUE);
+                    .defineInRange("startBalance", 100, 0, Double.MAX_VALUE);
             maxBasicIncomeSavings = builder
                     .comment("The max number of days since last login the player will be paid for. Ex. If this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when he/she logs in.")
                     .translation("Max Basic Income Savings")

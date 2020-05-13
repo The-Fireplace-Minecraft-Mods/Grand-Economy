@@ -10,7 +10,7 @@ import the_fireplace.grandeconomy.fabric.translation.TranslationUtil;
 public class KillingEvents {
     public static void onPlayerDeath(ServerPlayerEntity entity, DamageSource source) {
         if(!entity.world.isClient()) {
-            long moneyDropValue = Config.pvpMoneyTransfer;
+            double moneyDropValue = Config.pvpMoneyTransfer;
             if (moneyDropValue == 0) return;
             Entity killer = source.getAttacker();
             if (!(killer instanceof ServerPlayerEntity))
@@ -18,7 +18,7 @@ public class KillingEvents {
 
             if (GrandEconomyApi.getBalance(entity.getUuid(), true) <= 0)
                 return;
-            long amountTaken = (moneyDropValue > 0) ?
+            double amountTaken = (moneyDropValue > 0) ?
                 (GrandEconomyApi.getBalance(entity.getUuid(), true) * Config.pvpMoneyTransfer) / 100 :
                 Math.max(Math.min(GrandEconomyApi.getBalance(entity.getUuid(), true), -Config.pvpMoneyTransfer), 0);
             GrandEconomyApi.takeFromBalance(entity.getUuid(), amountTaken, true);

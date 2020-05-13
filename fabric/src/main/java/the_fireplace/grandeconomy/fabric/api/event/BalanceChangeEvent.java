@@ -12,5 +12,5 @@ public interface BalanceChangeEvent {
                 event.onBalanceChanged(accountId, oldBalance, newBalance);
         });
 
-    void onBalanceChanged(UUID accountId, long oldBalance, long newBalance);
+    void onBalanceChanged(UUID accountId, double oldBalance, double newBalance);
 }

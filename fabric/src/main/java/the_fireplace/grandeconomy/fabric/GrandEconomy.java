@@ -22,14 +22,14 @@ public class GrandEconomy implements ModInitializer {
     public static File configDir;
 
     private static IEconHandler economy;
-    private static IEconHandler economyWrapper = new IEconHandler() {
+    private static final IEconHandler economyWrapper = new IEconHandler() {
         @Override
-        public long getBalance(UUID uuid, Boolean isPlayer) {
+        public double getBalance(UUID uuid, Boolean isPlayer) {
             return economy.getBalance(uuid, isPlayer);
         }
 
         @Override
-        public boolean addToBalance(UUID uuid, long amount, Boolean isPlayer) {
+        public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
             if(Config.enforceNonNegativeBalance && amount < 0) {
                 if(getBalance(uuid, isPlayer)+amount < 0)
                     return false;
@@ -38,7 +38,7 @@ public class GrandEconomy implements ModInitializer {
         }
 
         @Override
-        public boolean takeFromBalance(UUID uuid, long amount, Boolean isPlayer) {
+        public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
             if(Config.enforceNonNegativeBalance && amount > 0) {
                 if(getBalance(uuid, isPlayer)-amount < 0)
                     return false;
@@ -47,30 +47,20 @@ public class GrandEconomy implements ModInitializer {
         }
 
         @Override
-        public boolean setBalance(UUID uuid, long amount, Boolean isPlayer) {
+        public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
             if(Config.enforceNonNegativeBalance && amount < 0)
                 return false;
             return economy.setBalance(uuid, amount, isPlayer);
         }
 
         @Override
-        public String getCurrencyName(long amount) {
+        public String getCurrencyName(double amount) {
             return economy.getCurrencyName(amount);
         }
 
         @Override
-        public String getFormattedCurrency(long amount) {
+        public String getFormattedCurrency(double amount) {
             return economy.getFormattedCurrency(amount);
-        }
-
-        @Override
-        public boolean ensureAccountExists(UUID uuid, Boolean isPlayer) {
-            return economy.ensureAccountExists(uuid, isPlayer);
-        }
-
-        @Override
-        public Boolean forceSave(UUID uuid, Boolean isPlayer) {
-            return economy.forceSave(uuid, isPlayer);
         }
 
         @Override

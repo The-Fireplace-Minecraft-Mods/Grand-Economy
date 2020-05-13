@@ -61,7 +61,7 @@ dependencies {
         exclude module: "unspecified"
     }*/
     compile "org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT"
-    compile group: "net.milkbowl.vault", name: "VaultAPI", version: "1.7"
+    compile 'thut-essentials:thutessentials:1.15.2:3.0.15'
     //compile name:'enderpay-1.12.2-1.0.1.0-deobf'
 }
 
@@ -82,8 +82,8 @@ repositories {
     }
     //Spigot
     maven { url = ("https://hub.spigotmc.org/nexus/content/groups/public/") }
-    // Vault
-    maven { url 'https://jitpack.io' }
+    //Thut Essentials
+    maven { url 'https://minecraft.curseforge.com/api/maven' }
     flatDir {
         dirs 'libs'
     }
