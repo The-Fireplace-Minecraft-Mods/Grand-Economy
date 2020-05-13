@@ -24,7 +24,7 @@ plugins {
 }
 apply plugin: 'net.cazzar.gradle.modsio'
 
-version = "1.5.3"
+version = "1.5.4"
 group = "the_fireplace.grandeconomy"
 archivesBaseName = "GrandEconomy-1.15.2"
 
@@ -114,7 +114,7 @@ void copyFiles(String dir) {
     String inDirPath = appendPrefix(dir)
     File inDir = new File("$inDirPath/build/libs")
     inDir.listFiles().each { file ->
-        File outFile = null;
+        File outFile
         //Main file from either one
         if(file.getName() == "$archivesBaseName-${version}.jar")
             outFile = new File(outDir, file.getName())
