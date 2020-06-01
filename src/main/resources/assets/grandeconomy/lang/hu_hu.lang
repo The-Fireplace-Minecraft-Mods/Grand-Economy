@@ -1,0 +1,37 @@
+grandeconomy.insufficient_credit=Nincs elég összeged ahhoz hogy ezt csináld.
+
+grandeconomy.killed_balance=Mivel megöltek, megváltozott az egyenleged, az új egyenleged: %s
+grandeconomy.killer_balance=Mivel megöltél valakit, megváltozott az egyenleged, az új egyenleged: %s
+
+commands.grandeconomy.common.console=Az alábbit csak játékosok használhatják: %s.
+commands.grandeconomy.common.balance=Egyenleg: %s
+
+commands.grandeconomy.balance.usage=/balance
+commands.grandeconomy.balance.description=Megmutatja a jelenlegi egyenleged.
+
+commands.grandeconomy.convert.usage=/convert
+commands.grandeconomy.convert.description=Pénzösszegre váltja amit a kezedben tartasz jelenleg.
+commands.grandeconomy.convert.success=%s %s cseréltél el %s összeget kaptál darabjáért, összesen %s pénzösszeget kaptál érte. %s lett a jelenlegi egyenleged.
+commands.grandeconomy.convert.failure=Értéktelen a kezedben tartott tárgy.
+
+commands.grandeconomy.pay.usage=/pay <player> <amount>
+commands.grandeconomy.pay.description=Fizet egy adott játékosnak az egyenlegedről.
+commands.grandeconomy.pay.negative=Nem fizethetsz negatív pénzösszeget.
+commands.grandeconomy.pay.paid=Küldtél %s pénzösszeget %s nevű játékosnak.
+commands.grandeconomy.pay.received=Kaptál %s pénzösszeget %s nevű játékostól.
+
+commands.grandeconomy.wallet.usage=/wallet <give|take|set|balance> <player> <amount>
+commands.grandeconomy.wallet.description=Admin parancs amivel játékosok pénzügyeit intézheted.
+commands.grandeconomy.wallet.given=%s hozzá lett adva %s egyenlegéhez
+commands.grandeconomy.wallet.taken=%s el lett véve %s egyenlegéről
+commands.grandeconomy.wallet.set=%s egyenlege át lett állítva %s összegre.
+commands.grandeconomy.wallet.balance=%s egyenlege: %s
+commands.grandeconomy.wallet.negative=Nem teheted mert %s egyenlegét 0 alá vinné.
+
+commands.grandeconomy.gehelp.usage=/geconhelp [page]
+commands.grandeconomy.gehelp.description=A Grand Economy plugin help parancsa.
+commands.grandeconomy.gehelp.format=%s: %s
+
+grandeconomy.chat.page.next=[Következő]
+grandeconomy.chat.page.prev=[Elöző]
+grandeconomy.chat.page.num=Page: %s/%s

@@ -3,6 +3,7 @@ Added the ability to use a thousands separator for more readable currency amount
 Added support for decimal amounts.
 Allowed using flat and percentage PVP rewards at the same time
 Added Thut Essentials support
+Added Hungarian language support (Castiel)
 
 Changes:
 Config is better organized. Delete your old config.
