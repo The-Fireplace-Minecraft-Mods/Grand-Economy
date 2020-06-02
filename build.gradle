@@ -44,6 +44,7 @@ dependencies {
     provided 'org.spongepowered:spongeapi:7.1.0'
     provided group: "com.forgeessentials", name: "forgeessentials", version: "1.4.4-SNAPSHOT", classifier: "dev", changing: true
     deobfCompile 'thut-essentials:thutessentials:1.12.2:2.2.23'
+    provided ':Pixelmon-1.12.2-7.3.1-universal:'
 }
 
 repositories {
@@ -55,13 +56,16 @@ repositories {
     maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
-        }
+    }
     maven {
 		name = "sk89q"
 		url = "http://maven.sk89q.com/repo/"
 	}
     //Thut Essentials
     maven { url 'https://minecraft.curseforge.com/api/maven' }
+    flatDir {
+        dirs 'lib'
+    }
 }
 
 processResources {

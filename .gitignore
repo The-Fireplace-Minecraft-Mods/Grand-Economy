@@ -22,3 +22,5 @@ eclipse
 run
 *.class
 classes
+
+lib

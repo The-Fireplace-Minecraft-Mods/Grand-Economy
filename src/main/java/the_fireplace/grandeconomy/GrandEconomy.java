@@ -26,6 +26,7 @@ import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
 import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ge.Account;
 import the_fireplace.grandeconomy.econhandlers.ge.GrandEconomyEconHandler;
+import the_fireplace.grandeconomy.econhandlers.pixelmon.PixelmonEconHandler;
 import the_fireplace.grandeconomy.econhandlers.sponge.SpongeEconHandler;
 import the_fireplace.grandeconomy.econhandlers.te.ThutEssentialsEconHandler;
 
@@ -148,6 +149,9 @@ public class GrandEconomy {
             case "bukkit":
                 //Wait because we will load it when the bukkit plugin loads
                 break;
+            case "pixelmon":
+                economy = new PixelmonEconHandler();
+                break;
             default:
                 economy = econHandlers.getOrDefault(globalConfig.economyBridge, new GrandEconomyEconHandler());
         }
@@ -219,7 +223,7 @@ public class GrandEconomy {
         @Config.Comment("What amount of players money should be transferred to killer")
         @Config.RangeDouble(min=0)
         public static double pvpMoneyTransferFlat = 0;
-        @Config.Comment("Which economy to bridge to, if any. Choices are \"none\", \"sponge\", \"enderpay\", \"forgeessentials\", \"thutessentials\", and \"vault\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded. If using Vault, make sure the Grand Economy Vault Compat ( https://dev.bukkit.org/projects/grand-economy-vault-compat ) plugin is loaded.")
+        @Config.Comment("Which economy to bridge to, if any. Choices are \"none\", \"sponge\", \"enderpay\", \"forgeessentials\", \"thutessentials\", \"pixelmon\", and \"vault\". The game will crash if you choose one that is not loaded. If using Sponge, make sure you have a Sponge economy loaded. If using Vault, make sure the Grand Economy Vault Compat ( https://dev.bukkit.org/projects/grand-economy-vault-compat ) plugin is loaded.")
         public static String economyBridge = "none";
         @Config.Comment("Server locale - the client's locale takes precedence if Grand Economy is installed there.")
         public static String locale = "en_us";
