@@ -24,18 +24,12 @@ dependencies {
 	modApi("me.shedaniel.cloth:config-2:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	modApi("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
 	include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
-	include "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+
+	implementation "blue.endless:jankson:1.1.+"
+	include "blue.endless:jankson:1.1.+"
 
 	compile "com.google.code.findbugs:jsr305:3.0.2"
-}
-
-repositories {
-	//Auto config
-	jcenter()
 }
 
 processResources {
@@ -85,7 +79,6 @@ curseforge {
 			relations {
 				requiredDependency 'fabric-api'
 				embeddedLibrary 'cloth-config'
-				embeddedLibrary 'auto-config-updated-api'
 				optionalDependency 'modmenu'
 			}
 		}
