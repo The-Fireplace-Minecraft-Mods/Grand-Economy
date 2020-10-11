@@ -1,0 +1,78 @@
+{
+  "grandeconomy.insufficient_credit": "You don't have enough money to do that.",
+
+  "grandeconomy.killed_balance": "You were killed, your balance is now: %s",
+  "grandeconomy.killer_balance": "You just killed someone, your balance is now: %s",
+
+  "commands.grandeconomy.common.console": "%s can only be used by players.",
+  "commands.grandeconomy.common.balance": "Balance: %s",
+  "commands.grandeconomy.common.insufficient_credit": "You don't have enough %s to do that.",
+
+  "commands.grandeconomy.balance.usage": "/balance",
+  "commands.grandeconomy.balance.description": "Shows your current account balance.",
+
+  "commands.grandeconomy.convert.usage": "/convert",
+  "commands.grandeconomy.convert.description": "Converts what you're holding into currency.",
+  "commands.grandeconomy.convert.success": "You have exchanged %s %s for %s each, earning a total of %s. Your balance is now %s.",
+  "commands.grandeconomy.convert.failure": "The item you are holding has no value.",
+
+  "commands.grandeconomy.pay.usage": "/pay <player> <amount>",
+  "commands.grandeconomy.pay.description": "Pay a player money from your account.",
+  "commands.grandeconomy.pay.negative": "You cannot pay someone negative amount.",
+  "commands.grandeconomy.pay.paid": "You sent %s to %s.",
+  "commands.grandeconomy.pay.recieved": "You recieved %s from %s.",
+
+  "commands.grandeconomy.wallet.usage": "/wallet <give|take|set|balance> <player> <amount>",
+  "commands.grandeconomy.wallet.description": "The admin command for managing account balances.",
+  "commands.grandeconomy.wallet.given": "%s added to %s balance",
+  "commands.grandeconomy.wallet.taken": "%s taken from %s balance",
+  "commands.grandeconomy.wallet.set": "%s balance set to %s",
+  "commands.grandeconomy.wallet.balance": "%s balance: %s",
+  "commands.grandeconomy.wallet.negative": "You cannot do this because it would set the %s's balance below zero.",
+
+  "commands.grandeconomy.gehelp.usage": "/gehelp [page]",
+  "commands.grandeconomy.gehelp.description": "The Grand Economy help command.",
+  "commands.grandeconomy.gehelp.format": "%s: %s",
+
+  "grandeconomy.chat.page.next": "[Next]",
+  "grandeconomy.chat.page.prev": "[Previous]",
+  "grandeconomy.chat.page.num": "Page: %s/%s",
+
+  "text.config.grandeconomy.title": "Grand Economy Config",
+  
+  "text.config.grandeconomy.global": "Global Settings",
+  "text.config.grandeconomy.global.desc": "Settings that work regardless of bridging.",
+  "text.config.grandeconomy.option.locale": "Server Locale",
+  "text.config.grandeconomy.option.locale.desc[0]": "Default language of the server. This has",
+  "text.config.grandeconomy.option.locale.desc[1]": "no effect here, only on servers. It is",
+  "text.config.grandeconomy.option.locale.desc[2]": "only here in the GUI for easy editing.",
+  "text.config.grandeconomy.option.pvpMoneyTransferPercent": "PVP Money Transfer (Percent)",
+  "text.config.grandeconomy.option.pvpMoneyTransferPercent.desc": "Percent of money to transfer to a player's killer.",
+  "text.config.grandeconomy.option.pvpMoneyTransferFlat": "PVP Money Transfer (Flat)",
+  "text.config.grandeconomy.option.pvpMoneyTransferFlat.desc": "Flat amount of money to transfer to a player's killer.",
+
+  "text.config.grandeconomy.bridging": "Bridging Settings",
+  "text.config.grandeconomy.bridging.desc": "Settings for working with other economies.",
+  "text.config.grandeconomy.option.economyBridge": "Bridge to Economy",
+  "text.config.grandeconomy.option.economyBridge.desc[0]": "Which economy to bridge to, if any.",
+  "text.config.grandeconomy.option.economyBridge.desc[1]": "This means Grand Economy and all mods using it will use the target's currency.",
+  "text.config.grandeconomy.option.economyBridge.desc[2]": "There are currently no options built in.",
+  "text.config.grandeconomy.option.economyBridge.desc[3]": "The game will crash if you choose one that is not loaded.",
+  "text.config.grandeconomy.option.enforceNonNegativeBalance": "Enforce Non-Negative Balance",
+  "text.config.grandeconomy.option.enforceNonNegativeBalance.desc[0]": "Makes sure account balances cannot go below zero.",
+  "text.config.grandeconomy.option.enforceNonNegativeBalance.desc[1]": "Useful if the bridged economy doesn't properly prevent negative balances.",
+
+  "text.config.grandeconomy.native": "Native Economy",
+  "text.config.grandeconomy.native.desc": "Settings for the built in economy.",
+  "text.config.grandeconomy.option.currencyNameSingular": "Currency Name (Singular)",
+  "text.config.grandeconomy.option.currencyNameMultiple": "Currency Name (Plural)",
+  "text.config.grandeconomy.option.thousandsSeparator": "Thousands Separator",
+  "text.config.grandeconomy.option.startBalance": "Start Balance",
+  "text.config.grandeconomy.option.basicIncome": "Basic Income",
+  "text.config.grandeconomy.option.basicIncome.desc": "Give each player currency every day they log in.",
+  "text.config.grandeconomy.option.basicIncomeAmount": "Basic Income Amount",
+  "text.config.grandeconomy.option.basicIncomeAmount.desc": "Amount to be given to a player each day.",
+  "text.config.grandeconomy.option.maxIncomeSavingsDays": "Max Basic Income Savings (in days)",
+  "text.config.grandeconomy.option.maxIncomeSavingsDays.desc[0]": "The max number of days since last login",
+  "text.config.grandeconomy.option.maxIncomeSavingsDays.desc[1]": "the player will be paid basic income for."
+}
