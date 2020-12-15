@@ -1,6 +1,6 @@
 package the_fireplace.grandeconomy.translation;
 
-import com.google.common.collect.Lists;
+import io.netty.util.internal.ConcurrentSet;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -8,12 +8,13 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableText;
 
-import java.util.List;
+import javax.annotation.Nullable;
+import java.util.Set;
 import java.util.UUID;
 
 public class TranslationUtil {
 
-    public static List<UUID> geClients = Lists.newArrayList();
+    public static Set<UUID> geClients = new ConcurrentSet<>();
 
     /**
      * Gets the translation for the given key and arguments and returns the formatted string.
@@ -84,7 +85,7 @@ public class TranslationUtil {
     /**
      * Returns the TranslatableText if the target is able to translate it, or the translated LiteralText otherwise.
      */
-    public static MutableText getTranslation(UUID target, String translationKey, Object... args) {
+    public static MutableText getTranslation(@Nullable UUID target, String translationKey, Object... args) {
         if(target == null || !geClients.contains(target))
             return new LiteralText(I18n.translateToLocalFormatted(translationKey, args));
         else

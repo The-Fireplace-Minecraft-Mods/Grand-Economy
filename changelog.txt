@@ -1,2 +1,11 @@
-Drop Forge Support
-Update to 1.16.X
+Additions:
+Basic income now works with bridged economies
+Config GUI support (when Mod Menu is loaded)
+
+Changes:
+Dropped Forge Support
+Updated to 1.16.X
+
+Fixes/Internal Changes:
+Performance improvements for saving and loading account data
+Performance improvements for determining when basic income should be given

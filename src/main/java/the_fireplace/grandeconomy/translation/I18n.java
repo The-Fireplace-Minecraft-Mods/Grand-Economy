@@ -1,10 +1,10 @@
 package the_fireplace.grandeconomy.translation;
 
-import com.google.common.collect.Sets;
-import the_fireplace.grandeconomy.utils.JarFileUtils;
+import the_fireplace.grandeconomy.io.JarFileUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Set;
 
 public final class I18n {
@@ -36,7 +36,7 @@ public final class I18n {
 
     public static Set<String> getLocales() {
         try {
-            Set<String> locales = Sets.newHashSet();
+            Set<String> locales = new HashSet<>();
             JarFileUtils.getFiles(I18n.class.getResourceAsStream("/assets/grandeconomy/lang/").toString()).forEach(path -> locales.add(path.getFileName().toString().replace(".json", "")));
             return locales;
         } catch(Exception e) {

@@ -9,8 +9,8 @@ import the_fireplace.grandeconomy.api.EconomyHandler;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.config.ModConfig;
 import the_fireplace.grandeconomy.events.NetworkEvents;
+import the_fireplace.grandeconomy.multithreading.ConcurrentExecutionManager;
 import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconHandler;
-import the_fireplace.grandeconomy.requesthandler.GrandEconomyApiImpl;
 
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ public class GrandEconomy implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(MODID);
     public static ModConfig config;
     private static EconomyHandler economy;
-    private static final EconomyHandler economyWrapper = new EconomyHandler() {
+    private static final EconomyHandler ECONOMY_WRAPPER = new EconomyHandler() {
         @Override
         public double getBalance(UUID uuid, Boolean isPlayer) {
             return economy.getBalance(uuid, isPlayer);
@@ -72,7 +72,7 @@ public class GrandEconomy implements ModInitializer {
         }
     };
     public static EconomyHandler getEconomy() {
-        return economyWrapper;
+        return ECONOMY_WRAPPER;
     }
 
     public static MinecraftServer getServer() {
@@ -84,13 +84,20 @@ public class GrandEconomy implements ModInitializer {
         config = ModConfig.load();
         config.save();
 
-        new GrandEconomyApiImpl();
         ServerLifecycleEvents.SERVER_STARTED.register(s -> {
             minecraftServer = s;
             loadEconomy();
             GeCommands.register(s.getCommandManager().getDispatcher());
         });
         NetworkEvents.init();
+        ServerLifecycleEvents.SERVER_STOPPING.register(s -> {
+            //TODO save data
+            try {
+                ConcurrentExecutionManager.waitForCompletion();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     static void loadEconomy() {
