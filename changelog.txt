@@ -1,4 +1,2 @@
-Additions:
-Re-added /convert
-
-Changes:
+Fixes:
+Fixed crash on launch

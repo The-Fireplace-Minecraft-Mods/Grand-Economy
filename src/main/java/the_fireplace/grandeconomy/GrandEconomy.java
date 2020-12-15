@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
@@ -132,7 +133,7 @@ public class GrandEconomy {
         //noinspection ResultOfMethodCallIgnored
         configDir.mkdirs();
         //Initialize ConversionItems
-        ConversionItems.hasValue(null, 0);
+        ConversionItems.hasValue(new ResourceLocation("null"), 0);
     }
 
     @Mod.EventHandler

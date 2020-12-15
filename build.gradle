@@ -22,7 +22,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'net.cazzar.gradle.modsio'
 
-version = "2.1.0"
+version = "2.1.1"
 group = "the_fireplace.grandeconomy"
 archivesBaseName = "GrandEconomy-1.12.2"
 
@@ -44,7 +44,7 @@ dependencies {
     provided 'org.spongepowered:spongeapi:7.1.0'
     provided group: "com.forgeessentials", name: "forgeessentials", version: "1.4.4-SNAPSHOT", classifier: "dev", changing: true
     deobfCompile 'thut-essentials:thutessentials:1.12.2:2.2.23'
-    provided ':Pixelmon-1.12.2-7.3.1-universal:'
+    provided ':Pixelmon-1.12.2-8.1.2-universal:'
 }
 
 repositories {
