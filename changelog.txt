@@ -1,15 +1,4 @@
 Additions:
-Added the ability to use a thousands separator for more readable currency amounts.
-Added support for decimal amounts.
-Allowed using flat and percentage PVP rewards at the same time
-Added Thut Essentials support
-Added Hungarian language support (Castiel)
-Added experimental Pixelmon support
+Re-added /convert
 
 Changes:
-Config is better organized. Delete your old config.
-Numerous API changes. This may break mods that use Grand Economy until they update.
-Removed the /convert command. Use Grand Exchange's Admin Shops for all the same functionality and more. https://www.curseforge.com/minecraft/mc-mods/grand-exchange
-Improved the descriptions of various config options.
-Added backup saving system to ensure that non-player and offline player accounts get saved when using native currency.
-Player name parsing for /wallet now accepts player selectors

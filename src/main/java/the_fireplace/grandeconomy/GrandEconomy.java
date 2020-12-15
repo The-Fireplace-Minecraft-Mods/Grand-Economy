@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.commands.*;
 import the_fireplace.grandeconomy.compat.IRegisterable;
 import the_fireplace.grandeconomy.compat.sponge.RegisterSpongeEconomy;
+import the_fireplace.grandeconomy.earnings.ConversionItems;
 import the_fireplace.grandeconomy.econhandlers.IEconHandler;
 import the_fireplace.grandeconomy.econhandlers.ep.EnderPayEconHandler;
 import the_fireplace.grandeconomy.econhandlers.fe.ForgeEssentialsEconHandler;
@@ -121,9 +122,17 @@ public class GrandEconomy {
         return true;
     }
 
+    public static File configDir;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
+
+        configDir = new File(event.getModConfigurationDirectory(), "grandeconomy-extra");
+        //noinspection ResultOfMethodCallIgnored
+        configDir.mkdirs();
+        //Initialize ConversionItems
+        ConversionItems.hasValue(null, 0);
     }
 
     @Mod.EventHandler
@@ -197,10 +206,11 @@ public class GrandEconomy {
 
     private void registerCommands(ServerCommandManager manager) {
         commands.addAll(Sets.newHashSet(
-                new CommandWallet(),
-                new CommandBalance(),
-                new CommandPay(),
-                new CommandGEHelp()
+            new CommandWallet(),
+            new CommandBalance(),
+            new CommandConvert(),
+            new CommandPay(),
+            new CommandGEHelp()
         ));
         for(CommandBase command: commands)
             manager.registerCommand(command);
