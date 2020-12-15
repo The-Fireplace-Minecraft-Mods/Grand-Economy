@@ -2,6 +2,7 @@ package the_fireplace.grandeconomy.api;
 
 import com.google.common.collect.Maps;
 import the_fireplace.grandeconomy.GrandEconomy;
+import the_fireplace.grandeconomy.requesthandler.GrandEconomyApiImpl;
 import the_fireplace.grandeconomy.requesthandler.IGrandEconomyApi;
 
 import java.util.Collections;
@@ -10,15 +11,7 @@ import java.util.UUID;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "RedundantSuppression"})
 public final class GrandEconomyApi {
-
-    private static IGrandEconomyApi API = null;
-    public static void setAPI(IGrandEconomyApi api) {
-        if(API == null)
-            API = api;
-    }
-    public static IGrandEconomyApi getAPI() {
-        return API;
-    }
+    private static final IGrandEconomyApi API = new GrandEconomyApiImpl();
 
     /**
      * Check the account's balance
@@ -116,11 +109,21 @@ public final class GrandEconomyApi {
         return API.getEconomyModId();
     }
 
-    private static final Map<String, IEconHandler> econHandlers = Maps.newHashMap();
-    public static boolean hasEconHandler(String key) {
+    private static final Map<String, EconomyHandler> econHandlers = Maps.newHashMap();
+
+    /**
+     * Check if an economy handler exists for the given modid or alias
+     * @param key
+     * A modid or alias
+     */
+    public static boolean hasEconomyHandler(String key) {
         return econHandlers.containsKey(key);
     }
-    public static Map<String, IEconHandler> getEconHandlers() {
+
+    /**
+     * Get a map of modid/alias -> Economy Handler. This generally shouldn't be used unless you have a good reason to do so.
+     */
+    public static Map<String, EconomyHandler> getEconomyHandlers() {
         return Collections.unmodifiableMap(econHandlers);
     }
 
@@ -129,16 +132,16 @@ public final class GrandEconomyApi {
      * This must be done BEFORE {@link net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents#SERVER_STARTED}.
      * @param handler
      * Your economy handler instance
-     * @param forModid
+     * @param modid
      * The modid the handler is for.
      * @param aliases
      * Aliases that can also be used in the config to use your currency. The method still returns true if any of these are already taken, as long as the modid isn't.
      * @return false if registering the handler failed (currently the only reason is if another handler is registered with the given modid) and true otherwise
      */
-    public static boolean registerEconomyHandler(IEconHandler handler, String forModid, String... aliases) {
-        if(econHandlers.containsKey(forModid) || forModid.equalsIgnoreCase(GrandEconomy.MODID))
+    public static boolean registerEconomyHandler(EconomyHandler handler, String modid, String... aliases) {
+        if(econHandlers.containsKey(modid) || modid.equalsIgnoreCase(GrandEconomy.MODID))
             return false;
-        econHandlers.put(forModid, handler);
+        econHandlers.put(modid, handler);
         for(String alias: aliases)
             econHandlers.putIfAbsent(alias, handler);
         return true;

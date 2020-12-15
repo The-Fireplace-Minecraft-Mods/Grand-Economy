@@ -1,18 +1,17 @@
-package the_fireplace.grandeconomy.ge;
+package the_fireplace.grandeconomy.nativeeconomy;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import the_fireplace.grandeconomy.GrandEconomy;
+import the_fireplace.grandeconomy.api.EconomyHandler;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
-import the_fireplace.grandeconomy.api.IEconHandler;
-import the_fireplace.grandeconomy.config.ModConfig;
 import the_fireplace.grandeconomy.translation.TranslationUtil;
 import the_fireplace.grandeconomy.utils.TimeUtils;
 
 import java.util.UUID;
 
-public class GrandEconomyEconHandler implements IEconHandler {
+public class GrandEconomyEconHandler implements EconomyHandler {
     @Override
     public double getBalance(UUID uuid, Boolean isPlayer) {
         Account account = Account.get(uuid);
@@ -67,8 +66,8 @@ public class GrandEconomyEconHandler implements IEconHandler {
     @Override
     public String getCurrencyName(double amount) {
         if (amount == 1)
-            return ModConfig.currencyNameSingular;
-        return ModConfig.currencyNameMultiple;
+            return GrandEconomy.config.currencyNameSingular;
+        return GrandEconomy.config.currencyNameMultiple;
     }
 
     @Override

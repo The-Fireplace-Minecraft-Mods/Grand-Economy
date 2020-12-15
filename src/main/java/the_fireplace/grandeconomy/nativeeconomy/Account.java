@@ -1,26 +1,27 @@
-package the_fireplace.grandeconomy.ge;
+package the_fireplace.grandeconomy.nativeeconomy;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.config.ModConfig;
 import the_fireplace.grandeconomy.utils.TimeUtils;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Account {
-    private static final HashMap<String, Account> accounts = new HashMap<>();
+    private static final Map<UUID, Account> ACCOUNT_INSTANCES = new ConcurrentHashMap<>();
     private static File location;
-    private boolean changed;
+    private boolean isChanged;
 
-    private UUID uuid;
+    private final UUID uuid;
     private double balance;
     private long lastLogin;
     private long lastCountActivity;
@@ -28,11 +29,11 @@ public class Account {
 
     private Account(UUID uuid) {
         this.uuid = uuid;
-        this.balance = ModConfig.startBalance;
+        this.balance = GrandEconomy.config.startBalance;
         long now = TimeUtils.getCurrentDay();
         this.lastLogin = now;
         this.lastCountActivity = now;
-        this.changed = true;
+        this.isChanged = true;
         if(GrandEconomy.getServer().getUserCache().getByUuid(uuid) != null)
             this.isPlayer = true;
     }
@@ -42,32 +43,20 @@ public class Account {
     }
 
     public static Account get(UUID uuid) {
-        Account account = accounts.get(uuid.toString());
+        Account account = ACCOUNT_INSTANCES.get(uuid);
         if (account != null)
             return account;
-
-        if (location == null)
-            return null;
         //noinspection ResultOfMethodCallIgnored
         location.mkdirs();
 
         account = new Account(uuid);
-        accounts.put(uuid.toString(), account);
+        ACCOUNT_INSTANCES.put(uuid, account);
 
         File file = account.getFile();
         if (!file.exists()) return account;
 
         account.read();
         return account;
-    }
-
-    public static void clear() {
-        Account.location = null;
-        Account.accounts.clear();
-    }
-
-    public static void setLocation(File location) {
-        Account.location = location;
     }
 
     boolean update() {
@@ -77,18 +66,18 @@ public class Account {
 
         if (!isPlayer || activityDeltaDays == 0) return false;
 
-        if (ModConfig.basicIncome && getPlayerMP() != null) {
+        if (GrandEconomy.config.basicIncome && getPlayerMP() != null) {
             long loginDeltaDays = (now - this.lastLogin);
-            if (loginDeltaDays > ModConfig.maxIncomeSavingsDays)
-                loginDeltaDays = ModConfig.maxIncomeSavingsDays;
+            if (loginDeltaDays > GrandEconomy.config.maxIncomeSavingsDays)
+                loginDeltaDays = GrandEconomy.config.maxIncomeSavingsDays;
             this.lastLogin = now;
-            this.balance += loginDeltaDays * ModConfig.basicIncomeAmount;
+            this.balance += loginDeltaDays * GrandEconomy.config.basicIncomeAmount;
         }
         return activityDeltaDays > 0;
     }
 
     void writeIfChanged() throws IOException {
-        if (changed) write();
+        if (isChanged) write();
     }
 
     private File getFile() {
@@ -100,7 +89,7 @@ public class Account {
     }
 
     private void read(File file) {
-        changed = false;
+        isChanged = false;
 
         JsonParser jsonParser = new JsonParser();
         try {
@@ -113,7 +102,7 @@ public class Account {
                 isPlayer = jsonObject.get("isPlayer").getAsBoolean();
             else if(GrandEconomy.getServer().getUserCache().getByUuid(uuid) != null) {
                 this.isPlayer = true;
-                this.changed = true;
+                this.isChanged = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,17 +123,17 @@ public class Account {
             String str = obj.toString();
             file.write(str);
         }
-        changed = false;
+        isChanged = false;
     }
 
-    public double getBalance() {
+    double getBalance() {
         return balance;
     }
 
     void setBalance(double v) {
         if(balance != v) {
             balance = v;
-            changed = true;
+            isChanged = true;
         }
     }
 
@@ -152,6 +141,7 @@ public class Account {
         setBalance(balance + v);
     }
 
+    @Nullable
     private ServerPlayerEntity getPlayerMP() {
         return GrandEconomy.getServer().getPlayerManager().getPlayer(uuid);
     }

@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id "com.matthewprenger.cursegradle" version "1.4.0"
+	id "com.github.johnrengelman.shadow" version "5.0.0"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -27,7 +28,6 @@ dependencies {
 	include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
 
 	implementation "blue.endless:jankson:1.1.+"
-	include "blue.endless:jankson:1.1.+"
 
 	compile "com.google.code.findbugs:jsr305:3.0.2"
 }
@@ -56,8 +56,20 @@ tasks.withType(JavaCompile) {
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
+	archiveClassifier.set("sources")
 	from sourceSets.main.allSource
+}
+
+shadowJar {
+	relocate("blue.endless.jankson", "${group}.shadowed.blue.endless.jankson")
+
+	configurations = [project.configurations.shadow]
+	classifier "shadow"
+}
+
+remapJar {
+	dependsOn(shadowJar)
+	input.set(shadowJar.archivePath)
 }
 
 jar {
@@ -70,6 +82,7 @@ curseforge {
 		id = '312141'
 		changelog = file('changelog.txt')
 		releaseType = 'release'
+		addGameVersion '1.16.4'
 		addGameVersion '1.16.3'
 		addGameVersion '1.16.2'
 		addGameVersion 'Java 8'

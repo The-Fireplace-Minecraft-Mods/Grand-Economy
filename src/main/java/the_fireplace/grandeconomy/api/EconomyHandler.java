@@ -2,7 +2,7 @@ package the_fireplace.grandeconomy.api;
 
 import java.util.UUID;
 
-public interface IEconHandler {
+public interface EconomyHandler {
     /**
      * Check the account's balance
      * @param uuid

@@ -21,6 +21,12 @@
   "entrypoints": {
     "main": [
       "the_fireplace.grandeconomy.GrandEconomy"
+    ],
+    "client": [
+      "the_fireplace.grandeconomy.GrandEconomyClient"
+    ],
+    "modmenu": [
+      "the_fireplace.grandeconomy.config.ModMenuIntegration"
     ]
   },
   "mixins": [

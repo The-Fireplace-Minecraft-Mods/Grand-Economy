@@ -1,16 +1,11 @@
 package the_fireplace.grandeconomy.requesthandler;
 
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.api.event.BalanceChangeEvent;
 
 import java.util.UUID;
 
-public class GrandEconomyApiFabric implements IGrandEconomyApi {
-
-    public GrandEconomyApiFabric() {
-        GrandEconomyApi.setAPI(this);
-    }
+public class GrandEconomyApiImpl implements IGrandEconomyApi {
 
     @Override
     public double getBalance(UUID uuid, Boolean isPlayer) {

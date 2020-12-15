@@ -9,7 +9,6 @@ import net.minecraft.util.JsonHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.config.ModConfig;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +23,7 @@ public class GrandEconomyLanguageMap {
     /** Pattern that matches numeric variable placeholders in a resource string, such as "%d", "%3$d", "%.2f" */
     @SuppressWarnings("RegExpRedundantEscape")
     private static final Pattern NUMERIC_VARIABLE_PATTERN = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
-    private static final GrandEconomyLanguageMap instance = new GrandEconomyLanguageMap(ModConfig.locale);
+    private static final GrandEconomyLanguageMap instance = new GrandEconomyLanguageMap(GrandEconomy.config.locale);
     private final Map<String, String> languageList = Maps.newHashMap();
 
     GrandEconomyLanguageMap(String locale) {
