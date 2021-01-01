@@ -8,19 +8,64 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.api.EconomyHandler;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.config.ModConfig;
-import the_fireplace.grandeconomy.events.NetworkEvents;
-import the_fireplace.grandeconomy.multithreading.ConcurrentExecutionManager;
 import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconHandler;
+import the_fireplace.lib.api.chat.TranslationService;
 
 import java.util.UUID;
 
 public class GrandEconomy implements ModInitializer {
     public static final String MODID = "grandeconomy";
-    private static MinecraftServer minecraftServer;
     public static final Logger LOGGER = LogManager.getLogger(MODID);
     public static ModConfig config;
-    private static EconomyHandler economy;
-    private static final EconomyHandler ECONOMY_WRAPPER = new EconomyHandler() {
+
+    private static final BoundedEconomyWrapper ECONOMY_WRAPPER = new BoundedEconomyWrapper();
+    public static EconomyHandler getEconomy() {
+        return ECONOMY_WRAPPER;
+    }
+
+    private static MinecraftServer minecraftServer;
+    public static MinecraftServer getServer() {
+        return minecraftServer;
+    }
+
+    private static TranslationService translationService = null;
+    public static TranslationService getTranslationService() {
+        if (translationService == null) {
+            translationService = TranslationService.get(MODID);
+        }
+        return translationService;
+    }
+
+    @Override
+    public void onInitialize() {
+        config = ModConfig.load();
+        config.save();
+        TranslationService.initialize(MODID);
+
+        ServerLifecycleEvents.SERVER_STARTING.register(s -> {
+            minecraftServer = s;
+            loadEconomy();
+            GeCommands.register(s.getCommandManager().getDispatcher());
+        });
+    }
+
+    static void loadEconomy() {
+        EconomyHandler economy = GrandEconomyApi.getEconomyHandlers().computeIfAbsent(GrandEconomy.config.economyBridge, unused -> {
+            EconomyHandler defaultEconomyHandler = new GrandEconomyEconHandler();
+            GrandEconomyApi.registerEconomyHandler(defaultEconomyHandler, MODID);
+            return defaultEconomyHandler;
+        });
+        economy.init();
+        ECONOMY_WRAPPER.setEconomy(economy);
+    }
+
+    private static class BoundedEconomyWrapper implements EconomyHandler {
+        EconomyHandler economy;
+
+        private void setEconomy(EconomyHandler economy) {
+            this.economy = economy;
+        }
+
         @Override
         public double getBalance(UUID uuid, Boolean isPlayer) {
             return economy.getBalance(uuid, isPlayer);
@@ -70,40 +115,5 @@ public class GrandEconomy implements ModInitializer {
         public void init() {
             economy.init();
         }
-    };
-    public static EconomyHandler getEconomy() {
-        return ECONOMY_WRAPPER;
-    }
-
-    public static MinecraftServer getServer() {
-        return minecraftServer;
-    }
-
-    @Override
-    public void onInitialize() {
-        config = ModConfig.load();
-        config.save();
-
-        ServerLifecycleEvents.SERVER_STARTED.register(s -> {
-            minecraftServer = s;
-            loadEconomy();
-            GeCommands.register(s.getCommandManager().getDispatcher());
-        });
-        NetworkEvents.init();
-        ServerLifecycleEvents.SERVER_STOPPING.register(s -> {
-            //TODO save data
-            try {
-                ConcurrentExecutionManager.waitForCompletion();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    static void loadEconomy() {
-        economy = GrandEconomyApi.getEconomyHandlers().getOrDefault(GrandEconomy.config.economyBridge, new GrandEconomyEconHandler());
-        if(economy.getClass().equals(GrandEconomyEconHandler.class))
-            GrandEconomyApi.registerEconomyHandler(economy, MODID);
-        economy.init();
     }
 }

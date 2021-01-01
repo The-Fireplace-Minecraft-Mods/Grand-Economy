@@ -3,7 +3,7 @@ package the_fireplace.grandeconomy.nativeeconomy;
 import com.google.gson.JsonObject;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.io.AccountData;
-import the_fireplace.grandeconomy.io.JsonReader;
+import the_fireplace.lib.api.io.JsonReader;
 
 import java.util.Map;
 import java.util.UUID;
@@ -46,7 +46,7 @@ public class Account extends AccountData {
     }
 
     private boolean calculateIsPlayer() {
-        return GrandEconomy.getServer().getPlayerManager().getPlayer(accountId) != null;
+        return GrandEconomy.getServer().getPlayerManager().getPlayer(getId()) != null;
     }
 
     @Override

@@ -4,7 +4,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
-import the_fireplace.grandeconomy.translation.TranslationUtil;
 
 public class KillingEvents {
     public static void onPlayerDeath(ServerPlayerEntity dyingPlayer, DamageSource source) {
@@ -29,10 +28,10 @@ public class KillingEvents {
                 );
             GrandEconomyApi.takeFromBalance(dyingPlayer.getUuid(), amountTaken, true);
 
-            dyingPlayer.sendMessage(TranslationUtil.getTranslation(dyingPlayer.getUuid(), "grandeconomy.killed_balance", GrandEconomyApi.getBalance(dyingPlayer.getUuid(), true)), false);
+            dyingPlayer.sendMessage(GrandEconomy.getTranslationService().getTextForTarget(dyingPlayer.getUuid(), "grandeconomy.killed_balance", GrandEconomyApi.getBalanceFormatted(dyingPlayer.getUuid(), true)), false);
 
             GrandEconomyApi.addToBalance(killer.getUuid(), amountTaken, true);
-            killer.sendMessage(TranslationUtil.getTranslation(killer.getUuid(), "grandeconomy.killer_balance", GrandEconomyApi.getBalance(killer.getUuid(), true)), false);
+            killer.sendMessage(GrandEconomy.getTranslationService().getTextForTarget(killer.getUuid(), "grandeconomy.killer_balance", GrandEconomyApi.getBalanceFormatted(killer.getUuid(), true)), false);
         }
     }
 }

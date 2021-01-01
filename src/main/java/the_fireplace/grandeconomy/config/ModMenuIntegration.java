@@ -13,7 +13,6 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
-import the_fireplace.grandeconomy.translation.I18n;
 
 import java.util.List;
 import java.util.Optional;
@@ -106,17 +105,6 @@ public class ModMenuIntegration implements ModMenuApi {
     }
 
     private void addGlobalCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory global) {
-        global.addEntry(entryBuilder.startStringDropdownMenu(new TranslatableText("text.config.grandeconomy.option.locale"), GrandEconomy.config.locale)
-            .setSelections(I18n.getLocales())
-            .setSuggestionMode(false)
-            .setDefaultValue(new ModConfig().locale)
-            .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.locale.desc", 3))
-            .setSaveConsumer(newValue -> GrandEconomy.config.locale = newValue)
-            .setErrorSupplier(value ->
-                I18n.hasLocale(value)
-                    ? Optional.empty()
-                    : Optional.of(new TranslatableText("text.config.grandeconomy.option.locale.err")))
-            .build());
         global.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.showBalanceOnJoin"), GrandEconomy.config.showBalanceOnJoin)
             .setDefaultValue(new ModConfig().showBalanceOnJoin)
             .setTooltip(new TranslatableText("text.config.grandeconomy.option.showBalanceOnJoin.desc"))

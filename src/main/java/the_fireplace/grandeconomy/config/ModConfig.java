@@ -15,7 +15,6 @@ public class ModConfig {
     private static final File configDir = new File("config");
     private static final File baseConfigFile = new File(configDir, GrandEconomy.MODID+".json5");
 
-    public String locale = "en_us";
     public boolean showBalanceOnJoin = false;
     public double pvpMoneyTransferPercent = 0;
     public double pvpMoneyTransferFlat = 0;
@@ -53,8 +52,6 @@ public class ModConfig {
             e.printStackTrace();
             return conf;
         }
-        if(obj.containsKey("locale"))
-            conf.locale = obj.get(String.class, "locale");
         if(obj.containsKey("showBalanceOnJoin"))
             conf.showBalanceOnJoin = obj.get(Boolean.class, "showBalanceOnJoin");
         if(obj.containsKey("pvpMoneyTransferPercent"))
