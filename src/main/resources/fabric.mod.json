@@ -27,6 +27,9 @@
     ],
     "modmenu": [
       "the_fireplace.grandeconomy.config.ModMenuIntegration"
+    ],
+    "gunpowder:modules": [
+      "the_fireplace.grandeconomy.compat.gunpowder.GrandEconomyGunpowderModule"
     ]
   },
   "mixins": [

@@ -10,28 +10,33 @@ public class KillingEvents {
         if(!dyingPlayer.world.isClient()) {
             double flatMoneyTransferAmount = GrandEconomy.config.pvpMoneyTransferFlat;
             double percentMoneyTransferAmount = GrandEconomy.config.pvpMoneyTransferPercent;
-            if (flatMoneyTransferAmount == 0 && percentMoneyTransferAmount == 0)
+            if (doubleEquals(flatMoneyTransferAmount, 0) && doubleEquals(percentMoneyTransferAmount, 0))
                 return;
 
             if (!(source.getAttacker() instanceof ServerPlayerEntity))
                 return;
             ServerPlayerEntity killer = (ServerPlayerEntity) source.getAttacker();
 
-            if (GrandEconomyApi.getBalance(dyingPlayer.getUuid(), true) <= 0)
+            if (GrandEconomyApi.getBalance(dyingPlayer.getUuid(), true) < 1)
                 return;
-            double amountTaken =
-                Math.max(
-                    Math.min(
-                        GrandEconomyApi.getBalance(dyingPlayer.getUuid(), true),
-                        (GrandEconomyApi.getBalance(dyingPlayer.getUuid(), true) * percentMoneyTransferAmount) / 100 + flatMoneyTransferAmount),
-                    0
-                );
+            double amountTaken = constrain(
+                (GrandEconomyApi.getBalance(dyingPlayer.getUuid(), true) * percentMoneyTransferAmount) / 100 + flatMoneyTransferAmount,
+                0,
+                GrandEconomyApi.getBalance(dyingPlayer.getUuid(), true)
+            );
             GrandEconomyApi.takeFromBalance(dyingPlayer.getUuid(), amountTaken, true);
-
             dyingPlayer.sendMessage(GrandEconomy.getTranslationService().getTextForTarget(dyingPlayer.getUuid(), "grandeconomy.killed_balance", GrandEconomyApi.getBalanceFormatted(dyingPlayer.getUuid(), true)), false);
 
             GrandEconomyApi.addToBalance(killer.getUuid(), amountTaken, true);
             killer.sendMessage(GrandEconomy.getTranslationService().getTextForTarget(killer.getUuid(), "grandeconomy.killer_balance", GrandEconomyApi.getBalanceFormatted(killer.getUuid(), true)), false);
         }
+    }
+
+    private static boolean doubleEquals(double d1, double d2) {
+        return Math.abs(d1 - d2) < 0.0001;
+    }
+
+    private static double constrain(double input, double min, double max) {
+        return Math.max(Math.min(input, max), min);
     }
 }

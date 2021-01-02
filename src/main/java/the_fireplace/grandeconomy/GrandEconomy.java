@@ -10,6 +10,7 @@ import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.config.ModConfig;
 import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconHandler;
 import the_fireplace.lib.api.chat.TranslationService;
+import the_fireplace.lib.impl.FireplaceLib;
 
 import java.util.UUID;
 
@@ -23,9 +24,8 @@ public class GrandEconomy implements ModInitializer {
         return ECONOMY_WRAPPER;
     }
 
-    private static MinecraftServer minecraftServer;
     public static MinecraftServer getServer() {
-        return minecraftServer;
+        return FireplaceLib.getServer();
     }
 
     private static TranslationService translationService = null;
@@ -43,18 +43,19 @@ public class GrandEconomy implements ModInitializer {
         TranslationService.initialize(MODID);
 
         ServerLifecycleEvents.SERVER_STARTING.register(s -> {
-            minecraftServer = s;
             loadEconomy();
             GeCommands.register(s.getCommandManager().getDispatcher());
         });
     }
 
     static void loadEconomy() {
-        EconomyHandler economy = GrandEconomyApi.getEconomyHandlers().computeIfAbsent(GrandEconomy.config.economyBridge, unused -> {
-            EconomyHandler defaultEconomyHandler = new GrandEconomyEconHandler();
-            GrandEconomyApi.registerEconomyHandler(defaultEconomyHandler, MODID);
-            return defaultEconomyHandler;
-        });
+        EconomyHandler economy;
+        if (GrandEconomyApi.hasEconomyHandler(GrandEconomy.config.economyBridge)) {
+            economy = GrandEconomyApi.getEconomyHandler(GrandEconomy.config.economyBridge);
+        } else {
+            economy = new GrandEconomyEconHandler();
+            GrandEconomyApi.registerEconomyHandler(economy, MODID);
+        }
         economy.init();
         ECONOMY_WRAPPER.setEconomy(economy);
     }

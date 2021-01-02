@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class GeCommands {
+    //TODO Clean all of this mess up
     //Used for the help command, each command in this list should have a corresponding command usage and description in the lang files
     private static final List<String> commands = Lists.newArrayList("balance", "convert", "pay", "wallet", "gehelp");
 

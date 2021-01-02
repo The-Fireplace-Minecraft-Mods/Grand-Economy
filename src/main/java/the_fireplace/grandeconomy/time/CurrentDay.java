@@ -1,6 +1,6 @@
-package the_fireplace.grandeconomy.utils;
+package the_fireplace.grandeconomy.time;
 
-public class TimeUtils {
+public class CurrentDay {
     public static long getCurrentDay() {
         return timeToDays(getCurrentServerTime());
     }

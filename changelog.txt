@@ -1,6 +1,7 @@
 Additions:
 Basic income now works with bridged economies
 Config GUI support (when Mod Menu is loaded)
+Full compatibility with Gunpowder API
 
 Changes:
 Dropped Forge Support

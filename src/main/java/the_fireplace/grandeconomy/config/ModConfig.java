@@ -18,6 +18,9 @@ public class ModConfig {
     public boolean showBalanceOnJoin = false;
     public double pvpMoneyTransferPercent = 0;
     public double pvpMoneyTransferFlat = 0;
+    public boolean basicIncome = true;
+    public double basicIncomeAmount = 50;
+    public int maxIncomeSavingsDays = 5;
 
     public String economyBridge = "none";
     public boolean enforceNonNegativeBalance = true;
@@ -26,9 +29,6 @@ public class ModConfig {
     public String currencyNameMultiple = "gp";
     public String thousandsSeparator = ",";
     public double startBalance = 100;
-    public boolean basicIncome = true;
-    public double basicIncomeAmount = 50;
-    public int maxIncomeSavingsDays = 5;
 
     public void save() {
         try {
@@ -58,6 +58,12 @@ public class ModConfig {
             conf.pvpMoneyTransferPercent = obj.get(Double.class, "pvpMoneyTransferPercent");
         if(obj.containsKey("pvpMoneyTransferFlat"))
             conf.pvpMoneyTransferFlat = obj.get(Double.class, "pvpMoneyTransferFlat");
+        if(obj.containsKey("basicIncome"))
+            conf.basicIncome = obj.get(Boolean.class, "basicIncome");
+        if(obj.containsKey("basicIncomeAmount"))
+            conf.basicIncomeAmount = obj.get(Double.class, "basicIncomeAmount");
+        if(obj.containsKey("maxIncomeSavingsDays"))
+            conf.maxIncomeSavingsDays = obj.get(Integer.class, "maxIncomeSavingsDays");
 
         if(obj.containsKey("economyBridge"))
             conf.economyBridge = obj.get(String.class, "economyBridge");
@@ -72,12 +78,6 @@ public class ModConfig {
             conf.thousandsSeparator = obj.get(String.class, "thousandsSeparator");
         if(obj.containsKey("startBalance"))
             conf.startBalance = obj.get(Double.class, "startBalance");
-        if(obj.containsKey("basicIncome"))
-            conf.basicIncome = obj.get(Boolean.class, "basicIncome");
-        if(obj.containsKey("basicIncomeAmount"))
-            conf.basicIncomeAmount = obj.get(Double.class, "basicIncomeAmount");
-        if(obj.containsKey("maxIncomeSavingsDays"))
-            conf.maxIncomeSavingsDays = obj.get(Integer.class, "maxIncomeSavingsDays");
 
         return conf;
     }

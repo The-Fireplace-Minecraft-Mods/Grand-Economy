@@ -3,12 +3,8 @@
   "package": "the_fireplace.grandeconomy.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "PlayerManagerMixin",
     "ServerPlayerEntityMixin",
     "ServerWorldMixin"
-  ],
-  "client": [
-    "ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

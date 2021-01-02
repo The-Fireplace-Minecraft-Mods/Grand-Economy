@@ -1,5 +1,7 @@
 package the_fireplace.grandeconomy.requesthandler;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.UUID;
 
 public interface IGrandEconomyApi {
@@ -10,7 +12,7 @@ public interface IGrandEconomyApi {
      * @return
      * The balance
      */
-    double getBalance(UUID uuid, Boolean isPlayer);
+    double getBalance(UUID uuid, @Nullable Boolean isPlayer);
 
     /**
      * Check the account's balance
@@ -45,7 +47,7 @@ public interface IGrandEconomyApi {
      * @return
      * Whether the balance was successfully set or not
      */
-    boolean setBalance(UUID uuid, double amount, Boolean isPlayer);
+    boolean setBalance(UUID uuid, double amount, @Nullable Boolean isPlayer);
 
     /**
      * Take from the account's balance

@@ -10,8 +10,4 @@ public abstract class AccountData extends ThreadedJsonSerializable {
         super(accountId, Directories.GE_DATA_LOCATION.resolve(saveFolder));
         SaveTimer.registerSaveFunction((short) 5, this::save);
     }
-
-    protected UUID getId() {
-        return objectId;
-    }
 }

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.io.AccountData;
-import the_fireplace.grandeconomy.utils.TimeUtils;
+import the_fireplace.grandeconomy.time.CurrentDay;
 import the_fireplace.lib.api.io.JsonReader;
 
 import java.util.Map;
@@ -24,15 +24,17 @@ public class LoginTracker extends AccountData {
             account.delete();
     }
 
-    private long lastLogin = TimeUtils.getCurrentDay();
+    private long lastLogin = CurrentDay.getCurrentDay();
 
     private LoginTracker(UUID uuid) {
         super(uuid, "login");
-        loadSavedData();
+        if (!loadSavedData()) {
+            markChanged();
+        }
     }
 
     public void addLogin() {
-        long now = TimeUtils.getCurrentDay();
+        long now = CurrentDay.getCurrentDay();
         long daysSinceLastLogin = now - this.lastLogin;
         this.lastLogin = now;
 

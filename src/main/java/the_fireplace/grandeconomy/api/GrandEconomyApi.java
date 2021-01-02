@@ -1,13 +1,13 @@
 package the_fireplace.grandeconomy.api;
 
-import com.google.common.collect.Maps;
-import the_fireplace.grandeconomy.GrandEconomy;
+import org.jetbrains.annotations.Nullable;
 import the_fireplace.grandeconomy.requesthandler.GrandEconomyApiImpl;
 import the_fireplace.grandeconomy.requesthandler.IGrandEconomyApi;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "RedundantSuppression"})
 public final class GrandEconomyApi {
@@ -20,7 +20,7 @@ public final class GrandEconomyApi {
      * @return
      * The balance
      */
-    public static double getBalance(UUID uuid, Boolean isPlayer) {
+    public static double getBalance(UUID uuid, @Nullable Boolean isPlayer) {
         return API.getBalance(uuid, isPlayer);
     }
 
@@ -61,7 +61,7 @@ public final class GrandEconomyApi {
      * @return
      * Whether the balance was successfully set or not
      */
-    public static boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
+    public static boolean setBalance(UUID uuid, double amount, @Nullable Boolean isPlayer) {
         return API.setBalance(uuid, amount, isPlayer);
     }
 
@@ -109,7 +109,7 @@ public final class GrandEconomyApi {
         return API.getEconomyModId();
     }
 
-    private static final Map<String, EconomyHandler> econHandlers = Maps.newHashMap();
+    private static final Map<String, EconomyHandler> econHandlers = new ConcurrentHashMap<>();
 
     /**
      * Check if an economy handler exists for the given modid or alias
@@ -120,11 +120,12 @@ public final class GrandEconomyApi {
         return econHandlers.containsKey(key);
     }
 
-    /**
-     * Get a map of modid/alias -> Economy Handler. This generally shouldn't be used unless you have a good reason to do so.
-     */
-    public static Map<String, EconomyHandler> getEconomyHandlers() {
-        return Collections.unmodifiableMap(econHandlers);
+    public static EconomyHandler getEconomyHandler(String key) {
+        return econHandlers.get(key);
+    }
+
+    public static Collection<String> getEconomyHandlers() {
+        return econHandlers.keySet();
     }
 
     /**
@@ -139,7 +140,7 @@ public final class GrandEconomyApi {
      * @return false if registering the handler failed (currently the only reason is if another handler is registered with the given modid) and true otherwise
      */
     public static boolean registerEconomyHandler(EconomyHandler handler, String modid, String... aliases) {
-        if(econHandlers.containsKey(modid) || modid.equalsIgnoreCase(GrandEconomy.MODID))
+        if(econHandlers.containsKey(modid))
             return false;
         econHandlers.put(modid, handler);
         for(String alias: aliases)

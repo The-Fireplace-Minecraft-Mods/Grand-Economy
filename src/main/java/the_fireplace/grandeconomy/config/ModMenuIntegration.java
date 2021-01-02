@@ -87,7 +87,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
     private void addBridgingCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory bridging) {
         bridging.addEntry(entryBuilder.startStringDropdownMenu(new TranslatableText("text.config.grandeconomy.option.economyBridge"), GrandEconomy.config.economyBridge)
-            .setSelections(GrandEconomyApi.getEconomyHandlers().keySet())
+            .setSelections(GrandEconomyApi.getEconomyHandlers())
             .setSuggestionMode(false)
             .setDefaultValue(new ModConfig().economyBridge)
             .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.economyBridge.desc", 4))
