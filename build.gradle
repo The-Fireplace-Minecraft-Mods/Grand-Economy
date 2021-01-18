@@ -16,7 +16,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = project.archives_base_name
-version = "${project.minecraft_version}-${project.mod_version}"
+version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group as String
 
 dependencies {
@@ -32,7 +32,7 @@ dependencies {
 	include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
 	modImplementation "the_fireplace.lib:Fireplace-Lib:${project.fireplacelib_version}"
 	include "the_fireplace.lib:Fireplace-Lib:${project.fireplacelib_version}"
-	modApi("io.github.gunpowder:gunpowder-api:${gunpowder_version}") {
+	modCompileOnly("io.github.gunpowder:gunpowder-api:${gunpowder_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
