@@ -1,7 +1,15 @@
 plugins {
+	// Dependencies
 	id 'fabric-loom' version '0.5-SNAPSHOT'
-	id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.github.johnrengelman.shadow" version "5.0.0"
+	// Mod Hosting Publish
+	id "com.matthewprenger.cursegradle" version "1.4.0"
+	id "com.modrinth.minotaur" version "1.1.0"
+	// Maven Publish
+	id "com.jfrog.bintray" version "1.8.4"
+	id "maven-publish"
+	id "java"
+	id "java-library"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -24,7 +32,7 @@ dependencies {
 	include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
 	modImplementation "the_fireplace.lib:Fireplace-Lib:${project.fireplacelib_version}"
 	include "the_fireplace.lib:Fireplace-Lib:${project.fireplacelib_version}"
-	modApi("io.github.gunpowder:gunpowder-api:${gunpowder_version}+${minecraft_version}") {
+	modApi("io.github.gunpowder:gunpowder-api:${gunpowder_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
@@ -89,7 +97,8 @@ curseforge {
 	project {
 		id = '312141'
 		changelog = file('changelog.txt')
-		releaseType = 'release'
+		releaseType = project.release_type
+		addGameVersion project.minecraft_version
 		addGameVersion '1.16.4'
 		addGameVersion '1.16.3'
 		addGameVersion '1.16.2'
@@ -107,7 +116,49 @@ curseforge {
 		}
 	}
 	options {
-        javaIntegration = false
-        forgeGradleIntegration = false
-    }
+		javaIntegration = false
+		forgeGradleIntegration = false
+	}
+}
+
+import com.modrinth.minotaur.TaskModrinthUpload
+
+task publishModrinth (type: TaskModrinthUpload) {
+	token = project.hasProperty("modrinthApiKey") ? project.modrinthApiKey : "empty"
+	projectId = '000000'
+	versionNumber = version
+	versionName = project.mod_version
+	uploadFile = jar // This is the java jar task
+	changelog = file('changelog.txt').getText()
+	releaseType = project.release_type
+	addGameVersion(project.minecraft_version as String)
+	addGameVersion('1.16.4')
+	addGameVersion('1.16.3')
+	addGameVersion('1.16.2')
+	addLoader('fabric')
+}
+
+bintray {
+	user = project.hasProperty("bintrayUser") ? project.bintrayUser : "empty"
+	key = project.hasProperty("bintrayApiKey") ? project.bintrayApiKey : "empty"
+	setPublications("mavenJava")
+	publish = true
+	pkg {
+		repo = "mc-mods"
+		name = "grand-economy"
+		licenses = ["GPL-2.0"]
+	}
+}
+
+def remapSourcesJar = tasks.getByName("remapSourcesJar")
+
+publishing {
+	publications {
+		mavenJava(MavenPublication.class) {
+			artifact(remapJar)
+			artifact(sourcesJar) {
+				builtBy(remapSourcesJar)
+			}
+		}
+	}
 }
