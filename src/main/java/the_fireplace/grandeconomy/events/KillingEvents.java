@@ -25,10 +25,10 @@ public class KillingEvents {
                 GrandEconomyApi.getBalance(dyingPlayer.getUuid(), true)
             );
             GrandEconomyApi.takeFromBalance(dyingPlayer.getUuid(), amountTaken, true);
-            dyingPlayer.sendMessage(GrandEconomy.getTranslationService().getTextForTarget(dyingPlayer.getUuid(), "grandeconomy.killed_balance", GrandEconomyApi.getBalanceFormatted(dyingPlayer.getUuid(), true)), false);
+            dyingPlayer.sendMessage(GrandEconomy.getTranslator().getTextForTarget(dyingPlayer.getUuid(), "grandeconomy.killed_balance", GrandEconomyApi.getBalanceFormatted(dyingPlayer.getUuid(), true)), false);
 
             GrandEconomyApi.addToBalance(killer.getUuid(), amountTaken, true);
-            killer.sendMessage(GrandEconomy.getTranslationService().getTextForTarget(killer.getUuid(), "grandeconomy.killer_balance", GrandEconomyApi.getBalanceFormatted(killer.getUuid(), true)), false);
+            killer.sendMessage(GrandEconomy.getTranslator().getTextForTarget(killer.getUuid(), "grandeconomy.killer_balance", GrandEconomyApi.getBalanceFormatted(killer.getUuid(), true)), false);
         }
     }
 

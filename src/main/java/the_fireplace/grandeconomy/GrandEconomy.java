@@ -9,7 +9,8 @@ import the_fireplace.grandeconomy.api.EconomyHandler;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.config.ModConfig;
 import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconHandler;
-import the_fireplace.lib.api.chat.TranslationService;
+import the_fireplace.lib.api.chat.Translator;
+import the_fireplace.lib.api.chat.TranslatorManager;
 import the_fireplace.lib.impl.FireplaceLib;
 
 import java.util.UUID;
@@ -28,19 +29,20 @@ public class GrandEconomy implements ModInitializer {
         return FireplaceLib.getServer();
     }
 
-    private static TranslationService translationService = null;
-    public static TranslationService getTranslationService() {
-        if (translationService == null) {
-            translationService = TranslationService.get(MODID);
+    private static final TranslatorManager translatorManager = TranslatorManager.getInstance();
+    private static Translator translator = null;
+    public static Translator getTranslator() {
+        if (translator == null) {
+            translator = translatorManager.getTranslator(MODID);
         }
-        return translationService;
+        return translator;
     }
 
     @Override
     public void onInitialize() {
         config = ModConfig.load();
         config.save();
-        TranslationService.initialize(MODID);
+        translatorManager.addTranslator(MODID);
 
         ServerLifecycleEvents.SERVER_STARTING.register(s -> {
             loadEconomy();

@@ -5,7 +5,7 @@ import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
 import the_fireplace.grandeconomy.io.AccountData;
 import the_fireplace.grandeconomy.time.CurrentDay;
-import the_fireplace.lib.api.io.JsonReader;
+import the_fireplace.lib.api.io.JsonObjectReader;
 
 import java.util.Map;
 import java.util.UUID;
@@ -20,8 +20,9 @@ public class LoginTracker extends AccountData {
 
     public static void delete(UUID accountId) {
         LoginTracker account = PLAYER_TIME_TRACKER_INSTANCES.remove(accountId);
-        if(account != null)
-            account.delete();
+        if (account != null) {
+            account.deleteSaveFile();
+        }
     }
 
     private long lastLogin = CurrentDay.getCurrentDay();
@@ -38,8 +39,9 @@ public class LoginTracker extends AccountData {
         long daysSinceLastLogin = now - this.lastLogin;
         this.lastLogin = now;
 
-        if (daysSinceLastLogin == 0)
+        if (daysSinceLastLogin == 0) {
             return;
+        }
 
         distributeBasicIncome(daysSinceLastLogin);
     }
@@ -53,7 +55,7 @@ public class LoginTracker extends AccountData {
     }
 
     @Override
-    public void readFromJson(JsonReader reader) {
+    public void readFromJson(JsonObjectReader reader) {
         lastLogin = reader.readLong("lastLogin", lastLogin);
     }
 

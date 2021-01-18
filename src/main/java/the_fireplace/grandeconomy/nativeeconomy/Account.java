@@ -3,7 +3,7 @@ package the_fireplace.grandeconomy.nativeeconomy;
 import com.google.gson.JsonObject;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.io.AccountData;
-import the_fireplace.lib.api.io.JsonReader;
+import the_fireplace.lib.api.io.JsonObjectReader;
 
 import java.util.Map;
 import java.util.UUID;
@@ -18,8 +18,9 @@ public class Account extends AccountData {
 
     public static void delete(UUID accountId) {
         Account account = ACCOUNT_INSTANCES.remove(accountId);
-        if(account != null)
-            account.delete();
+        if (account != null) {
+            account.deleteSaveFile();
+        }
     }
 
     private double balance = GrandEconomy.config.startBalance;
@@ -50,7 +51,7 @@ public class Account extends AccountData {
     }
 
     @Override
-    public void readFromJson(JsonReader reader) {
+    public void readFromJson(JsonObjectReader reader) {
         balance = reader.readDouble("balance", balance);
         isPlayer = reader.readBool("isPlayer", calculateIsPlayer());
     }

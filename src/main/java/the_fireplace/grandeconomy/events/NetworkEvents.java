@@ -10,7 +10,7 @@ public class NetworkEvents {
     public static void onPlayerJoinServer(ServerPlayerEntity player) {
         LoginTracker.get(player.getUuid()).addLogin();
         if (GrandEconomy.config.showBalanceOnJoin) {
-            Text joinMessage = GrandEconomy.getTranslationService().getTextForTarget(
+            Text joinMessage = GrandEconomy.getTranslator().getTextForTarget(
                 player.getUuid(),
                 "commands.grandeconomy.common.balance",
                 GrandEconomyApi.getBalanceFormatted(player.getUuid(), true)
