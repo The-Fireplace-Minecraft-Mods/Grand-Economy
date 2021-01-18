@@ -1,2 +1,2 @@
 Fixes:
-Fixed crash on launch
+Prevent NaN amounts from being passed to economies.

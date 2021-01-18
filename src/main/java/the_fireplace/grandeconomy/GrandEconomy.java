@@ -49,58 +49,7 @@ public class GrandEconomy {
     public static MinecraftServer minecraftServer;
 
     private static IEconHandler economy;
-    private static final IEconHandler economyWrapper = new IEconHandler() {
-        @Override
-        public double getBalance(UUID uuid, Boolean isPlayer) {
-            return economy.getBalance(uuid, isPlayer);
-        }
-
-        @Override
-        public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
-            if(globalConfig.enforceNonNegativeBalance && amount < 0) {
-                if(getBalance(uuid, isPlayer)+amount < 0)
-                    return false;
-            }
-            return economy.addToBalance(uuid, amount, isPlayer);
-        }
-
-        @Override
-        public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
-            if(globalConfig.enforceNonNegativeBalance && amount > 0) {
-                if(getBalance(uuid, isPlayer)-amount < 0)
-                    return false;
-            }
-            return economy.takeFromBalance(uuid, amount, isPlayer);
-        }
-
-        @Override
-        public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
-            if(globalConfig.enforceNonNegativeBalance && amount < 0)
-                return false;
-            return economy.setBalance(uuid, amount, isPlayer);
-        }
-
-        @Override
-        public String getCurrencyName(double amount) {
-            return economy.getCurrencyName(amount);
-        }
-
-        @Override
-        public String getFormattedCurrency(double amount) {
-            return economy.getFormattedCurrency(amount);
-        }
-
-        @Override
-        public String getId() {
-            return economy.getId();
-        }
-
-        @Override
-        public void init() {
-            economy.init();
-        }
-    };
-
+    private static final IEconHandler economyWrapper = new EconomyHandlerWrapper();
     public static IEconHandler getEconomy() {
         return economyWrapper;
     }
@@ -260,5 +209,68 @@ public class GrandEconomy {
         @Config.Comment("The max number of days since last login the player will be paid basic income for. Ex. If this option is set to 5, the mod will save income for 5 days of the player being offline, to give to the player when they log in.")
         @Config.RangeInt(min=0)
         public static int maxBasicIncomeDays = 5;
+    }
+
+    private static class EconomyHandlerWrapper implements IEconHandler {
+        @Override
+        public double getBalance(UUID uuid, Boolean isPlayer) {
+            double balance = economy.getBalance(uuid, isPlayer);
+
+            return Double.isNaN(balance) ? 0 : balance;
+        }
+
+        @Override
+        public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
+            if (Double.isNaN(amount)) {
+                return false;
+            }
+            if (globalConfig.enforceNonNegativeBalance && amount < 0) {
+                if(getBalance(uuid, isPlayer)+amount < 0)
+                    return false;
+            }
+            return economy.addToBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
+            if (Double.isNaN(amount)) {
+                return false;
+            }
+            if(globalConfig.enforceNonNegativeBalance && amount > 0) {
+                if(getBalance(uuid, isPlayer)-amount < 0)
+                    return false;
+            }
+            return economy.takeFromBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
+            if (Double.isNaN(amount)) {
+                return false;
+            }
+            if(globalConfig.enforceNonNegativeBalance && amount < 0)
+                return false;
+            return economy.setBalance(uuid, amount, isPlayer);
+        }
+
+        @Override
+        public String getCurrencyName(double amount) {
+            return economy.getCurrencyName(amount);
+        }
+
+        @Override
+        public String getFormattedCurrency(double amount) {
+            return economy.getFormattedCurrency(amount);
+        }
+
+        @Override
+        public String getId() {
+            return economy.getId();
+        }
+
+        @Override
+        public void init() {
+            economy.init();
+        }
     }
 }
