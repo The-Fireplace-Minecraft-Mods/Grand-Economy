@@ -6,6 +6,7 @@ Full compatibility with Gunpowder API
 Changes:
 Dropped Forge Support
 Updated to 1.16.X
+/wallet balance now requires choosing a player (was previously optional). Use /balance to see your own balance.
 
 Fixes/Internal Changes:
 Performance improvements for saving and loading account data

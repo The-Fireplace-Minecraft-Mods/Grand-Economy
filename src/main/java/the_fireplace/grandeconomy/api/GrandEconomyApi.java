@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"UnusedReturnValue", "unused", "RedundantSuppression"})
 public final class GrandEconomyApi {
-    private static final IGrandEconomyApi API = new GrandEconomyApiImpl();
+    private static final IGrandEconomyApi API = new GrandEconomyApiImpl();//TODO deal with this
 
     /**
      * Check the account's balance
