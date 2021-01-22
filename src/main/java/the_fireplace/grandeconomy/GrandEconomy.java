@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.api.EconomyHandler;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.command.GeCommands;
 import the_fireplace.grandeconomy.config.ModConfig;
 import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconHandler;
 import the_fireplace.lib.api.chat.Translator;

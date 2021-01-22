@@ -5,17 +5,21 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
-import the_fireplace.grandeconomy.command.framework.*;
+import the_fireplace.grandeconomy.command.framework.CommonTranslationKeys;
+import the_fireplace.grandeconomy.command.framework.RegisterableCommand;
+import the_fireplace.grandeconomy.command.framework.Requirements;
+import the_fireplace.grandeconomy.command.framework.SendFeedback;
 
 public final class PayCommand implements RegisterableCommand {
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
-        commandDispatcher.register(CommandManager.literal("pay")
+    public CommandNode<ServerCommandSource> register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
+        return commandDispatcher.register(CommandManager.literal("pay")
             .requires(Requirements::player)
             .then(CommandManager.argument("player", EntityArgumentType.player())
                 .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0))

@@ -6,20 +6,22 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.GrandEconomyApi;
-import the_fireplace.grandeconomy.command.framework.CommandManager;
+import the_fireplace.grandeconomy.command.framework.AliasedArgumentType;
 import the_fireplace.grandeconomy.command.framework.RegisterableCommand;
 import the_fireplace.grandeconomy.command.framework.Requirements;
 import the_fireplace.grandeconomy.command.framework.SendFeedback;
 
 public final class WalletCommand implements RegisterableCommand {
     @Override
-    public void register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
+    public CommandNode<ServerCommandSource> register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> walletCommand = CommandManager.literal("wallet")
             .requires(Requirements::manageGameSettings);
 
@@ -38,7 +40,7 @@ public final class WalletCommand implements RegisterableCommand {
                 )
             )
         );
-        walletCommand.then(CommandManager.aliased("give", "add")
+        walletCommand.then(AliasedArgumentType.aliased("give", "add")
             .then(CommandManager.argument("player", EntityArgumentType.player())
                 .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0))
                     .executes(this::runGiveCommand)
@@ -53,7 +55,7 @@ public final class WalletCommand implements RegisterableCommand {
             )
         );
 
-        commandDispatcher.register(walletCommand);
+        return commandDispatcher.register(walletCommand);
     }
 
     private int runSetCommand(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {
@@ -89,6 +91,7 @@ public final class WalletCommand implements RegisterableCommand {
         if (GrandEconomyApi.getBalance(targetPlayer.getUuid(), true) - amount < 0) {
             return SendFeedback.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
         }
+        GrandEconomyApi.takeFromBalance(targetPlayer.getUuid(), amount, true);
         SendFeedback.basic(command, "commands.grandeconomy.wallet.taken", GrandEconomyApi.formatCurrency(amount), targetPlayer.getDisplayName());
         return Command.SINGLE_SUCCESS;
     }

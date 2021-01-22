@@ -67,5 +67,7 @@
   "text.config.grandeconomy.option.basicIncomeAmount.desc": "Amount to be given to a player each day.",
   "text.config.grandeconomy.option.maxIncomeSavingsDays": "Max Basic Income Savings (in days)",
   "text.config.grandeconomy.option.maxIncomeSavingsDays.desc[0]": "The max number of days since last login",
-  "text.config.grandeconomy.option.maxIncomeSavingsDays.desc[1]": "the player will be paid basic income for."
+  "text.config.grandeconomy.option.maxIncomeSavingsDays.desc[1]": "the player will be paid basic income for.",
+
+  "argument.aliased.invalid": "Invalid "
 }
