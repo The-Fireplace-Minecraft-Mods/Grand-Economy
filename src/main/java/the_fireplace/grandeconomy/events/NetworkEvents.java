@@ -3,7 +3,7 @@ package the_fireplace.grandeconomy.events;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.api.CurrencyAPI;
 import the_fireplace.grandeconomy.logintracker.LoginTracker;
 
 public class NetworkEvents {
@@ -13,7 +13,7 @@ public class NetworkEvents {
             Text joinMessage = GrandEconomy.getTranslator().getTextForTarget(
                 player.getUuid(),
                 "commands.grandeconomy.common.balance",
-                GrandEconomyApi.getBalanceFormatted(player.getUuid(), true)
+                CurrencyAPI.getInstance().getBalanceFormatted(player.getUuid(), true)
             );
             player.sendMessage(joinMessage, false);
         }

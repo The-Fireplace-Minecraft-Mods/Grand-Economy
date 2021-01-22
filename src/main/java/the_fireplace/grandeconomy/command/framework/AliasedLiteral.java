@@ -17,12 +17,12 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public final class AliasedArgumentType implements ArgumentType<String> {
+public final class AliasedLiteral implements ArgumentType<String> {
     private static final SimpleCommandExceptionType INVALID_ALIASED_LITERAL = new SimpleCommandExceptionType(new TranslatableText("argument.aliased.invalid"));
     private final String literal;
     private final String[] aliases;
 
-    private AliasedArgumentType(String literal, String... aliases) {
+    private AliasedLiteral(String literal, String... aliases) {
         this.literal = literal;
         this.aliases = aliases;
     }
@@ -32,8 +32,8 @@ public final class AliasedArgumentType implements ArgumentType<String> {
         return CommandManager.argument(String.join("|", allVariants), aliasedArgumentType(literal, aliases));
     }
 
-    public static AliasedArgumentType aliasedArgumentType(String literal, String... aliases) {
-        return new AliasedArgumentType(literal, aliases);
+    public static AliasedLiteral aliasedArgumentType(String literal, String... aliases) {
+        return new AliasedLiteral(literal, aliases);
     }
 
     @Override

@@ -6,8 +6,8 @@ import io.github.gunpowder.api.GunpowderModule;
 import io.github.gunpowder.api.module.currency.modelhandlers.BalanceHandler;
 import org.jetbrains.annotations.NotNull;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.api.EconomyHandler;
-import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.api.Economy;
+import the_fireplace.grandeconomy.api.EconomyRegistry;
 
 import java.util.Locale;
 import java.util.Set;
@@ -29,9 +29,10 @@ public class GrandEconomyGunpowderModule implements GunpowderModule {
     @Override
     public void onInitialize() {
         if (GUNPOWDER_NAMES.contains(GrandEconomy.config.economyBridge.toLowerCase(Locale.ROOT))) {
-            EconomyHandler gunpowderEconomyHandler = new GunpowderEconomyHandler();
-            GrandEconomyApi.registerEconomyHandler(gunpowderEconomyHandler, "gunpowder-api", "gunpowder", "gunpowder-currency");
+            Economy gunpowderEconomy = new GunpowderEconomy();
+            EconomyRegistry.getInstance().registerEconomyHandler(gunpowderEconomy, "gunpowder-api", "gunpowder", "gunpowder-currency");
         } else {
+            //noinspection LawOfDemeter
             GunpowderMod.getInstance().getRegistry().registerModelHandler(BalanceHandler.class, new GrandEconomyGunpowderBalanceHandler.Supplier());
         }
     }

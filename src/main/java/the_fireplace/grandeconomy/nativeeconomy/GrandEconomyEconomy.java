@@ -1,11 +1,11 @@
 package the_fireplace.grandeconomy.nativeeconomy;
 
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.api.EconomyHandler;
+import the_fireplace.grandeconomy.api.Economy;
 
 import java.util.UUID;
 
-public class GrandEconomyEconHandler implements EconomyHandler {
+public class GrandEconomyEconomy implements Economy {
     @Override
     public double getBalance(UUID uuid, Boolean isPlayer) {
         return Account.get(uuid).getBalance();

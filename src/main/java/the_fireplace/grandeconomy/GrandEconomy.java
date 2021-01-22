@@ -5,11 +5,11 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import the_fireplace.grandeconomy.api.EconomyHandler;
-import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.api.Economy;
+import the_fireplace.grandeconomy.api.EconomyRegistry;
 import the_fireplace.grandeconomy.command.GeCommands;
 import the_fireplace.grandeconomy.config.ModConfig;
-import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconHandler;
+import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconomy;
 import the_fireplace.lib.api.chat.Translator;
 import the_fireplace.lib.api.chat.TranslatorManager;
 import the_fireplace.lib.impl.FireplaceLib;
@@ -22,7 +22,7 @@ public class GrandEconomy implements ModInitializer {
     public static ModConfig config;
 
     private static final BoundedEconomyWrapper ECONOMY_WRAPPER = new BoundedEconomyWrapper();
-    public static EconomyHandler getEconomy() {
+    public static Economy getEconomy() {
         return ECONOMY_WRAPPER;
     }
 
@@ -52,21 +52,21 @@ public class GrandEconomy implements ModInitializer {
     }
 
     static void loadEconomy() {
-        EconomyHandler economy;
-        if (GrandEconomyApi.hasEconomyHandler(GrandEconomy.config.economyBridge)) {
-            economy = GrandEconomyApi.getEconomyHandler(GrandEconomy.config.economyBridge);
+        Economy economy;
+        if (EconomyRegistry.getInstance().hasEconomyHandler(GrandEconomy.config.economyBridge)) {
+            economy = EconomyRegistry.getInstance().getEconomyHandler(GrandEconomy.config.economyBridge);
         } else {
-            economy = new GrandEconomyEconHandler();
-            GrandEconomyApi.registerEconomyHandler(economy, MODID);
+            economy = new GrandEconomyEconomy();
+            EconomyRegistry.getInstance().registerEconomyHandler(economy, MODID);
         }
         economy.init();
         ECONOMY_WRAPPER.setEconomy(economy);
     }
 
-    private static class BoundedEconomyWrapper implements EconomyHandler {
-        EconomyHandler economy;
+    private static class BoundedEconomyWrapper implements Economy {
+        Economy economy;
 
-        private void setEconomy(EconomyHandler economy) {
+        private void setEconomy(Economy economy) {
             this.economy = economy;
         }
 

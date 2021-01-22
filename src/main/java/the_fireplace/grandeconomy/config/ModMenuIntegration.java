@@ -12,7 +12,7 @@ import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.api.EconomyRegistry;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,13 +87,13 @@ public class ModMenuIntegration implements ModMenuApi {
 
     private void addBridgingCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory bridging) {
         bridging.addEntry(entryBuilder.startStringDropdownMenu(new TranslatableText("text.config.grandeconomy.option.economyBridge"), GrandEconomy.config.economyBridge)
-            .setSelections(GrandEconomyApi.getEconomyHandlers())
+            .setSelections(EconomyRegistry.getInstance().getEconomyHandlers())
             .setSuggestionMode(false)
             .setDefaultValue(new ModConfig().economyBridge)
             .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.economyBridge.desc", 4))
             .setSaveConsumer(newValue -> GrandEconomy.config.economyBridge = newValue)
             .setErrorSupplier(value ->
-                GrandEconomyApi.hasEconomyHandler(value)
+                EconomyRegistry.getInstance().hasEconomyHandler(value)
                     ? Optional.empty()
                     : Optional.of(new TranslatableText("text.config.grandeconomy.option.economyBridge.err")))
             .build());

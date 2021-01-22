@@ -13,13 +13,20 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.api.GrandEconomyApi;
-import the_fireplace.grandeconomy.command.framework.AliasedArgumentType;
+import the_fireplace.grandeconomy.api.CurrencyAPI;
+import the_fireplace.grandeconomy.command.framework.AliasedLiteral;
 import the_fireplace.grandeconomy.command.framework.RegisterableCommand;
 import the_fireplace.grandeconomy.command.framework.Requirements;
 import the_fireplace.grandeconomy.command.framework.SendFeedback;
 
 public final class WalletCommand implements RegisterableCommand {
+    
+    private final CurrencyAPI currencyAPI;
+    
+    WalletCommand() {
+        this.currencyAPI = CurrencyAPI.getInstance();
+    }
+    
     @Override
     public CommandNode<ServerCommandSource> register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> walletCommand = CommandManager.literal("wallet")
@@ -40,7 +47,7 @@ public final class WalletCommand implements RegisterableCommand {
                 )
             )
         );
-        walletCommand.then(AliasedArgumentType.aliased("give", "add")
+        walletCommand.then(AliasedLiteral.aliased("give", "add")
             .then(CommandManager.argument("player", EntityArgumentType.player())
                 .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0))
                     .executes(this::runGiveCommand)
@@ -64,35 +71,35 @@ public final class WalletCommand implements RegisterableCommand {
         if (amount < 0) {
             return SendFeedback.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
         }
-        GrandEconomyApi.setBalance(targetPlayer.getUuid(), amount, true);
-        command.getSource().sendFeedback(GrandEconomy.getTranslator().getTextForTarget(command.getSource(), "commands.grandeconomy.wallet.set", targetPlayer.getDisplayName(), GrandEconomyApi.formatCurrency(amount)), false);
+        currencyAPI.setBalance(targetPlayer.getUuid(), amount, true);
+        command.getSource().sendFeedback(GrandEconomy.getTranslator().getTextForTarget(command.getSource(), "commands.grandeconomy.wallet.set", targetPlayer.getDisplayName(), currencyAPI.formatCurrency(amount)), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private int runBalanceCommand(CommandContext<ServerCommandSource> command, ServerPlayerEntity targetPlayer) {
-        SendFeedback.basic(command, "commands.grandeconomy.wallet.balance", targetPlayer.getDisplayName(), GrandEconomyApi.getBalanceFormatted(targetPlayer.getUuid(), true));
+        SendFeedback.basic(command, "commands.grandeconomy.wallet.balance", targetPlayer.getDisplayName(), currencyAPI.getBalanceFormatted(targetPlayer.getUuid(), true));
         return Command.SINGLE_SUCCESS;
     }
 
     private int runGiveCommand(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {
         PlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "player");
         double amount = command.getArgument("amount", Double.class);
-        if (GrandEconomyApi.getBalance(targetPlayer.getUuid(), true) + amount < 0) {
+        if (currencyAPI.getBalance(targetPlayer.getUuid(), true) + amount < 0) {
             return SendFeedback.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
         }
-        GrandEconomyApi.addToBalance(targetPlayer.getUuid(), amount, true);
-        SendFeedback.basic(command, "commands.grandeconomy.wallet.given", GrandEconomyApi.formatCurrency(amount), targetPlayer.getDisplayName());
+        currencyAPI.addToBalance(targetPlayer.getUuid(), amount, true);
+        SendFeedback.basic(command, "commands.grandeconomy.wallet.given", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
         return Command.SINGLE_SUCCESS;
     }
 
     private int runTakeCommand(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {
         PlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "target");
         double amount = command.getArgument("amount", Double.class);
-        if (GrandEconomyApi.getBalance(targetPlayer.getUuid(), true) - amount < 0) {
+        if (currencyAPI.getBalance(targetPlayer.getUuid(), true) - amount < 0) {
             return SendFeedback.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
         }
-        GrandEconomyApi.takeFromBalance(targetPlayer.getUuid(), amount, true);
-        SendFeedback.basic(command, "commands.grandeconomy.wallet.taken", GrandEconomyApi.formatCurrency(amount), targetPlayer.getDisplayName());
+        currencyAPI.takeFromBalance(targetPlayer.getUuid(), amount, true);
+        SendFeedback.basic(command, "commands.grandeconomy.wallet.taken", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
         return Command.SINGLE_SUCCESS;
     }
 }

@@ -2,7 +2,7 @@ package the_fireplace.grandeconomy.logintracker;
 
 import com.google.gson.JsonObject;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.api.GrandEconomyApi;
+import the_fireplace.grandeconomy.api.CurrencyAPI;
 import the_fireplace.grandeconomy.io.AccountData;
 import the_fireplace.grandeconomy.time.CurrentDay;
 import the_fireplace.lib.api.io.JsonObjectReader;
@@ -50,7 +50,7 @@ public class LoginTracker extends AccountData {
         if (GrandEconomy.config.basicIncome) {
             if (days > GrandEconomy.config.maxIncomeSavingsDays)
                 days = GrandEconomy.config.maxIncomeSavingsDays;
-            GrandEconomyApi.addToBalance(getId(), days * GrandEconomy.config.basicIncomeAmount, true);
+            CurrencyAPI.getInstance().addToBalance(getId(), days * GrandEconomy.config.basicIncomeAmount, true);
         }
     }
 

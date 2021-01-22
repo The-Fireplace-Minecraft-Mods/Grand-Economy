@@ -2,12 +2,12 @@ package the_fireplace.grandeconomy.compat.gunpowder;
 
 import io.github.gunpowder.api.GunpowderMod;
 import io.github.gunpowder.api.module.currency.modelhandlers.BalanceHandler;
-import the_fireplace.grandeconomy.api.EconomyHandler;
+import the_fireplace.grandeconomy.api.Economy;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class GunpowderEconomyHandler implements EconomyHandler {
+public class GunpowderEconomy implements Economy {
 
     private BalanceHandler balanceHandler;
 

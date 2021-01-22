@@ -1,18 +1,34 @@
 package the_fireplace.grandeconomy.api;
 
+import org.jetbrains.annotations.Nullable;
+import the_fireplace.grandeconomy.impl.CurrencyManager;
+
 import java.util.UUID;
 
-public interface EconomyHandler {
+@SuppressWarnings("unused")
+public interface CurrencyAPI {
+    static CurrencyAPI getInstance() {
+        //noinspection deprecation
+        return CurrencyManager.INSTANCE;
+    }
+
     /**
      * Check the account's balance
      * @param uuid
      * The account to check the balance of
-     * @param isPlayer
-     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
      * @return
      * The balance
      */
-    double getBalance(UUID uuid, Boolean isPlayer);
+    double getBalance(UUID uuid, @Nullable Boolean isPlayer);
+
+    /**
+     * Check the account's balance
+     * @param uuid
+     * The account to check the balance of
+     * @return
+     * The balance, formatted with the currency name
+     */
+    String getBalanceFormatted(UUID uuid, Boolean isPlayer);
 
     /**
      * Add to the account's balance
@@ -28,6 +44,19 @@ public interface EconomyHandler {
     boolean addToBalance(UUID uuid, double amount, Boolean isPlayer);
 
     /**
+     * Sets the account's balance
+     * @param uuid
+     * The account to set the balance of
+     * @param amount
+     * The amount to set the account balance to
+     * @param isPlayer
+     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
+     * @return
+     * Whether the balance was successfully set or not
+     */
+    boolean setBalance(UUID uuid, double amount, @Nullable Boolean isPlayer);
+
+    /**
      * Take from the account's balance
      * @param uuid
      * The account to decrease the balance of
@@ -41,19 +70,6 @@ public interface EconomyHandler {
     boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer);
 
     /**
-     * Sets the account's balance
-     * @param uuid
-     * The account to set the balance of
-     * @param amount
-     * The amount to set the account balance to
-     * @param isPlayer
-     * If the account is known to be a player, true. If it is known not to be a player, false. null otherwise.
-     * @return
-     * Whether the balance was successfully set or not
-     */
-    boolean setBalance(UUID uuid, double amount, Boolean isPlayer);
-
-    /**
      * Gets the name of the currency for the given amount.
      * @param amount
      * The amount to check. This is typically used to determine whether singular or plural.
@@ -63,18 +79,16 @@ public interface EconomyHandler {
     String getCurrencyName(double amount);
 
     /**
-     * Gets the currency amount with the currency name/symbol attached
+     * Gets the currency amount with the currency name attached
      * @param amount
      * The currency amount
      * @return
      * The currency amount with the name attached
      */
-    String getFormattedCurrency(double amount);
+    String formatCurrency(double amount);
 
     /**
-     * Get the modid of the economy mod this is using.
+     * Get the modid of the economy Grand Economy is using for currency.
      */
-    String getId();
-
-    void init();
+    String getEconomyModId();
 }
