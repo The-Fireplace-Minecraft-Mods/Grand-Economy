@@ -3,6 +3,7 @@ package the_fireplace.grandeconomy.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -14,7 +15,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.CurrencyAPI;
-import the_fireplace.grandeconomy.command.framework.AliasedLiteral;
 import the_fireplace.grandeconomy.command.framework.RegisterableCommand;
 import the_fireplace.grandeconomy.command.framework.Requirements;
 import the_fireplace.grandeconomy.command.framework.SendFeedback;
@@ -47,13 +47,14 @@ public final class WalletCommand implements RegisterableCommand {
                 )
             )
         );
-        walletCommand.then(AliasedLiteral.aliased("give", "add")
-            .then(CommandManager.argument("player", EntityArgumentType.player())
+
+        addAliased(walletCommand, new String[]{"give", "add"},
+            CommandManager.argument("player", EntityArgumentType.player())
                 .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0))
                     .executes(this::runGiveCommand)
                 )
-            )
         );
+
         walletCommand.then(CommandManager.literal("take")
             .then(CommandManager.argument("target", EntityArgumentType.player())
                 .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0))
@@ -63,6 +64,14 @@ public final class WalletCommand implements RegisterableCommand {
         );
 
         return commandDispatcher.register(walletCommand);
+    }
+
+    private void addAliased(ArgumentBuilder<ServerCommandSource, ?> baseCommand, String[] aliases, ArgumentBuilder<ServerCommandSource, ?> remainingArgs) {
+        for (String alias: aliases) {
+            baseCommand.then(CommandManager.literal(alias)
+                .then(remainingArgs)
+            );
+        }
     }
 
     private int runSetCommand(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {

@@ -4,6 +4,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
 
 public class Requirements {
+    public static boolean entity(ServerCommandSource commandSource) {
+        return commandSource.getEntity() != null;
+    }
+
     public static boolean player(ServerCommandSource commandSource) {
         return commandSource.getEntity() instanceof PlayerEntity;
     }
