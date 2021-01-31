@@ -2,10 +2,13 @@ package the_fireplace.grandeconomy;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.api.Economy;
 import the_fireplace.grandeconomy.api.EconomyRegistry;
+import the_fireplace.grandeconomy.api.GrandEconomyEntrypoint;
+import the_fireplace.grandeconomy.api.event.EconomySelectedEvent;
 import the_fireplace.grandeconomy.command.RegisterGeCommands;
 import the_fireplace.grandeconomy.config.ModConfig;
 import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconomy;
@@ -45,6 +48,10 @@ public class GrandEconomy implements ModInitializer {
         config = ModConfig.load();
         config.save();
         translatorManager.addTranslator(MODID);
+        FabricLoader.getInstance().getEntrypointContainers("grandeconomy", GrandEconomyEntrypoint.class).forEach((entrypoint) -> {
+            GrandEconomyEntrypoint api = entrypoint.getEntrypoint();
+            api.init(EconomyRegistry.getInstance());
+        });
 
         ServerLifecycleEvents.SERVER_STARTING.register(s -> {
             loadEconomy();
@@ -53,14 +60,16 @@ public class GrandEconomy implements ModInitializer {
     }
 
     static void loadEconomy() {
+        EconomyRegistry economyRegistry = EconomyRegistry.getInstance();
         Economy economy;
-        if (EconomyRegistry.getInstance().hasEconomyHandler(GrandEconomy.config.economyBridge)) {
-            economy = EconomyRegistry.getInstance().getEconomyHandler(GrandEconomy.config.economyBridge);
+        if (economyRegistry.hasEconomyHandler(GrandEconomy.config.economyBridge)) {
+            economy = economyRegistry.getEconomyHandler(GrandEconomy.config.economyBridge);
         } else {
             economy = new GrandEconomyEconomy();
-            EconomyRegistry.getInstance().registerEconomyHandler(economy, MODID);
+            economyRegistry.registerEconomyHandler(economy, MODID);
         }
         economy.init();
         ECONOMY_WRAPPER.setEconomy(economy);
+        EconomySelectedEvent.EVENT.invoker().onEconomySelected(economy);
     }
 }

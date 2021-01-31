@@ -5,7 +5,7 @@ import the_fireplace.grandeconomy.impl.CurrencyManager;
 
 import java.util.UUID;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface CurrencyAPI {
     static CurrencyAPI getInstance() {
         //noinspection deprecation
@@ -28,7 +28,7 @@ public interface CurrencyAPI {
      * @return
      * The balance, formatted with the currency name
      */
-    String getFormattedBalance(UUID uuid, Boolean isPlayer);
+    String getFormattedBalance(UUID uuid, @Nullable Boolean isPlayer);
 
     /**
      * Add to the account's balance
@@ -41,7 +41,7 @@ public interface CurrencyAPI {
      * @return
      * Whether the amount was successfully added or not
      */
-    boolean addToBalance(UUID uuid, double amount, Boolean isPlayer);
+    boolean addToBalance(UUID uuid, double amount, @Nullable Boolean isPlayer);
 
     /**
      * Sets the account's balance
@@ -67,7 +67,7 @@ public interface CurrencyAPI {
      * @return
      * Whether the amount was successfully taken or not
      */
-    boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer);
+    boolean takeFromBalance(UUID uuid, double amount, @Nullable Boolean isPlayer);
 
     /**
      * Gets the name of the currency for the given amount.
