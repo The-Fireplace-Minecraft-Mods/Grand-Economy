@@ -6,7 +6,6 @@ To use currency from Grand Economy and/or register your own currency with Grand 
 3. Add your entrypoint class to the `grandeconomy` entrypoint in your `fabric.mod.json`
 
 #### Example entrypoint
-`
     "entrypoints": {
         "main": [
             ...
@@ -15,4 +14,3 @@ To use currency from Grand Economy and/or register your own currency with Grand 
             "your.package.YourImplementationClass"
         ]
     },
-`
