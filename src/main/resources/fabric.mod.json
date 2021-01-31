@@ -15,7 +15,7 @@
   },
 
   "license": "GPL-2.0",
-  "icon": "",
+  "icon": "assets/grandeconomy/logo.png",
 
   "environment": "*",
   "entrypoints": {
@@ -39,7 +39,7 @@
   "depends": {
     "fabricloader": ">=0.7.2",
     "fabric": "*",
-    "minecraft": "1.16.X",
+    "minecraft": ">=1.16",
     "fireplacelib": "2.X"
   }
 }
