@@ -9,7 +9,6 @@ import the_fireplace.lib.api.chat.TextPaginator;
 public final class GeCommands {
 
     public static void register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
-        //noinspection unchecked
         new HelpCommandBuilder(
             GrandEconomy.getTranslator(),
             TextPaginator.getInstance(),
@@ -17,7 +16,8 @@ public final class GeCommands {
             LiteralArgumentBuilder.literal("gehelp")
         ).addCommands(
             new BalanceCommand().register(commandDispatcher),
-            new PayCommand().register(commandDispatcher),
+            new PayCommand().register(commandDispatcher)
+        ).addSubCommands(
             new WalletCommand().register(commandDispatcher)
         ).register(commandDispatcher);
     }
