@@ -1,4 +1,4 @@
-package the_fireplace.grandeconomy.command;
+package the_fireplace.grandeconomy.command.commands;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -14,23 +14,14 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import the_fireplace.grandeconomy.GrandEconomy;
-import the_fireplace.grandeconomy.api.CurrencyAPI;
-import the_fireplace.grandeconomy.command.framework.RegisterableCommand;
-import the_fireplace.grandeconomy.command.framework.Requirements;
-import the_fireplace.grandeconomy.command.framework.SendFeedback;
+import the_fireplace.grandeconomy.command.GeCommand;
 
-public final class WalletCommand implements RegisterableCommand {
-    
-    private final CurrencyAPI currencyAPI;
-    
-    WalletCommand() {
-        this.currencyAPI = CurrencyAPI.getInstance();
-    }
+public final class WalletCommand extends GeCommand {
     
     @Override
     public CommandNode<ServerCommandSource> register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> walletCommand = CommandManager.literal("wallet")
-            .requires(Requirements::manageGameSettings);
+            .requires(requirements::manageGameSettings);
 
         walletCommand.then(CommandManager.literal("balance")
             .then(CommandManager.argument("player", EntityArgumentType.player())
@@ -78,7 +69,7 @@ public final class WalletCommand implements RegisterableCommand {
         PlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "player");
         double amount = command.getArgument("amount", Double.class);
         if (amount < 0) {
-            return SendFeedback.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
+            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
         }
         currencyAPI.setBalance(targetPlayer.getUuid(), amount, true);
         command.getSource().sendFeedback(GrandEconomy.getTranslator().getTextForTarget(command.getSource(), "commands.grandeconomy.wallet.set", targetPlayer.getDisplayName(), currencyAPI.formatCurrency(amount)), false);
@@ -86,7 +77,7 @@ public final class WalletCommand implements RegisterableCommand {
     }
 
     private int runBalanceCommand(CommandContext<ServerCommandSource> command, ServerPlayerEntity targetPlayer) {
-        SendFeedback.basic(command, "commands.grandeconomy.wallet.balance", targetPlayer.getDisplayName(), currencyAPI.getBalanceFormatted(targetPlayer.getUuid(), true));
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.balance", targetPlayer.getDisplayName(), currencyAPI.getBalanceFormatted(targetPlayer.getUuid(), true));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -94,10 +85,10 @@ public final class WalletCommand implements RegisterableCommand {
         PlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "player");
         double amount = command.getArgument("amount", Double.class);
         if (currencyAPI.getBalance(targetPlayer.getUuid(), true) + amount < 0) {
-            return SendFeedback.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
+            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
         }
         currencyAPI.addToBalance(targetPlayer.getUuid(), amount, true);
-        SendFeedback.basic(command, "commands.grandeconomy.wallet.given", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.given", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
         return Command.SINGLE_SUCCESS;
     }
 
@@ -105,10 +96,10 @@ public final class WalletCommand implements RegisterableCommand {
         PlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "target");
         double amount = command.getArgument("amount", Double.class);
         if (currencyAPI.getBalance(targetPlayer.getUuid(), true) - amount < 0) {
-            return SendFeedback.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
+            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
         }
         currencyAPI.takeFromBalance(targetPlayer.getUuid(), amount, true);
-        SendFeedback.basic(command, "commands.grandeconomy.wallet.taken", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.taken", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
         return Command.SINGLE_SUCCESS;
     }
 }

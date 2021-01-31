@@ -7,11 +7,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.api.Economy;
 import the_fireplace.grandeconomy.api.EconomyRegistry;
-import the_fireplace.grandeconomy.command.GeCommands;
+import the_fireplace.grandeconomy.command.RegisterGeCommands;
 import the_fireplace.grandeconomy.config.ModConfig;
 import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconomy;
 import the_fireplace.lib.api.chat.Translator;
 import the_fireplace.lib.api.chat.TranslatorManager;
+import the_fireplace.lib.api.command.FeedbackSender;
+import the_fireplace.lib.api.command.FeedbackSenderManager;
 import the_fireplace.lib.impl.FireplaceLib;
 
 import java.util.UUID;
@@ -38,6 +40,13 @@ public class GrandEconomy implements ModInitializer {
         }
         return translator;
     }
+    private static FeedbackSender feedbackSender = null;
+    public static FeedbackSender getFeedbackSender() {
+        if (feedbackSender == null) {
+            feedbackSender = FeedbackSenderManager.getInstance().get(getTranslator());
+        }
+        return feedbackSender;
+    }
 
     @Override
     public void onInitialize() {
@@ -47,7 +56,7 @@ public class GrandEconomy implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTING.register(s -> {
             loadEconomy();
-            GeCommands.register(s.getCommandManager().getDispatcher());
+            RegisterGeCommands.register(s.getCommandManager().getDispatcher());
         });
     }
 
