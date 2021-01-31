@@ -7,7 +7,7 @@ import the_fireplace.grandeconomy.api.CurrencyAPI;
 
 public class KillingEvents {
     public static void onPlayerDeath(ServerPlayerEntity dyingPlayer, DamageSource source) {
-        if(!dyingPlayer.world.isClient()) {
+        if (!dyingPlayer.world.isClient()) {
             double flatMoneyTransferAmount = GrandEconomy.config.pvpMoneyTransferFlat;
             double percentMoneyTransferAmount = GrandEconomy.config.pvpMoneyTransferPercent;
             if (doubleEquals(flatMoneyTransferAmount, 0) && doubleEquals(percentMoneyTransferAmount, 0))
@@ -17,18 +17,21 @@ public class KillingEvents {
                 return;
             ServerPlayerEntity killer = (ServerPlayerEntity) source.getAttacker();
 
-            if (CurrencyAPI.getInstance().getBalance(dyingPlayer.getUuid(), true) < 1)
+            CurrencyAPI currencyAPI = CurrencyAPI.getInstance();
+            double dyingPlayerBalance = currencyAPI.getBalance(dyingPlayer.getUuid(), true);
+            if (dyingPlayerBalance < 0.01) {
                 return;
+            }
             double amountTaken = constrain(
-                (CurrencyAPI.getInstance().getBalance(dyingPlayer.getUuid(), true) * percentMoneyTransferAmount) / 100 + flatMoneyTransferAmount,
+                (dyingPlayerBalance * percentMoneyTransferAmount) / 100 + flatMoneyTransferAmount,
                 0,
-                CurrencyAPI.getInstance().getBalance(dyingPlayer.getUuid(), true)
+                dyingPlayerBalance
             );
-            CurrencyAPI.getInstance().takeFromBalance(dyingPlayer.getUuid(), amountTaken, true);
-            dyingPlayer.sendMessage(GrandEconomy.getTranslator().getTextForTarget(dyingPlayer.getUuid(), "grandeconomy.killed_balance", CurrencyAPI.getInstance().getBalanceFormatted(dyingPlayer.getUuid(), true)), false);
+            currencyAPI.takeFromBalance(dyingPlayer.getUuid(), amountTaken, true);
+            GrandEconomy.getFeedbackSender().basic(dyingPlayer, "grandeconomy.killed_balance", currencyAPI.getFormattedBalance(dyingPlayer.getUuid(), true));
 
-            CurrencyAPI.getInstance().addToBalance(killer.getUuid(), amountTaken, true);
-            killer.sendMessage(GrandEconomy.getTranslator().getTextForTarget(killer.getUuid(), "grandeconomy.killer_balance", CurrencyAPI.getInstance().getBalanceFormatted(killer.getUuid(), true)), false);
+            currencyAPI.addToBalance(killer.getUuid(), amountTaken, true);
+            GrandEconomy.getFeedbackSender().basic(killer, "grandeconomy.killer_balance", currencyAPI.getFormattedBalance(killer.getUuid(), true));
         }
     }
 

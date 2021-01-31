@@ -8,12 +8,12 @@ import java.util.UUID;
 public class GrandEconomyEconomy implements Economy {
     @Override
     public double getBalance(UUID uuid, Boolean isPlayer) {
-        return Account.get(uuid).getBalance();
+        return AccountManager.get(uuid).getBalance();
     }
 
     @Override
     public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
-        Account account = Account.get(uuid);
+        Account account = AccountManager.get(uuid);
         if(account.getBalance() + amount < 0)
             return false;
         account.addBalance(amount);
@@ -22,7 +22,7 @@ public class GrandEconomyEconomy implements Economy {
 
     @Override
     public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
-        Account account = Account.get(uuid);
+        Account account = AccountManager.get(uuid);
         if (account.getBalance() < amount)
             return false;
         account.addBalance(-amount);
@@ -34,7 +34,7 @@ public class GrandEconomyEconomy implements Economy {
         if (amount < 0)
             return false;
 
-        Account.get(uuid).setBalance(amount);
+        AccountManager.get(uuid).setBalance(amount);
         return true;
     }
 

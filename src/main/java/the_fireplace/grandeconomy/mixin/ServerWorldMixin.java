@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import the_fireplace.grandeconomy.events.NetworkEvents;
 
+@SuppressWarnings("unused")
 @Mixin(ServerWorld.class)
 public class ServerWorldMixin {
     @Inject(at = @At("RETURN"), method = "onPlayerConnected")

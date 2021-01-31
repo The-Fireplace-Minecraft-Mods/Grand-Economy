@@ -4,6 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.CurrencyAPI;
+import the_fireplace.grandeconomy.command.CommonTranslationKeys;
 import the_fireplace.grandeconomy.logintracker.LoginTracker;
 
 public class NetworkEvents {
@@ -12,8 +13,8 @@ public class NetworkEvents {
         if (GrandEconomy.config.showBalanceOnJoin) {
             Text joinMessage = GrandEconomy.getTranslator().getTextForTarget(
                 player.getUuid(),
-                "commands.grandeconomy.common.balance",
-                CurrencyAPI.getInstance().getBalanceFormatted(player.getUuid(), true)
+                CommonTranslationKeys.BALANCE,
+                CurrencyAPI.getInstance().getFormattedBalance(player.getUuid(), true)
             );
             player.sendMessage(joinMessage, false);
         }

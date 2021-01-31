@@ -12,7 +12,7 @@ public abstract class GeCommand implements RegisterableCommand {
 	protected final FeedbackSender feedbackSender;
 	protected final Requirements requirements;
 
-	GeCommand() {
+	protected GeCommand() {
 		this.currencyAPI = CurrencyAPI.getInstance();
 		this.feedbackSender = GrandEconomy.getFeedbackSender();
 		this.requirements = Requirements.getInstance();

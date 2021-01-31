@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import the_fireplace.grandeconomy.command.CommonTranslationKeys;
 import the_fireplace.grandeconomy.command.GeCommand;
 
 public final class BalanceCommand extends GeCommand {
@@ -20,7 +21,7 @@ public final class BalanceCommand extends GeCommand {
     }
 
     private int execute(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {
-        feedbackSender.basic(command, "commands.grandeconomy.common.balance", currencyAPI.getBalanceFormatted(command.getSource().getPlayer().getUuid(), true));
+        feedbackSender.basic(command, CommonTranslationKeys.BALANCE, currencyAPI.getFormattedBalance(command.getSource().getPlayer().getUuid(), true));
         return Command.SINGLE_SUCCESS;
     }
 }

@@ -77,7 +77,7 @@ public final class WalletCommand extends GeCommand {
     }
 
     private int runBalanceCommand(CommandContext<ServerCommandSource> command, ServerPlayerEntity targetPlayer) {
-        feedbackSender.basic(command, "commands.grandeconomy.wallet.balance", targetPlayer.getDisplayName(), currencyAPI.getBalanceFormatted(targetPlayer.getUuid(), true));
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.balance", targetPlayer.getDisplayName(), currencyAPI.getFormattedBalance(targetPlayer.getUuid(), true));
         return Command.SINGLE_SUCCESS;
     }
 

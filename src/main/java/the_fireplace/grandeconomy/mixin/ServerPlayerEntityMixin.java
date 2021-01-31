@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import the_fireplace.grandeconomy.events.KillingEvents;
 
+@SuppressWarnings({"ConstantConditions", "unused"})
 @Mixin(ServerPlayerEntity.class)
 public class ServerPlayerEntityMixin {
     @Inject(at = @At("HEAD"), method = "onDeath")

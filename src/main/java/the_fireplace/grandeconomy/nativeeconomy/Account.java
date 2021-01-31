@@ -4,29 +4,15 @@ import com.google.gson.JsonObject;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.io.AccountData;
 import the_fireplace.lib.api.io.JsonObjectReader;
+import the_fireplace.lib.impl.FireplaceLib;
 
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Account extends AccountData {
-    private static final Map<UUID, Account> ACCOUNT_INSTANCES = new ConcurrentHashMap<>();
-
-    public static Account get(UUID accountId) {
-        return ACCOUNT_INSTANCES.computeIfAbsent(accountId, Account::new);
-    }
-
-    public static void delete(UUID accountId) {
-        Account account = ACCOUNT_INSTANCES.remove(accountId);
-        if (account != null) {
-            account.deleteSaveFile();
-        }
-    }
-
     private double balance = GrandEconomy.config.startBalance;
     private boolean isPlayer = calculateIsPlayer();
 
-    private Account(UUID uuid) {
+    Account(UUID uuid) {
         super(uuid, "account");
         loadSavedData();
     }
@@ -47,7 +33,7 @@ public class Account extends AccountData {
     }
 
     private boolean calculateIsPlayer() {
-        return GrandEconomy.getServer().getPlayerManager().getPlayer(getId()) != null;
+        return FireplaceLib.getServer().getPlayerManager().getPlayer(getId()) != null;
     }
 
     @Override
@@ -67,5 +53,9 @@ public class Account extends AccountData {
     @Override
     protected boolean isDefaultData() {
         return balance == GrandEconomy.config.startBalance && !isPlayer;
+    }
+
+    void delete() {
+        deleteSaveFile();
     }
 }

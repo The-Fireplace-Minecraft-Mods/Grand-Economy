@@ -28,7 +28,7 @@ public interface CurrencyAPI {
      * @return
      * The balance, formatted with the currency name
      */
-    String getBalanceFormatted(UUID uuid, Boolean isPlayer);
+    String getFormattedBalance(UUID uuid, Boolean isPlayer);
 
     /**
      * Add to the account's balance

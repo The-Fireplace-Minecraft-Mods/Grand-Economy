@@ -23,7 +23,7 @@ public final class CurrencyManager implements CurrencyAPI {
     }
 
     @Override
-    public String getBalanceFormatted(UUID uuid, Boolean isPlayer) {
+    public String getFormattedBalance(UUID uuid, Boolean isPlayer) {
         return formatCurrency(economy.getBalance(uuid, isPlayer));
     }
 

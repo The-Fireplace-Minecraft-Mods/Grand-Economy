@@ -1,5 +1,8 @@
 package the_fireplace.grandeconomy.command;
 
 public final class CommonTranslationKeys {
-    public static final String INSUFFICIENT_CREDIT = "commands.grandeconomy.common.insufficient_credit";
+    private static final String COMMON_PREFIX = "commands.grandeconomy.common.";
+
+    public static final String INSUFFICIENT_CREDIT = COMMON_PREFIX + "insufficient_credit";
+    public static final String BALANCE = COMMON_PREFIX + "balance";
 }
