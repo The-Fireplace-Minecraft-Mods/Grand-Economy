@@ -36,13 +36,13 @@ public final class HelpCommandBuilder implements RegisterableCommand {
 
     public HelpCommandBuilder addCommands(CommandNode<ServerCommandSource>... commands) {
         String[] commandNames = Arrays.stream(commands).map(CommandNode::getName).toArray(String[]::new);
-        this.commands = ArrayUtils.addAll(this.commands, commandNames);
 
-        return this;
+        return addCommands(commandNames);
     }
 
     public HelpCommandBuilder addCommands(String... commands) {
         this.commands = ArrayUtils.addAll(this.commands, commands);
+        this.commands = ArrayUtils.add(this.commands, helpCommandBase.getLiteral());
 
         return this;
     }

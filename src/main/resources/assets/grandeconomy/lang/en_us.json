@@ -1,6 +1,4 @@
 {
-  "grandeconomy.insufficient_credit": "You don't have enough money to do that.",
-
   "grandeconomy.killed_balance": "You were killed, your balance is now: %s",
   "grandeconomy.killer_balance": "You just killed someone, your balance is now: %s",
 
@@ -20,7 +18,7 @@
   "commands.grandeconomy.pay.description": "Pay a player money from your account.",
   "commands.grandeconomy.pay.negative": "You cannot pay someone negative amount.",
   "commands.grandeconomy.pay.paid": "You sent %s to %s.",
-  "commands.grandeconomy.pay.recieved": "You recieved %s from %s.",
+  "commands.grandeconomy.pay.recieved": "You received %s from %s.",
 
   "commands.grandeconomy.wallet.usage": "/wallet <give|take|set|balance> <player> <amount>",
   "commands.grandeconomy.wallet.description": "The admin command for managing account balances.",
@@ -28,7 +26,7 @@
   "commands.grandeconomy.wallet.taken": "%s taken from %s balance",
   "commands.grandeconomy.wallet.set": "%s balance set to %s",
   "commands.grandeconomy.wallet.balance": "%s balance: %s",
-  "commands.grandeconomy.wallet.negative": "You cannot do this because it would set the %s's balance below zero.",
+  "commands.grandeconomy.wallet.negative": "You cannot do this because it would set the balance of %s below zero.",
 
   "commands.grandeconomy.gehelp.usage": "/gehelp [page]",
   "commands.grandeconomy.gehelp.description": "The Grand Economy help command.",
@@ -67,7 +65,5 @@
   "text.config.grandeconomy.option.basicIncomeAmount.desc": "Amount to be given to a player each day.",
   "text.config.grandeconomy.option.maxIncomeSavingsDays": "Max Basic Income Savings (in days)",
   "text.config.grandeconomy.option.maxIncomeSavingsDays.desc[0]": "The max number of days since last login",
-  "text.config.grandeconomy.option.maxIncomeSavingsDays.desc[1]": "the player will be paid basic income for.",
-
-  "argument.aliased.invalid": "Invalid "
+  "text.config.grandeconomy.option.maxIncomeSavingsDays.desc[1]": "the player will be paid basic income for."
 }

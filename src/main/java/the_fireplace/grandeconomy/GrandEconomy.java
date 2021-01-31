@@ -77,7 +77,7 @@ public class GrandEconomy implements ModInitializer {
 
         @Override
         public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
-            if(GrandEconomy.config.enforceNonNegativeBalance && amount < 0) {
+            if (GrandEconomy.config.enforceNonNegativeBalance && amount < 0) {
                 if(getBalance(uuid, isPlayer)+amount < 0)
                     return false;
             }
