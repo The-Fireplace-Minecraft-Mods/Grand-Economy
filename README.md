@@ -1,4 +1,8 @@
 # Grand Economy API
+## Adding Grand Economy to your dev environment
+TODO
+
+## Using the Entrypoint (for a Soft Dependency)
 To use currency from Grand Economy and/or register your own currency with Grand Economy without creating a hard dependency on it, you'll want to use the entrypoint.
 
 1. Create a class that implements `the_fireplace.grandeconomy.api.GrandEconomyEntrypoint`
