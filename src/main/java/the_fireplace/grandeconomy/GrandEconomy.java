@@ -52,9 +52,9 @@ public class GrandEconomy implements ModInitializer {
             GrandEconomyEntrypoint api = entrypoint.getEntrypoint();
             api.init(EconomyRegistry.getInstance());
         });
+        loadEconomy();
 
         ServerLifecycleEvents.SERVER_STARTING.register(s -> {
-            loadEconomy();
             RegisterGeCommands.register(s.getCommandManager().getDispatcher());
         });
     }
