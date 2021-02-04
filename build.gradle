@@ -126,7 +126,7 @@ import com.modrinth.minotaur.TaskModrinthUpload
 
 task publishModrinth (type: TaskModrinthUpload) {
 	token = project.hasProperty("modrinthApiKey") ? project.modrinthApiKey : "empty"
-	projectId = '000000'
+	projectId = 'gno5mxtx'
 	versionNumber = version
 	versionName = project.mod_version
 	uploadFile = jar // This is the java jar task
@@ -147,7 +147,7 @@ bintray {
 	pkg {
 		repo = "mc-mods"
 		name = "grand-economy"
-		licenses = ["GPL-2.0"]
+		licenses = ["MPL-2.0"]
 	}
 }
 
