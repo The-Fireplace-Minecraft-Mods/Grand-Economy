@@ -10,6 +10,7 @@ Updated to 1.16.X
 /gehelp now has separate entries for each wallet subcommand
 Grand Economy now uses Fireplace Lib - it's included, no extra action needed from users.
 /convert has been removed again. This time Grand Exchange really will have a similarly easy way to convert items to currency.
+Removed the thousandsSeparator option in favor of using the new decimalFormattingLanguageTag option to determine how to format currency.
 
 Fixes/Internal Changes:
 Performance improvements for saving and loading account data

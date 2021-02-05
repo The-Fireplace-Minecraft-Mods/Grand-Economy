@@ -1,6 +1,7 @@
 package the_fireplace.grandeconomy;
 
 import the_fireplace.grandeconomy.api.Economy;
+import the_fireplace.grandeconomy.api.event.BalanceChangeEvent;
 
 import java.util.UUID;
 
@@ -18,27 +19,42 @@ class BoundedEconomyWrapper implements Economy {
 
 	@Override
 	public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
+		double previousBalance = getBalance(uuid, isPlayer);
 		if (GrandEconomy.config.enforceNonNegativeBalance && amount < 0) {
-			if (getBalance(uuid, isPlayer) + amount < 0)
+			if (previousBalance + amount < 0)
 				return false;
 		}
-		return economy.addToBalance(uuid, amount, isPlayer);
+		boolean added = economy.addToBalance(uuid, amount, isPlayer);
+		if (added) {
+			BalanceChangeEvent.EVENT.invoker().onBalanceChanged(uuid, previousBalance, getBalance(uuid, isPlayer));
+		}
+		return added;
 	}
 
 	@Override
 	public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
+		double previousBalance = getBalance(uuid, isPlayer);
 		if (GrandEconomy.config.enforceNonNegativeBalance && amount > 0) {
-			if (getBalance(uuid, isPlayer) - amount < 0)
+			if (previousBalance - amount < 0)
 				return false;
 		}
-		return economy.takeFromBalance(uuid, amount, isPlayer);
+		boolean taken = economy.takeFromBalance(uuid, amount, isPlayer);
+		if (taken) {
+			BalanceChangeEvent.EVENT.invoker().onBalanceChanged(uuid, previousBalance, getBalance(uuid, isPlayer));
+		}
+		return taken;
 	}
 
 	@Override
 	public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
 		if (GrandEconomy.config.enforceNonNegativeBalance && amount < 0)
 			return false;
-		return economy.setBalance(uuid, amount, isPlayer);
+		double previousBalance = getBalance(uuid, isPlayer);
+		boolean balanceSet = economy.setBalance(uuid, amount, isPlayer);
+		if (balanceSet) {
+			BalanceChangeEvent.EVENT.invoker().onBalanceChanged(uuid, previousBalance, getBalance(uuid, isPlayer));
+		}
+		return balanceSet;
 	}
 
 	@Override

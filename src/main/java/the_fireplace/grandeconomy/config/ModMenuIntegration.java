@@ -8,11 +8,10 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.StringVisitable;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.*;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.EconomyRegistry;
+import the_fireplace.lib.api.chat.TextStyles;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,28 +59,16 @@ public class ModMenuIntegration implements ModMenuApi {
             .setDefaultValue(new ModConfig().currencyNameMultiple)
             .setSaveConsumer(newValue -> GrandEconomy.config.currencyNameMultiple = newValue)
             .build());
-        nativeEconomy.addEntry(entryBuilder.startStrField(new TranslatableText("text.config.grandeconomy.option.thousandsSeparator"), GrandEconomy.config.thousandsSeparator)
-            .setDefaultValue(new ModConfig().thousandsSeparator)
-            .setSaveConsumer(newValue -> GrandEconomy.config.thousandsSeparator = newValue)
+        nativeEconomy.addEntry(entryBuilder.startStrField(new TranslatableText("text.config.grandeconomy.option.decimalFormattingLanguageTag")
+                .setStyle(TextStyles.BLUE.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.oracle.com/java/technologies/javase/jdk8-jre8-suported-locales.html"))),
+                GrandEconomy.config.decimalFormattingLanguageTag
+            )
+            .setDefaultValue(new ModConfig().decimalFormattingLanguageTag)
+            .setSaveConsumer(newValue -> GrandEconomy.config.decimalFormattingLanguageTag = newValue)
             .build());
         nativeEconomy.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.startBalance"), GrandEconomy.config.startBalance)
             .setDefaultValue(new ModConfig().startBalance)
             .setSaveConsumer(newValue -> GrandEconomy.config.startBalance = newValue)
-            .build());
-        nativeEconomy.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.basicIncome"), GrandEconomy.config.basicIncome)
-            .setDefaultValue(new ModConfig().basicIncome)
-            .setTooltip(new TranslatableText("text.config.grandeconomy.option.basicIncome.desc"))
-            .setSaveConsumer(newValue -> GrandEconomy.config.basicIncome = newValue)
-            .build());
-        nativeEconomy.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.basicIncomeAmount"), GrandEconomy.config.basicIncomeAmount)
-            .setDefaultValue(new ModConfig().basicIncomeAmount)
-            .setTooltip(new TranslatableText("text.config.grandeconomy.option.basicIncomeAmount.desc"))
-            .setSaveConsumer(newValue -> GrandEconomy.config.basicIncomeAmount = newValue)
-            .build());
-        nativeEconomy.addEntry(entryBuilder.startIntField(new TranslatableText("text.config.grandeconomy.option.maxIncomeSavingsDays"), GrandEconomy.config.maxIncomeSavingsDays)
-            .setDefaultValue(new ModConfig().maxIncomeSavingsDays)
-            .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.maxIncomeSavingsDays.desc", 2))
-            .setSaveConsumer(newValue -> GrandEconomy.config.maxIncomeSavingsDays = newValue)
             .build());
     }
 
@@ -120,6 +107,21 @@ public class ModMenuIntegration implements ModMenuApi {
             .setDefaultValue(new ModConfig().pvpMoneyTransferFlat)
             .setTooltip(new TranslatableText("text.config.grandeconomy.option.pvpMoneyTransferFlat.desc"))
             .setSaveConsumer(newValue -> GrandEconomy.config.pvpMoneyTransferFlat = newValue)
+            .build());
+        global.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.basicIncome"), GrandEconomy.config.basicIncome)
+            .setDefaultValue(new ModConfig().basicIncome)
+            .setTooltip(new TranslatableText("text.config.grandeconomy.option.basicIncome.desc"))
+            .setSaveConsumer(newValue -> GrandEconomy.config.basicIncome = newValue)
+            .build());
+        global.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.basicIncomeAmount"), GrandEconomy.config.basicIncomeAmount)
+            .setDefaultValue(new ModConfig().basicIncomeAmount)
+            .setTooltip(new TranslatableText("text.config.grandeconomy.option.basicIncomeAmount.desc"))
+            .setSaveConsumer(newValue -> GrandEconomy.config.basicIncomeAmount = newValue)
+            .build());
+        global.addEntry(entryBuilder.startIntField(new TranslatableText("text.config.grandeconomy.option.maxIncomeSavingsDays"), GrandEconomy.config.maxIncomeSavingsDays)
+            .setDefaultValue(new ModConfig().maxIncomeSavingsDays)
+            .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.maxIncomeSavingsDays.desc", 2))
+            .setSaveConsumer(newValue -> GrandEconomy.config.maxIncomeSavingsDays = newValue)
             .build());
     }
 

@@ -3,6 +3,9 @@ package the_fireplace.grandeconomy.nativeeconomy;
 import the_fireplace.grandeconomy.GrandEconomy;
 import the_fireplace.grandeconomy.api.Economy;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.UUID;
 
 public class GrandEconomyEconomy implements Economy {
@@ -47,7 +50,9 @@ public class GrandEconomyEconomy implements Economy {
 
     @Override
     public String getFormattedCurrency(double amount) {
-        return amount + " " + getCurrencyName(amount);
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        decimalFormat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.forLanguageTag(GrandEconomy.config.decimalFormattingLanguageTag)));
+        return decimalFormat.format(amount) + " " + getCurrencyName(amount);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class ModConfig {
 
     public String currencyNameSingular = "gp";
     public String currencyNameMultiple = "gp";
-    public String thousandsSeparator = ",";
+    public String decimalFormattingLanguageTag = "en-US";
     public double startBalance = 100;
 
     public void save() {
@@ -74,8 +74,8 @@ public class ModConfig {
             conf.currencyNameSingular = obj.get(String.class, "currencyNameSingular");
         if(obj.containsKey("currencyNameMultiple"))
             conf.currencyNameMultiple = obj.get(String.class, "currencyNameMultiple");
-        if(obj.containsKey("thousandsSeparator"))
-            conf.thousandsSeparator = obj.get(String.class, "thousandsSeparator");
+        if(obj.containsKey("decimalFormattingLanguageTag"))
+            conf.decimalFormattingLanguageTag = obj.get(String.class, "decimalFormattingLanguageTag");
         if(obj.containsKey("startBalance"))
             conf.startBalance = obj.get(Double.class, "startBalance");
 

@@ -63,7 +63,7 @@
   "text.config.grandeconomy.nativeEconomy.desc": "Settings for the built in economy.",
   "text.config.grandeconomy.option.currencyNameSingular": "Currency Name (Singular)",
   "text.config.grandeconomy.option.currencyNameMultiple": "Currency Name (Plural)",
-  "text.config.grandeconomy.option.thousandsSeparator": "Thousands Separator",
+  "text.config.grandeconomy.option.decimalFormattingLanguageTag": "Decimal Format Language Tag",
   "text.config.grandeconomy.option.startBalance": "Start Balance",
   "text.config.grandeconomy.option.basicIncome": "Basic Income",
   "text.config.grandeconomy.option.basicIncome.desc": "Give each player currency every day they log in.",
