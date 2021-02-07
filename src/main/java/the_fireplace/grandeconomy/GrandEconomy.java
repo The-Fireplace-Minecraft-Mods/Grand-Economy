@@ -8,10 +8,8 @@ import org.apache.logging.log4j.Logger;
 import the_fireplace.grandeconomy.api.Economy;
 import the_fireplace.grandeconomy.api.EconomyRegistry;
 import the_fireplace.grandeconomy.api.GrandEconomyEntrypoint;
-import the_fireplace.grandeconomy.api.event.EconomySelectedEvent;
 import the_fireplace.grandeconomy.command.RegisterGeCommands;
 import the_fireplace.grandeconomy.config.ModConfig;
-import the_fireplace.grandeconomy.nativeeconomy.GrandEconomyEconomy;
 import the_fireplace.lib.api.chat.Translator;
 import the_fireplace.lib.api.chat.TranslatorManager;
 import the_fireplace.lib.api.command.FeedbackSender;
@@ -19,19 +17,24 @@ import the_fireplace.lib.api.command.FeedbackSenderManager;
 
 public class GrandEconomy implements ModInitializer {
     public static final String MODID = "grandeconomy";
-    public static final Logger LOGGER = LogManager.getLogger(MODID);
-    public static ModConfig config;
-
+    private static final Logger LOGGER = LogManager.getLogger(MODID);
+    public static Logger getLogger() {
+        return LOGGER;
+    }
+    private static ModConfig config;
+    public static ModConfig getConfig() {
+        return config;
+    }
     private static final BoundedEconomyWrapper ECONOMY_WRAPPER = new BoundedEconomyWrapper();
     public static Economy getEconomy() {
         return ECONOMY_WRAPPER;
     }
 
-    private static final TranslatorManager translatorManager = TranslatorManager.getInstance();
+    private static final TranslatorManager TRANSLATOR_MANAGER = TranslatorManager.getInstance();
     private static Translator translator = null;
     public static Translator getTranslator() {
         if (translator == null) {
-            translator = translatorManager.getTranslator(MODID);
+            translator = TRANSLATOR_MANAGER.getTranslator(MODID);
         }
         return translator;
     }
@@ -47,7 +50,7 @@ public class GrandEconomy implements ModInitializer {
     public void onInitialize() {
         config = ModConfig.load();
         config.save();
-        translatorManager.addTranslator(MODID);
+        TRANSLATOR_MANAGER.addTranslator(MODID);
         FabricLoader.getInstance().getEntrypointContainers("grandeconomy", GrandEconomyEntrypoint.class).forEach((entrypoint) -> {
             GrandEconomyEntrypoint api = entrypoint.getEntrypoint();
             api.init(EconomyRegistry.getInstance());
@@ -61,15 +64,13 @@ public class GrandEconomy implements ModInitializer {
 
     static void loadEconomy() {
         EconomyRegistry economyRegistry = EconomyRegistry.getInstance();
-        Economy economy;
-        if (economyRegistry.hasEconomyHandler(GrandEconomy.config.economyBridge)) {
-            economy = economyRegistry.getEconomyHandler(GrandEconomy.config.economyBridge);
-        } else {
-            economy = new GrandEconomyEconomy();
-            economyRegistry.registerEconomyHandler(economy, MODID);
+        String bridge = GrandEconomy.config.economyBridge;
+        if (!economyRegistry.hasEconomyHandler(bridge)) {
+            getLogger().warn("Economy '{}' not found, defaulting to Grand Economy's native economy.", bridge);
+            bridge = MODID;
         }
+        Economy economy = economyRegistry.getEconomyHandler(bridge);
         economy.init();
         ECONOMY_WRAPPER.setEconomy(economy);
-        EconomySelectedEvent.EVENT.invoker().onEconomySelected(economy);
     }
 }

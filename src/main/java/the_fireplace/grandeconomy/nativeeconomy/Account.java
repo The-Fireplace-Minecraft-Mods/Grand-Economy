@@ -9,7 +9,7 @@ import the_fireplace.lib.impl.FireplaceLib;
 import java.util.UUID;
 
 public class Account extends AccountData {
-    private double balance = GrandEconomy.config.startBalance;
+    private double balance = GrandEconomy.getConfig().startBalance;
     private boolean isPlayer = calculateIsPlayer();
 
     Account(UUID uuid) {
@@ -52,7 +52,7 @@ public class Account extends AccountData {
 
     @Override
     protected boolean isDefaultData() {
-        return balance == GrandEconomy.config.startBalance && !isPlayer;
+        return balance == GrandEconomy.getConfig().startBalance && !isPlayer;
     }
 
     void delete() {

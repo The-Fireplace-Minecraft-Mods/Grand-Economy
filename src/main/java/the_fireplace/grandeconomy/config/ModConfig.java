@@ -1,19 +1,19 @@
 package the_fireplace.grandeconomy.config;
 
-import blue.endless.jankson.Jankson;
-import blue.endless.jankson.JsonGrammar;
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.impl.SyntaxError;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import the_fireplace.grandeconomy.GrandEconomy;
+import the_fireplace.lib.api.io.DirectoryResolver;
+import the_fireplace.lib.api.io.JsonObjectReader;
+import the_fireplace.lib.api.io.JsonObjectReaderFactory;
+import the_fireplace.lib.api.io.JsonWritable;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 
-public class ModConfig {
-    private static final File configDir = new File("config");
-    private static final File baseConfigFile = new File(configDir, GrandEconomy.MODID+".json5");
+public class ModConfig implements JsonWritable {
+    private static File getConfigFile() {
+        return DirectoryResolver.getInstance().getConfigPath().resolve(GrandEconomy.MODID + ".json").toFile();
+    }
 
     public boolean showBalanceOnJoin = false;
     public double pvpMoneyTransferPercent = 0;
@@ -22,7 +22,7 @@ public class ModConfig {
     public double basicIncomeAmount = 50;
     public int maxIncomeSavingsDays = 5;
 
-    public String economyBridge = "none";
+    public String economyBridge = GrandEconomy.MODID;
     public boolean enforceNonNegativeBalance = true;
 
     public String currencyNameSingular = "gp";
@@ -31,54 +31,32 @@ public class ModConfig {
     public double startBalance = 100;
 
     public void save() {
-        try {
-            FileWriter fw = new FileWriter(baseConfigFile);
-            fw.write(Jankson.builder().build().toJson(this).toJson(JsonGrammar.JSON5));
-            fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writeToJson(getConfigFile());
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static ModConfig load() {
-        JsonObject obj;
+        JsonObjectReader reader = JsonObjectReaderFactory.getInstance().create(getConfigFile());
         ModConfig conf = new ModConfig();
-        try {
-            obj = Jankson.builder().build().load(baseConfigFile);
-        } catch(FileNotFoundException e) {
-            return conf;
-        } catch (IOException | SyntaxError | NullPointerException e) {
-            e.printStackTrace();
-            return conf;
-        }
-        if(obj.containsKey("showBalanceOnJoin"))
-            conf.showBalanceOnJoin = obj.get(Boolean.class, "showBalanceOnJoin");
-        if(obj.containsKey("pvpMoneyTransferPercent"))
-            conf.pvpMoneyTransferPercent = obj.get(Double.class, "pvpMoneyTransferPercent");
-        if(obj.containsKey("pvpMoneyTransferFlat"))
-            conf.pvpMoneyTransferFlat = obj.get(Double.class, "pvpMoneyTransferFlat");
-        if(obj.containsKey("basicIncome"))
-            conf.basicIncome = obj.get(Boolean.class, "basicIncome");
-        if(obj.containsKey("basicIncomeAmount"))
-            conf.basicIncomeAmount = obj.get(Double.class, "basicIncomeAmount");
-        if(obj.containsKey("maxIncomeSavingsDays"))
-            conf.maxIncomeSavingsDays = obj.get(Integer.class, "maxIncomeSavingsDays");
+        conf.showBalanceOnJoin = reader.readBool("showBalanceOnJoin", conf.showBalanceOnJoin);
+        conf.pvpMoneyTransferPercent = reader.readDouble("pvpMoneyTransferPercent", conf.pvpMoneyTransferPercent);
+        conf.pvpMoneyTransferFlat = reader.readDouble("pvpMoneyTransferFlat", conf.pvpMoneyTransferFlat);
+        conf.basicIncome = reader.readBool("basicIncome", conf.basicIncome);
+        conf.basicIncomeAmount = reader.readDouble("basicIncomeAmount", conf.basicIncomeAmount);
+        conf.maxIncomeSavingsDays = reader.readInt("maxIncomeSavingsDays", conf.maxIncomeSavingsDays);
 
-        if(obj.containsKey("economyBridge"))
-            conf.economyBridge = obj.get(String.class, "economyBridge");
-        if(obj.containsKey("enforceNonNegativeBalance"))
-            conf.enforceNonNegativeBalance = obj.get(Boolean.class, "enforceNonNegativeBalance");
+        conf.economyBridge = reader.readString("economyBridge", conf.economyBridge);
+        conf.enforceNonNegativeBalance = reader.readBool("enforceNonNegativeBalance", conf.enforceNonNegativeBalance);
 
-        if(obj.containsKey("currencyNameSingular"))
-            conf.currencyNameSingular = obj.get(String.class, "currencyNameSingular");
-        if(obj.containsKey("currencyNameMultiple"))
-            conf.currencyNameMultiple = obj.get(String.class, "currencyNameMultiple");
-        if(obj.containsKey("decimalFormattingLanguageTag"))
-            conf.decimalFormattingLanguageTag = obj.get(String.class, "decimalFormattingLanguageTag");
-        if(obj.containsKey("startBalance"))
-            conf.startBalance = obj.get(Double.class, "startBalance");
+        conf.currencyNameSingular = reader.readString("currencyNameSingular", conf.currencyNameSingular);
+        conf.currencyNameMultiple = reader.readString("currencyNameMultiple", conf.currencyNameMultiple);
+        conf.decimalFormattingLanguageTag = reader.readString("decimalFormattingLanguageTag", conf.decimalFormattingLanguageTag);
+        conf.startBalance = reader.readDouble("startBalance", conf.startBalance);
 
         return conf;
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return (JsonObject) new Gson().toJsonTree(this);
     }
 }

@@ -22,6 +22,9 @@
     "main": [
       "the_fireplace.grandeconomy.GrandEconomy"
     ],
+    "grandeconomy": [
+      "the_fireplace.grandeconomy.nativeeconomy.NativeEconomyEntrypoint"
+    ],
     "modmenu": [
       "the_fireplace.grandeconomy.config.ModMenuIntegration"
     ],

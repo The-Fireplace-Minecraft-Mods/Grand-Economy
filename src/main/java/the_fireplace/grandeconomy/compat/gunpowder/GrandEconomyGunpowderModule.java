@@ -28,7 +28,7 @@ public class GrandEconomyGunpowderModule implements GunpowderModule {
 
     @Override
     public void onInitialize() {
-        if (GUNPOWDER_NAMES.contains(GrandEconomy.config.economyBridge.toLowerCase(Locale.ROOT))) {
+        if (GUNPOWDER_NAMES.contains(GrandEconomy.getConfig().economyBridge.toLowerCase(Locale.ROOT))) {
             Economy gunpowderEconomy = new GunpowderEconomy();
             EconomyRegistry.getInstance().registerEconomyHandler(gunpowderEconomy, "gunpowder-api", "gunpowder", "gunpowder-currency");
         } else {

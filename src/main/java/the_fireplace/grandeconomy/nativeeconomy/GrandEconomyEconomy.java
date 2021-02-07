@@ -44,14 +44,14 @@ public class GrandEconomyEconomy implements Economy {
     @Override
     public String getCurrencyName(double amount) {
         if (amount == 1)
-            return GrandEconomy.config.currencyNameSingular;
-        return GrandEconomy.config.currencyNameMultiple;
+            return GrandEconomy.getConfig().currencyNameSingular;
+        return GrandEconomy.getConfig().currencyNameMultiple;
     }
 
     @Override
     public String getFormattedCurrency(double amount) {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
-        decimalFormat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.forLanguageTag(GrandEconomy.config.decimalFormattingLanguageTag)));
+        decimalFormat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.forLanguageTag(GrandEconomy.getConfig().decimalFormattingLanguageTag)));
         return decimalFormat.format(amount) + " " + getCurrencyName(amount);
     }
 

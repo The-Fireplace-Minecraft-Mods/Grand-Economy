@@ -10,7 +10,7 @@ import the_fireplace.grandeconomy.logintracker.LoginTracker;
 public class NetworkEvents {
     public static void onPlayerJoinServer(ServerPlayerEntity player) {
         LoginTracker.get(player.getUuid()).addLogin();
-        if (GrandEconomy.config.showBalanceOnJoin) {
+        if (GrandEconomy.getConfig().showBalanceOnJoin) {
             Text joinMessage = GrandEconomy.getTranslator().getTextForTarget(
                 player.getUuid(),
                 CommonTranslationKeys.BALANCE,

@@ -47,10 +47,10 @@ public class LoginTracker extends AccountData {
     }
 
     private void distributeBasicIncome(long days) {
-        if (GrandEconomy.config.basicIncome) {
-            if (days > GrandEconomy.config.maxIncomeSavingsDays)
-                days = GrandEconomy.config.maxIncomeSavingsDays;
-            CurrencyAPI.getInstance().addToBalance(getId(), days * GrandEconomy.config.basicIncomeAmount, true);
+        if (GrandEconomy.getConfig().basicIncome) {
+            if (days > GrandEconomy.getConfig().maxIncomeSavingsDays)
+                days = GrandEconomy.getConfig().maxIncomeSavingsDays;
+            CurrencyAPI.getInstance().addToBalance(getId(), days * GrandEconomy.getConfig().basicIncomeAmount, true);
         }
     }
 

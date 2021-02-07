@@ -8,8 +8,8 @@ import the_fireplace.grandeconomy.api.CurrencyAPI;
 public class KillingEvents {
     public static void onPlayerDeath(ServerPlayerEntity dyingPlayer, DamageSource source) {
         if (!dyingPlayer.world.isClient()) {
-            double flatMoneyTransferAmount = GrandEconomy.config.pvpMoneyTransferFlat;
-            double percentMoneyTransferAmount = GrandEconomy.config.pvpMoneyTransferPercent;
+            double flatMoneyTransferAmount = GrandEconomy.getConfig().pvpMoneyTransferFlat;
+            double percentMoneyTransferAmount = GrandEconomy.getConfig().pvpMoneyTransferPercent;
             if (doubleEquals(flatMoneyTransferAmount, 0) && doubleEquals(percentMoneyTransferAmount, 0))
                 return;
 

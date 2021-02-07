@@ -2,6 +2,7 @@ package the_fireplace.grandeconomy;
 
 import the_fireplace.grandeconomy.api.Economy;
 import the_fireplace.grandeconomy.api.event.BalanceChangeEvent;
+import the_fireplace.grandeconomy.api.event.EconomySelectedEvent;
 
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ class BoundedEconomyWrapper implements Economy {
 
 	void setEconomy(Economy economy) {
 		this.economy = economy;
+		EconomySelectedEvent.EVENT.invoker().onEconomySelected(economy);
 	}
 
 	@Override
@@ -20,7 +22,7 @@ class BoundedEconomyWrapper implements Economy {
 	@Override
 	public boolean addToBalance(UUID uuid, double amount, Boolean isPlayer) {
 		double previousBalance = getBalance(uuid, isPlayer);
-		if (GrandEconomy.config.enforceNonNegativeBalance && amount < 0) {
+		if (GrandEconomy.getConfig().enforceNonNegativeBalance && amount < 0) {
 			if (previousBalance + amount < 0)
 				return false;
 		}
@@ -34,7 +36,7 @@ class BoundedEconomyWrapper implements Economy {
 	@Override
 	public boolean takeFromBalance(UUID uuid, double amount, Boolean isPlayer) {
 		double previousBalance = getBalance(uuid, isPlayer);
-		if (GrandEconomy.config.enforceNonNegativeBalance && amount > 0) {
+		if (GrandEconomy.getConfig().enforceNonNegativeBalance && amount > 0) {
 			if (previousBalance - amount < 0)
 				return false;
 		}
@@ -47,7 +49,7 @@ class BoundedEconomyWrapper implements Economy {
 
 	@Override
 	public boolean setBalance(UUID uuid, double amount, Boolean isPlayer) {
-		if (GrandEconomy.config.enforceNonNegativeBalance && amount < 0)
+		if (GrandEconomy.getConfig().enforceNonNegativeBalance && amount < 0)
 			return false;
 		double previousBalance = getBalance(uuid, isPlayer);
 		boolean balanceSet = economy.setBalance(uuid, amount, isPlayer);

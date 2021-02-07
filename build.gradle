@@ -1,7 +1,6 @@
 plugins {
 	// Dependencies
 	id 'fabric-loom' version '0.5-SNAPSHOT'
-	id "com.github.johnrengelman.shadow" version "5.0.0"
 	// Mod Hosting Publish
 	id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.modrinth.minotaur" version "1.1.0"
@@ -35,9 +34,6 @@ dependencies {
 	modCompileOnly("io.github.gunpowder:gunpowder-api:${gunpowder_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-
-	shadow("blue.endless:jankson:1.1.+")
-	implementation "blue.endless:jankson:1.1.+"
 
 	compile "com.google.code.findbugs:jsr305:3.0.2"
 }
@@ -75,18 +71,6 @@ tasks.withType(JavaCompile) {
 task sourcesJar(type: Jar, dependsOn: classes) {
 	archiveClassifier.set("sources")
 	from sourceSets.main.allSource
-}
-
-shadowJar {
-	relocate("blue.endless.jankson", "${project.group}.shadowed.blue.endless.jankson")
-
-	configurations = [project.configurations.shadow]
-	classifier "shadow"
-}
-
-remapJar {
-	dependsOn(shadowJar)
-	input.set(shadowJar.archivePath)
 }
 
 jar {

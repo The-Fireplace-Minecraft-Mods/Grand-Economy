@@ -29,7 +29,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
             buildConfigCategories(builder);
 
-            builder.setSavingRunnable(() -> GrandEconomy.config.save());
+            builder.setSavingRunnable(() -> GrandEconomy.getConfig().save());
             return builder.build();
         };
     }
@@ -51,77 +51,76 @@ public class ModMenuIntegration implements ModMenuApi {
     }
 
     private void addNativeEconomyCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory nativeEconomy) {
-        nativeEconomy.addEntry(entryBuilder.startStrField(new TranslatableText("text.config.grandeconomy.option.currencyNameSingular"), GrandEconomy.config.currencyNameSingular)
+        nativeEconomy.addEntry(entryBuilder.startStrField(new TranslatableText("text.config.grandeconomy.option.currencyNameSingular"), GrandEconomy.getConfig().currencyNameSingular)
             .setDefaultValue(new ModConfig().currencyNameSingular)
-            .setSaveConsumer(newValue -> GrandEconomy.config.currencyNameSingular = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().currencyNameSingular = newValue)
             .build());
-        nativeEconomy.addEntry(entryBuilder.startStrField(new TranslatableText("text.config.grandeconomy.option.currencyNameMultiple"), GrandEconomy.config.currencyNameMultiple)
+        nativeEconomy.addEntry(entryBuilder.startStrField(new TranslatableText("text.config.grandeconomy.option.currencyNameMultiple"), GrandEconomy.getConfig().currencyNameMultiple)
             .setDefaultValue(new ModConfig().currencyNameMultiple)
-            .setSaveConsumer(newValue -> GrandEconomy.config.currencyNameMultiple = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().currencyNameMultiple = newValue)
             .build());
         nativeEconomy.addEntry(entryBuilder.startStrField(new TranslatableText("text.config.grandeconomy.option.decimalFormattingLanguageTag")
                 .setStyle(TextStyles.BLUE.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.oracle.com/java/technologies/javase/jdk8-jre8-suported-locales.html"))),
-                GrandEconomy.config.decimalFormattingLanguageTag
+                GrandEconomy.getConfig().decimalFormattingLanguageTag
             )
             .setDefaultValue(new ModConfig().decimalFormattingLanguageTag)
-            .setSaveConsumer(newValue -> GrandEconomy.config.decimalFormattingLanguageTag = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().decimalFormattingLanguageTag = newValue)
             .build());
-        nativeEconomy.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.startBalance"), GrandEconomy.config.startBalance)
+        nativeEconomy.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.startBalance"), GrandEconomy.getConfig().startBalance)
             .setDefaultValue(new ModConfig().startBalance)
-            .setSaveConsumer(newValue -> GrandEconomy.config.startBalance = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().startBalance = newValue)
             .build());
     }
 
     private void addBridgingCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory bridging) {
-        bridging.addEntry(entryBuilder.startStringDropdownMenu(new TranslatableText("text.config.grandeconomy.option.economyBridge"), GrandEconomy.config.economyBridge)
+        bridging.addEntry(entryBuilder.startStringDropdownMenu(new TranslatableText("text.config.grandeconomy.option.economyBridge"), GrandEconomy.getConfig().economyBridge)
             .setSelections(EconomyRegistry.getInstance().getEconomyHandlers())
             .setSuggestionMode(false)
             .setDefaultValue(new ModConfig().economyBridge)
             .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.economyBridge.desc", 4))
-            .setSaveConsumer(newValue -> GrandEconomy.config.economyBridge = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().economyBridge = newValue)
             .setErrorSupplier(value ->
                 EconomyRegistry.getInstance().hasEconomyHandler(value)
                     ? Optional.empty()
                     : Optional.of(new TranslatableText("text.config.grandeconomy.option.economyBridge.err")))
             .build());
-        bridging.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.enforceNonNegativeBalance"), GrandEconomy.config.enforceNonNegativeBalance)
+        bridging.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.enforceNonNegativeBalance"), GrandEconomy.getConfig().enforceNonNegativeBalance)
             .setDefaultValue(new ModConfig().enforceNonNegativeBalance)
             .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.enforceNonNegativeBalance.desc", 2))
-            .setSaveConsumer(newValue -> GrandEconomy.config.enforceNonNegativeBalance = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().enforceNonNegativeBalance = newValue)
             .build());
     }
 
     private void addGlobalCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory global) {
-        global.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.showBalanceOnJoin"), GrandEconomy.config.showBalanceOnJoin)
+        global.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.showBalanceOnJoin"), GrandEconomy.getConfig().showBalanceOnJoin)
             .setDefaultValue(new ModConfig().showBalanceOnJoin)
-            .setTooltip(new TranslatableText("text.config.grandeconomy.option.showBalanceOnJoin.desc"))
-            .setSaveConsumer(newValue -> GrandEconomy.config.showBalanceOnJoin = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().showBalanceOnJoin = newValue)
             .build());
-        global.addEntry(entryBuilder.startIntSlider(new TranslatableText("text.config.grandeconomy.option.pvpMoneyTransferPercent"), (int)(GrandEconomy.config.pvpMoneyTransferPercent*1000), 0, 1000)
+        global.addEntry(entryBuilder.startIntSlider(new TranslatableText("text.config.grandeconomy.option.pvpMoneyTransferPercent"), (int)(GrandEconomy.getConfig().pvpMoneyTransferPercent*1000), 0, 1000)
             .setDefaultValue((int)(DEFAULT_CONFIG.pvpMoneyTransferPercent*1000))
             .setTextGetter(val -> Text.of(String.format("%.1f", val/10d)+"%"))
             .setTooltip(new TranslatableText("text.config.grandeconomy.option.pvpMoneyTransferPercent.desc"))
-            .setSaveConsumer(newValue -> GrandEconomy.config.pvpMoneyTransferPercent = ((double)newValue)/1000d)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().pvpMoneyTransferPercent = ((double)newValue)/1000d)
             .build());
-        global.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.pvpMoneyTransferFlat"), GrandEconomy.config.pvpMoneyTransferFlat)
+        global.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.pvpMoneyTransferFlat"), GrandEconomy.getConfig().pvpMoneyTransferFlat)
             .setDefaultValue(new ModConfig().pvpMoneyTransferFlat)
             .setTooltip(new TranslatableText("text.config.grandeconomy.option.pvpMoneyTransferFlat.desc"))
-            .setSaveConsumer(newValue -> GrandEconomy.config.pvpMoneyTransferFlat = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().pvpMoneyTransferFlat = newValue)
             .build());
-        global.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.basicIncome"), GrandEconomy.config.basicIncome)
+        global.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.basicIncome"), GrandEconomy.getConfig().basicIncome)
             .setDefaultValue(new ModConfig().basicIncome)
             .setTooltip(new TranslatableText("text.config.grandeconomy.option.basicIncome.desc"))
-            .setSaveConsumer(newValue -> GrandEconomy.config.basicIncome = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().basicIncome = newValue)
             .build());
-        global.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.basicIncomeAmount"), GrandEconomy.config.basicIncomeAmount)
+        global.addEntry(entryBuilder.startDoubleField(new TranslatableText("text.config.grandeconomy.option.basicIncomeAmount"), GrandEconomy.getConfig().basicIncomeAmount)
             .setDefaultValue(new ModConfig().basicIncomeAmount)
             .setTooltip(new TranslatableText("text.config.grandeconomy.option.basicIncomeAmount.desc"))
-            .setSaveConsumer(newValue -> GrandEconomy.config.basicIncomeAmount = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().basicIncomeAmount = newValue)
             .build());
-        global.addEntry(entryBuilder.startIntField(new TranslatableText("text.config.grandeconomy.option.maxIncomeSavingsDays"), GrandEconomy.config.maxIncomeSavingsDays)
+        global.addEntry(entryBuilder.startIntField(new TranslatableText("text.config.grandeconomy.option.maxIncomeSavingsDays"), GrandEconomy.getConfig().maxIncomeSavingsDays)
             .setDefaultValue(new ModConfig().maxIncomeSavingsDays)
             .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.maxIncomeSavingsDays.desc", 2))
-            .setSaveConsumer(newValue -> GrandEconomy.config.maxIncomeSavingsDays = newValue)
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().maxIncomeSavingsDays = newValue)
             .build());
     }
 
