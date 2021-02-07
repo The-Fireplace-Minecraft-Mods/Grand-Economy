@@ -41,9 +41,9 @@ public class ModMenuIntegration implements ModMenuApi {
         global.setDescription(new StringVisitable[]{new TranslatableText("text.config.grandeconomy.global.desc")});
         addGlobalCategoryEntries(entryBuilder, global);
 
-        ConfigCategory bridging = builder.getOrCreateCategory(new TranslatableText("text.config.grandeconomy.bridging"));
-        bridging.setDescription(new StringVisitable[]{new TranslatableText("text.config.grandeconomy.bridging.desc")});
-        addBridgingCategoryEntries(entryBuilder, bridging);
+        ConfigCategory economyHandling = builder.getOrCreateCategory(new TranslatableText("text.config.grandeconomy.economyHandling"));
+        economyHandling.setDescription(new StringVisitable[]{new TranslatableText("text.config.grandeconomy.economyHandling.desc")});
+        addEconomyHandlingCategoryEntries(entryBuilder, economyHandling);
 
         ConfigCategory nativeEconomy = builder.getOrCreateCategory(new TranslatableText("text.config.grandeconomy.nativeEconomy"));
         nativeEconomy.setDescription(new StringVisitable[]{new TranslatableText("text.config.grandeconomy.nativeEconomy.desc")});
@@ -72,19 +72,19 @@ public class ModMenuIntegration implements ModMenuApi {
             .build());
     }
 
-    private void addBridgingCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory bridging) {
-        bridging.addEntry(entryBuilder.startStringDropdownMenu(new TranslatableText("text.config.grandeconomy.option.economyBridge"), GrandEconomy.getConfig().economyBridge)
+    private void addEconomyHandlingCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory economyHandlingCategory) {
+        economyHandlingCategory.addEntry(entryBuilder.startStringDropdownMenu(new TranslatableText("text.config.grandeconomy.option.economyHandler"), GrandEconomy.getConfig().economyHandler)
             .setSelections(EconomyRegistry.getInstance().getEconomyHandlers())
             .setSuggestionMode(false)
-            .setDefaultValue(new ModConfig().economyBridge)
-            .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.economyBridge.desc", 4))
-            .setSaveConsumer(newValue -> GrandEconomy.getConfig().economyBridge = newValue)
+            .setDefaultValue(new ModConfig().economyHandler)
+            .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.economyHandler.desc", 2))
+            .setSaveConsumer(newValue -> GrandEconomy.getConfig().economyHandler = newValue)
             .setErrorSupplier(value ->
                 EconomyRegistry.getInstance().hasEconomyHandler(value)
                     ? Optional.empty()
-                    : Optional.of(new TranslatableText("text.config.grandeconomy.option.economyBridge.err")))
+                    : Optional.of(new TranslatableText("text.config.grandeconomy.option.economyHandler.err")))
             .build());
-        bridging.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.enforceNonNegativeBalance"), GrandEconomy.getConfig().enforceNonNegativeBalance)
+        economyHandlingCategory.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("text.config.grandeconomy.option.enforceNonNegativeBalance"), GrandEconomy.getConfig().enforceNonNegativeBalance)
             .setDefaultValue(new ModConfig().enforceNonNegativeBalance)
             .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.enforceNonNegativeBalance.desc", 2))
             .setSaveConsumer(newValue -> GrandEconomy.getConfig().enforceNonNegativeBalance = newValue)

@@ -64,7 +64,7 @@ public class GrandEconomy implements ModInitializer {
 
     static void loadEconomy() {
         EconomyRegistry economyRegistry = EconomyRegistry.getInstance();
-        String bridge = GrandEconomy.config.economyBridge;
+        String bridge = GrandEconomy.config.economyHandler;
         if (!economyRegistry.hasEconomyHandler(bridge)) {
             getLogger().warn("Economy '{}' not found, defaulting to Grand Economy's native economy.", bridge);
             bridge = MODID;

@@ -8,7 +8,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.UUID;
 
-public class GrandEconomyEconomy implements Economy {
+public class NativeEconomy implements Economy {
     @Override
     public double getBalance(UUID uuid, Boolean isPlayer) {
         return AccountManager.get(uuid).getBalance();
@@ -50,9 +50,9 @@ public class GrandEconomyEconomy implements Economy {
 
     @Override
     public String getFormattedCurrency(double amount) {
-        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
         decimalFormat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.forLanguageTag(GrandEconomy.getConfig().decimalFormattingLanguageTag)));
-        return decimalFormat.format(amount) + " " + getCurrencyName(amount);
+        return decimalFormat.format(amount).replace('\u202F', ' ') + " " + getCurrencyName(amount);
     }
 
     @Override

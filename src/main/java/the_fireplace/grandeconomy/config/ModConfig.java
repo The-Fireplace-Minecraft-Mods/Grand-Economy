@@ -22,7 +22,7 @@ public class ModConfig implements JsonWritable {
     public double basicIncomeAmount = 50;
     public int maxIncomeSavingsDays = 5;
 
-    public String economyBridge = GrandEconomy.MODID;
+    public String economyHandler = GrandEconomy.MODID;
     public boolean enforceNonNegativeBalance = true;
 
     public String currencyNameSingular = "gp";
@@ -44,7 +44,7 @@ public class ModConfig implements JsonWritable {
         conf.basicIncomeAmount = reader.readDouble("basicIncomeAmount", conf.basicIncomeAmount);
         conf.maxIncomeSavingsDays = reader.readInt("maxIncomeSavingsDays", conf.maxIncomeSavingsDays);
 
-        conf.economyBridge = reader.readString("economyBridge", conf.economyBridge);
+        conf.economyHandler = reader.readString("economyHandler", conf.economyHandler);
         conf.enforceNonNegativeBalance = reader.readBool("enforceNonNegativeBalance", conf.enforceNonNegativeBalance);
 
         conf.currencyNameSingular = reader.readString("currencyNameSingular", conf.currencyNameSingular);
