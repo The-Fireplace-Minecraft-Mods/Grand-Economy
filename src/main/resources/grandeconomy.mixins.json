@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "the_fireplace.grandeconomy.mixin",
+  "package": "dev.the_fireplace.grandeconomy.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "ServerPlayerEntityMixin",

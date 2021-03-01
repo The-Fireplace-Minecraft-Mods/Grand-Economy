@@ -5,10 +5,9 @@ plugins {
 	id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.modrinth.minotaur" version "1.1.0"
 	// Maven Publish
-	id "com.jfrog.bintray" version "1.8.4"
-	id "maven-publish"
-	id "java"
-	id "java-library"
+	id 'maven'
+	id 'signing'
+	id 'io.codearte.nexus-staging' version '0.22.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -24,13 +23,11 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
-	modApi("me.shedaniel.cloth:config-2:${project.clothconfig_version}") {
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
-	modImplementation "the_fireplace.lib:Fireplace-Lib:${project.fireplacelib_version}"
-	include "the_fireplace.lib:Fireplace-Lib:${project.fireplacelib_version}"
+	modImplementation "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
 	modCompileOnly("io.github.gunpowder:gunpowder-api:${gunpowder_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
@@ -40,8 +37,16 @@ dependencies {
 
 repositories {
 	maven {
-		name = "Gunpowder"
-		url = "https://maven.martmists.com/releases"
+		name = 'Cloth Config'
+		url = 'https://maven.shedaniel.me/'
+	}
+	maven {
+		name = 'Mod Menu'
+		url = 'https://maven.terraformersmc.com/releases/'
+	}
+	maven {
+		name = 'Gunpowder'
+		url = 'https://maven.martmists.com/releases'
 	}
 }
 
@@ -73,76 +78,113 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 	from sourceSets.main.allSource
 }
 
-jar {
-	from "LICENSE"
+task javadocJar(type: Jar, dependsOn: classes) {
+	archiveClassifier.set('javadoc')
+	from javadoc
 }
 
-curseforge {
-	apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : "empty"
-	project {
-		id = '312141'
-		changelog = file('changelog.txt')
-		releaseType = project.release_type
-		addGameVersion project.minecraft_version
-		addGameVersion '1.16.4'
-		addGameVersion '1.16.3'
-		addGameVersion '1.16.2'
-		addGameVersion 'Java 8'
-		addGameVersion 'Fabric'
-		mainArtifact(new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")) {
-			displayName = "$archivesBaseName-$version"
-			relations {
-				requiredDependency 'fabric-api'
-				embeddedLibrary 'fireplace-lib'
-				embeddedLibrary 'cloth-config'
-				optionalDependency 'modmenu'
-				optionalDependency 'gunpowder-currency'
+artifacts {
+	archives jar, javadocJar, sourcesJar
+}
+
+signing {
+	sign configurations.archives
+}
+
+signArchives.dependsOn(remapSourcesJar)
+
+jar {
+	from 'LICENSE'
+}
+
+if (hasProperty('curseForgeApiKey')) {
+	curseforge {
+		apiKey = curseForgeApiKey
+		project {
+			id = '312141'
+			changelog = file('changelog.txt')
+			releaseType = project.release_type
+			addGameVersion project.minecraft_version
+			addGameVersion '1.16.4'
+			addGameVersion '1.16.3'
+			addGameVersion '1.16.2'
+			addGameVersion 'Java 8'
+			addGameVersion 'Fabric'
+			mainArtifact(new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")) {
+				displayName = "$archivesBaseName-$version"
+				relations {
+					requiredDependency 'fabric-api'
+					requiredDependency 'fireplace-lib'
+					optionalDependency 'cloth-config'
+					optionalDependency 'modmenu'
+					optionalDependency 'gunpowder-currency'
+				}
 			}
 		}
-	}
-	options {
-		javaIntegration = false
-		forgeGradleIntegration = false
+		options {
+			javaIntegration = false
+			forgeGradleIntegration = false
+		}
 	}
 }
 
 import com.modrinth.minotaur.TaskModrinthUpload
-
-task publishModrinth (type: TaskModrinthUpload) {
-	token = project.hasProperty("modrinthApiKey") ? project.modrinthApiKey : "empty"
-	projectId = 'gno5mxtx'
-	versionNumber = version
-	versionName = project.mod_version
-	uploadFile = jar // This is the java jar task
-	changelog = file('changelog.txt').getText()
-	releaseType = project.release_type
-	addGameVersion(project.minecraft_version as String)
-	addGameVersion('1.16.4')
-	addGameVersion('1.16.3')
-	addGameVersion('1.16.2')
-	addLoader('fabric')
-}
-
-bintray {
-	user = project.hasProperty("bintrayUser") ? project.bintrayUser : "empty"
-	key = project.hasProperty("bintrayApiKey") ? project.bintrayApiKey : "empty"
-	setPublications("mavenJava")
-	publish = true
-	pkg {
-		repo = "mc-mods"
-		name = "grand-economy"
-		licenses = ["MPL-2.0"]
+if (hasProperty('modrinthApiKey')) {
+	task publishModrinth(type: TaskModrinthUpload) {
+		token = modrinthApiKey
+		projectId = 'gno5mxtx'
+		versionNumber = version
+		versionName = project.mod_version
+		uploadFile = new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")
+		changelog = file('changelog.txt').getText()
+		releaseType = project.release_type
+		addGameVersion(project.minecraft_version as String)
+		addGameVersion('1.16.4')
+		addGameVersion('1.16.3')
+		addGameVersion('1.16.2')
+		addLoader('fabric')
 	}
 }
 
-def remapSourcesJar = tasks.getByName("remapSourcesJar")
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-publishing {
-	publications {
-		mavenJava(MavenPublication.class) {
-			artifact(remapJar)
-			artifact(sourcesJar) {
-				builtBy(remapSourcesJar)
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			pom.project {
+				name 'Grand Economy'
+				packaging 'jar'
+				description 'A server-side economy mod/api for Minecraft.'
+				url 'https://www.curseforge.com/minecraft/mc-mods/grand-economy'
+
+				scm {
+					connection "scm:svn:https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}.git"
+					developerConnection "scm:svn:https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}.git"
+					url "https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}"
+				}
+
+				licenses {
+					license {
+						name 'Mozilla Public License 2.0'
+						url 'https://www.mozilla.org/en-US/MPL/2.0/'
+					}
+				}
+
+				developers {
+					developer {
+						id 'the_fireplace'
+						name 'The_Fireplace'
+						email 'the.f1repl4ce@gmail.com'
+					}
+				}
 			}
 		}
 	}
