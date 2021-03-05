@@ -48,6 +48,8 @@ repositories {
 		name = 'Gunpowder'
 		url = 'https://maven.martmists.com/releases'
 	}
+	// For a Gunpowder dep
+	jcenter()
 }
 
 processResources {
