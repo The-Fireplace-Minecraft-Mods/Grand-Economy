@@ -17,7 +17,7 @@ public class NetworkEvents {
                 CommonTranslationKeys.BALANCE,
                 CurrencyAPI.getInstance().getFormattedBalance(player.getUuid(), true)
             );
-            player.sendMessage(joinMessage, false);
+            player.sendMessage(joinMessage);
         }
     }
 }

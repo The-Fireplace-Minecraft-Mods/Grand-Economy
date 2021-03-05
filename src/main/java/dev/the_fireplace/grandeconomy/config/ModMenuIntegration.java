@@ -10,7 +10,6 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.StringVisitable;
 
 import java.util.Optional;
 
@@ -25,12 +24,18 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
         super(GrandEconomy.getTranslator());
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public String getModId() {
+        return GrandEconomy.MODID;
+    }
+
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> {
             ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
-                .setTitle(translator.getTranslatedText("text.config.grandeconomy.title"));
+                .setTitle(translator.getTranslatedString("text.config.grandeconomy.title"));
 
             buildConfigCategories(builder);
 
@@ -42,16 +47,13 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
     private void buildConfigCategories(ConfigBuilder builder) {
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        ConfigCategory global = builder.getOrCreateCategory(translator.getTranslatedText("text.config.grandeconomy.global"));
-        global.setDescription(new StringVisitable[]{translator.getTranslatedText("text.config.grandeconomy.global.desc")});
+        ConfigCategory global = builder.getOrCreateCategory(translator.getTranslatedString("text.config.grandeconomy.global"));
         addGlobalCategoryEntries(entryBuilder, global);
 
-        ConfigCategory economyHandling = builder.getOrCreateCategory(translator.getTranslatedText("text.config.grandeconomy.economyHandling"));
-        economyHandling.setDescription(new StringVisitable[]{translator.getTranslatedText("text.config.grandeconomy.economyHandling.desc")});
+        ConfigCategory economyHandling = builder.getOrCreateCategory(translator.getTranslatedString("text.config.grandeconomy.economyHandling"));
         addEconomyHandlingCategoryEntries(entryBuilder, economyHandling);
 
-        ConfigCategory nativeEconomy = builder.getOrCreateCategory(translator.getTranslatedText("text.config.grandeconomy.nativeEconomy"));
-        nativeEconomy.setDescription(new StringVisitable[]{translator.getTranslatedText("text.config.grandeconomy.nativeEconomy.desc")});
+        ConfigCategory nativeEconomy = builder.getOrCreateCategory(translator.getTranslatedString("text.config.grandeconomy.nativeEconomy"));
         addNativeEconomyCategoryEntries(entryBuilder, nativeEconomy);
     }
 
@@ -94,7 +96,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
 
     private void addEconomyHandlingCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory economyHandlingCategory) {
         economyHandlingCategory.addEntry(
-            entryBuilder.startStringDropdownMenu(translator.getTranslatedText("text.config.grandeconomy.option.economyHandler"), config.getEconomyHandler())
+            entryBuilder.startStringDropdownMenu(translator.getTranslatedString("text.config.grandeconomy.option.economyHandler"), config.getEconomyHandler())
             .setSelections(economyRegistry.getEconomyHandlers())
             .setSuggestionMode(false)
             .setDefaultValue(DEFAULT_CONFIG.getEconomyHandler())
@@ -103,9 +105,9 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
             .setErrorSupplier(value ->
                 economyRegistry.hasEconomyHandler(value)
                     ? Optional.empty()
-                    : Optional.of(translator.getTranslatedText("text.config.grandeconomy.option.economyHandler.err")))
+                    : Optional.of(translator.getTranslatedString("text.config.grandeconomy.option.economyHandler.err")))
             .build());
-        economyHandlingCategory.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedText("text.config.grandeconomy.option.enforceNonNegativeBalance"), config.isEnforceNonNegativeBalance())
+        economyHandlingCategory.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedString("text.config.grandeconomy.option.enforceNonNegativeBalance"), config.isEnforceNonNegativeBalance())
             .setDefaultValue(DEFAULT_CONFIG.isEnforceNonNegativeBalance())
             .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.enforceNonNegativeBalance.desc", 2))
             .setSaveConsumer(config::setEnforceNonNegativeBalance)
@@ -113,7 +115,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
     }
 
     private void addGlobalCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory global) {
-        global.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedText("text.config.grandeconomy.option.showBalanceOnJoin"), config.isShowBalanceOnJoin())
+        global.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedString("text.config.grandeconomy.option.showBalanceOnJoin"), config.isShowBalanceOnJoin())
             .setDefaultValue(DEFAULT_CONFIG.isShowBalanceOnJoin())
             .setSaveConsumer(config::setShowBalanceOnJoin)
             .build());
@@ -137,9 +139,9 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
             0,
             Double.MAX_VALUE
         );
-        global.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedText("text.config.grandeconomy.option.basicIncome"), config.isBasicIncome())
+        global.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedString("text.config.grandeconomy.option.basicIncome"), config.isBasicIncome())
             .setDefaultValue(DEFAULT_CONFIG.isBasicIncome())
-            .setTooltip(translator.getTranslatedText("text.config.grandeconomy.option.basicIncome.desc"))
+            .setTooltip(translator.getTranslatedString("text.config.grandeconomy.option.basicIncome.desc"))
             .setSaveConsumer(config::setBasicIncome)
             .build());
         addDoubleField(

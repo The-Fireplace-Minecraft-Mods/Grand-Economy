@@ -10,7 +10,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import dev.the_fireplace.grandeconomy.GrandEconomy;
 import dev.the_fireplace.grandeconomy.command.GeCommand;
-import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.arguments.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
