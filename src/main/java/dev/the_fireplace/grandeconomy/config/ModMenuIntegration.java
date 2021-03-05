@@ -3,15 +3,16 @@ package dev.the_fireplace.grandeconomy.config;
 import dev.the_fireplace.grandeconomy.GrandEconomy;
 import dev.the_fireplace.grandeconomy.api.EconomyRegistry;
 import dev.the_fireplace.lib.api.client.ConfigScreenBuilder;
-import io.github.prospector.modmenu.api.ConfigScreenFactory;
 import io.github.prospector.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.screen.Screen;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuApi {
@@ -24,14 +25,13 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
         super(GrandEconomy.getTranslator());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public String getModId() {
         return GrandEconomy.MODID;
     }
 
     @Override
-    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+    public Function<Screen, ? extends Screen> getConfigScreenFactory() {
         return parent -> {
             ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
@@ -95,15 +95,15 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
     }
 
     private void addEconomyHandlingCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory economyHandlingCategory) {
+        //noinspection unchecked
         economyHandlingCategory.addEntry(
             entryBuilder.startStringDropdownMenu(translator.getTranslatedString("text.config.grandeconomy.option.economyHandler"), config.getEconomyHandler())
             .setSelections(economyRegistry.getEconomyHandlers())
-            .setSuggestionMode(false)
             .setDefaultValue(DEFAULT_CONFIG.getEconomyHandler())
             .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.economyHandler.desc", 2))
-            .setSaveConsumer(config::setEconomyHandler)
+            .setSaveConsumer(newValue -> config.setEconomyHandler((String) newValue))
             .setErrorSupplier(value ->
-                economyRegistry.hasEconomyHandler(value)
+                economyRegistry.hasEconomyHandler((String) value)
                     ? Optional.empty()
                     : Optional.of(translator.getTranslatedString("text.config.grandeconomy.option.economyHandler.err")))
             .build());

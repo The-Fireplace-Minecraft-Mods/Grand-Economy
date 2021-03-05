@@ -23,7 +23,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 	modApi("me.shedaniel.cloth:config-2:${project.clothconfig_version}") {
 		exclude(group: 'net.fabricmc.fabric-api')
 		exclude(group: 'io.github.prospector')
@@ -108,7 +108,6 @@ if (hasProperty('curseForgeApiKey')) {
 					requiredDependency 'fireplace-lib'
 					optionalDependency 'cloth-config'
 					optionalDependency 'modmenu'
-					optionalDependency 'gunpowder-currency'
 				}
 			}
 		}

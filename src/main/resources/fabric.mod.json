@@ -36,7 +36,7 @@
   "depends": {
     "fabricloader": ">=0.7.2",
     "fabric": "*",
-    "minecraft": "1.15.X",
+    "minecraft": "1.14.X",
     "fireplacelib": ">=3.0.3 <4"
   }
 }
