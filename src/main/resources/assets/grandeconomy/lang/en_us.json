@@ -9,6 +9,10 @@
   "commands.grandeconomy.balance.usage": "/balance",
   "commands.grandeconomy.balance.description": "Shows your current account balance.",
 
+  "commands.grandeconomy.reload.usage": "/gereload.",
+  "commands.grandeconomy.reload.description": "Reloads config from the config file.",
+  "commands.grandeconomy.reload.reloaded": "Grand Economy config reloaded!",
+
   "commands.grandeconomy.convert.usage": "/convert",
   "commands.grandeconomy.convert.description": "Converts what you're holding into currency.",
   "commands.grandeconomy.convert.success": "You have exchanged %s %s for %s each, earning a total of %s. Your balance is now %s.",
