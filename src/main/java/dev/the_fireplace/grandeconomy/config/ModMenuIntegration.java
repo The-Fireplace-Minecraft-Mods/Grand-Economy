@@ -41,7 +41,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
 
             buildConfigCategories(builder);
 
-            builder.setSavingRunnable(() -> ModConfig.getInstance().resave());
+            builder.setSavingRunnable(() -> ModConfig.getInstance().save());
             return builder.build();
         };
     }
