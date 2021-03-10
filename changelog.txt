@@ -1,7 +1,7 @@
 Additions:
 
 Changes:
-Updated to Fireplace Lib 3.0.3+
+Updated to use features from Fireplace Lib 3.0.4+
+Updated logo
 
 Fixes/Internal Changes:
-The root package is now dev.the_fireplace.grandeconomy
