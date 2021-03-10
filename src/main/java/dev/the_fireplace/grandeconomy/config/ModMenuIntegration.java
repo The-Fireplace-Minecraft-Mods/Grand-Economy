@@ -17,7 +17,9 @@ import java.util.Optional;
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuApi {
     private static final ModConfig.Access DEFAULT_CONFIG = ModConfig.getDefaultData();
-    
+    private static final String TRANSLATION_BASE = "text.config.grandeconomy.";
+    private static final String OPTION_TRANSLATION_BASE = TRANSLATION_BASE + "option.";
+
     private final EconomyRegistry economyRegistry = EconomyRegistry.getInstance();
     private final ModConfig.Access config = ModConfig.getData();
 
@@ -30,7 +32,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
         return parent -> {
             ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
-                .setTitle(translator.getTranslatedText("text.config.grandeconomy.title"));
+                .setTitle(translator.getTranslatedText(TRANSLATION_BASE + "title"));
 
             buildConfigCategories(builder);
 
@@ -42,16 +44,16 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
     private void buildConfigCategories(ConfigBuilder builder) {
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        ConfigCategory global = builder.getOrCreateCategory(translator.getTranslatedText("text.config.grandeconomy.global"));
-        global.setDescription(new StringVisitable[]{translator.getTranslatedText("text.config.grandeconomy.global.desc")});
+        ConfigCategory global = builder.getOrCreateCategory(translator.getTranslatedText(TRANSLATION_BASE + "global"));
+        global.setDescription(new StringVisitable[]{translator.getTranslatedText(TRANSLATION_BASE + "global.desc")});
         addGlobalCategoryEntries(entryBuilder, global);
 
-        ConfigCategory economyHandling = builder.getOrCreateCategory(translator.getTranslatedText("text.config.grandeconomy.economyHandling"));
-        economyHandling.setDescription(new StringVisitable[]{translator.getTranslatedText("text.config.grandeconomy.economyHandling.desc")});
+        ConfigCategory economyHandling = builder.getOrCreateCategory(translator.getTranslatedText(TRANSLATION_BASE + "economyHandling"));
+        economyHandling.setDescription(new StringVisitable[]{translator.getTranslatedText(TRANSLATION_BASE + "economyHandling.desc")});
         addEconomyHandlingCategoryEntries(entryBuilder, economyHandling);
 
-        ConfigCategory nativeEconomy = builder.getOrCreateCategory(translator.getTranslatedText("text.config.grandeconomy.nativeEconomy"));
-        nativeEconomy.setDescription(new StringVisitable[]{translator.getTranslatedText("text.config.grandeconomy.nativeEconomy.desc")});
+        ConfigCategory nativeEconomy = builder.getOrCreateCategory(translator.getTranslatedText(TRANSLATION_BASE + "nativeEconomy"));
+        nativeEconomy.setDescription(new StringVisitable[]{translator.getTranslatedText(TRANSLATION_BASE + "nativeEconomy.desc")});
         addNativeEconomyCategoryEntries(entryBuilder, nativeEconomy);
     }
 
@@ -59,7 +61,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
         addStringField(
             entryBuilder,
             nativeEconomy,
-            "text.config.grandeconomy.option.currencyNameSingular",
+            OPTION_TRANSLATION_BASE + "currencyNameSingular",
             config.getCurrencyNameSingular(),
             DEFAULT_CONFIG.getCurrencyNameSingular(),
             config::setCurrencyNameSingular
@@ -67,7 +69,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
         addStringField(
             entryBuilder,
             nativeEconomy,
-            "text.config.grandeconomy.option.currencyNameMultiple",
+            OPTION_TRANSLATION_BASE + "currencyNameMultiple",
             config.getCurrencyNameMultiple(),
             DEFAULT_CONFIG.getCurrencyNameMultiple(),
             config::setCurrencyNameMultiple
@@ -75,7 +77,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
         addStringField(
             entryBuilder,
             nativeEconomy,
-            "text.config.grandeconomy.option.decimalFormattingLanguageTag",
+            OPTION_TRANSLATION_BASE + "decimalFormattingLanguageTag",
             config.getDecimalFormattingLanguageTag(),
             DEFAULT_CONFIG.getDecimalFormattingLanguageTag(),
             config::setDecimalFormattingLanguageTag
@@ -83,7 +85,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
         addDoubleField(
             entryBuilder,
             nativeEconomy,
-            "text.config.grandeconomy.option.startBalance",
+            OPTION_TRANSLATION_BASE + "startBalance",
             config.getStartBalance(),
             DEFAULT_CONFIG.getStartBalance(),
             config::setStartBalance,
@@ -94,58 +96,70 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
 
     private void addEconomyHandlingCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory economyHandlingCategory) {
         economyHandlingCategory.addEntry(
-            entryBuilder.startStringDropdownMenu(translator.getTranslatedText("text.config.grandeconomy.option.economyHandler"), config.getEconomyHandler())
+            entryBuilder.startStringDropdownMenu(translator.getTranslatedText(OPTION_TRANSLATION_BASE + "economyHandler"), config.getEconomyHandler())
             .setSelections(economyRegistry.getEconomyHandlers())
             .setSuggestionMode(false)
             .setDefaultValue(DEFAULT_CONFIG.getEconomyHandler())
-            .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.economyHandler.desc", 2))
+            .setTooltip(genDescriptionTranslatables(OPTION_TRANSLATION_BASE + "economyHandler.desc", 2))
             .setSaveConsumer(config::setEconomyHandler)
             .setErrorSupplier(value ->
                 economyRegistry.hasEconomyHandler(value)
                     ? Optional.empty()
-                    : Optional.of(translator.getTranslatedText("text.config.grandeconomy.option.economyHandler.err")))
+                    : Optional.of(translator.getTranslatedText(OPTION_TRANSLATION_BASE + "economyHandler.err")))
             .build());
-        economyHandlingCategory.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedText("text.config.grandeconomy.option.enforceNonNegativeBalance"), config.isEnforceNonNegativeBalance())
-            .setDefaultValue(DEFAULT_CONFIG.isEnforceNonNegativeBalance())
-            .setTooltip(genDescriptionTranslatables("text.config.grandeconomy.option.enforceNonNegativeBalance.desc", 2))
-            .setSaveConsumer(config::setEnforceNonNegativeBalance)
-            .build());
+        addBoolToggle(
+            entryBuilder,
+            economyHandlingCategory,
+            OPTION_TRANSLATION_BASE + "enforceNonNegativeBalance",
+            config.isEnforceNonNegativeBalance(),
+            DEFAULT_CONFIG.isEnforceNonNegativeBalance(),
+            config::setEnforceNonNegativeBalance,
+            (byte) 2
+        );
     }
 
     private void addGlobalCategoryEntries(ConfigEntryBuilder entryBuilder, ConfigCategory global) {
-        global.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedText("text.config.grandeconomy.option.showBalanceOnJoin"), config.isShowBalanceOnJoin())
-            .setDefaultValue(DEFAULT_CONFIG.isShowBalanceOnJoin())
-            .setSaveConsumer(config::setShowBalanceOnJoin)
-            .build());
+        addBoolToggle(
+            entryBuilder,
+            global,
+            OPTION_TRANSLATION_BASE + "showBalanceOnJoin",
+            config.isShowBalanceOnJoin(),
+            DEFAULT_CONFIG.isShowBalanceOnJoin(),
+            config::setShowBalanceOnJoin,
+            (byte) 0
+        );
         addDoublePercentSlider(
             entryBuilder,
             global,
-            "text.config.grandeconomy.option.pvpMoneyTransferPercent",
+            OPTION_TRANSLATION_BASE + "pvpMoneyTransferPercent",
             config.getPvpMoneyTransferPercent(),
             DEFAULT_CONFIG.getPvpMoneyTransferPercent(),
             config::setPvpMoneyTransferPercent,
-            (byte)1,
-            (byte)1
+            (byte) 1,
+            (byte) 1
         );
         addDoubleField(
             entryBuilder,
             global,
-            "text.config.grandeconomy.option.pvpMoneyTransferFlat",
+            OPTION_TRANSLATION_BASE + "pvpMoneyTransferFlat",
             config.getPvpMoneyTransferFlat(),
             DEFAULT_CONFIG.getPvpMoneyTransferFlat(),
             config::setPvpMoneyTransferFlat,
             0,
             Double.MAX_VALUE
         );
-        global.addEntry(entryBuilder.startBooleanToggle(translator.getTranslatedText("text.config.grandeconomy.option.basicIncome"), config.isBasicIncome())
-            .setDefaultValue(DEFAULT_CONFIG.isBasicIncome())
-            .setTooltip(translator.getTranslatedText("text.config.grandeconomy.option.basicIncome.desc"))
-            .setSaveConsumer(config::setBasicIncome)
-            .build());
+        addBoolToggle(
+            entryBuilder,
+            global,
+            OPTION_TRANSLATION_BASE + "basicIncome",
+            config.isBasicIncome(),
+            DEFAULT_CONFIG.isBasicIncome(),
+            config::setBasicIncome
+        );
         addDoubleField(
             entryBuilder,
             global,
-            "text.config.grandeconomy.option.basicIncomeAmount",
+            OPTION_TRANSLATION_BASE + "basicIncomeAmount",
             config.getBasicIncomeAmount(),
             DEFAULT_CONFIG.getBasicIncomeAmount(),
             config::setBasicIncomeAmount,
@@ -155,7 +169,7 @@ public class ModMenuIntegration extends ConfigScreenBuilder implements ModMenuAp
         addIntField(
             entryBuilder,
             global,
-            "text.config.grandeconomy.option.maxIncomeSavingsDays",
+            OPTION_TRANSLATION_BASE + "maxIncomeSavingsDays",
             config.getMaxIncomeSavingsDays(),
             DEFAULT_CONFIG.getMaxIncomeSavingsDays(),
             config::setMaxIncomeSavingsDays,
