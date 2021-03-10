@@ -78,10 +78,6 @@ public final class ModConfig extends LazyConfig {
     public String getId() {
         return GrandEconomy.MODID;
     }
-
-    public void resave() {
-        save();
-    }
     
     public final class Access {
 
