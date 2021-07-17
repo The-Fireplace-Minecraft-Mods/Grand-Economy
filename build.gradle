@@ -30,6 +30,12 @@ repositories {
 		name = 'Gunpowder'
 		url = 'https://maven.martmists.com/releases'
 	}
+	maven {
+		name = 'Hermes (Gunpowder dep)'
+		url = 'https://hephaestus.dev/release'
+	}
+	// Gunpowder dep
+	//noinspection GrDeprecatedAPIUsage, JCenterRepository
 	jcenter()
 	flatDir { dirs 'lib' }
 }
@@ -41,7 +47,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
+	modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	modImplementation "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
