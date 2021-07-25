@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerWorld.class)
 public final class ServerWorldMixin {
     @Inject(at = @At("RETURN"), method = "method_18213")
-    public void onPlayerConnected(ServerPlayerEntity player, CallbackInfo info) {
+    private void onPlayerConnected(ServerPlayerEntity player, CallbackInfo info) {
         DIContainer.get().getInstance(NetworkEvents.class).onPlayerJoinServer(player);
     }
 }
