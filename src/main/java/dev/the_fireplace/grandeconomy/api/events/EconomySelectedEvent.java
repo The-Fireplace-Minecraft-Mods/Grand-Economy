@@ -1,6 +1,6 @@
-package dev.the_fireplace.grandeconomy.api.event;
+package dev.the_fireplace.grandeconomy.api.events;
 
-import dev.the_fireplace.grandeconomy.api.Economy;
+import dev.the_fireplace.grandeconomy.api.interfaces.Economy;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 

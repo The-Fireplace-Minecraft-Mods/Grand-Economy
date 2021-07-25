@@ -1,17 +1,11 @@
-package dev.the_fireplace.grandeconomy.api;
+package dev.the_fireplace.grandeconomy.api.injectables;
 
-import dev.the_fireplace.grandeconomy.impl.CurrencyManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface CurrencyAPI {
-    static CurrencyAPI getInstance() {
-        //noinspection deprecation
-        return CurrencyManager.INSTANCE;
-    }
-
     /**
      * Check the account's balance
      * @param uuid

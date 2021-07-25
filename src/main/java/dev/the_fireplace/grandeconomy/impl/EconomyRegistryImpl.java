@@ -1,17 +1,17 @@
 package dev.the_fireplace.grandeconomy.impl;
 
-import dev.the_fireplace.grandeconomy.api.Economy;
-import dev.the_fireplace.grandeconomy.api.EconomyRegistry;
+import dev.the_fireplace.annotateddi.api.di.Implementation;
+import dev.the_fireplace.grandeconomy.api.injectables.EconomyRegistry;
+import dev.the_fireplace.grandeconomy.api.interfaces.Economy;
 
+import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Implementation
+@Singleton
 public final class EconomyRegistryImpl implements EconomyRegistry {
-    @Deprecated
-    public static final EconomyRegistryImpl INSTANCE = new EconomyRegistryImpl();
-
-    private EconomyRegistryImpl(){}
 
     private final Map<String, Economy> econHandlers = new ConcurrentHashMap<>();
 
