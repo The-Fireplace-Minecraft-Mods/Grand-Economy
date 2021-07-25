@@ -8,16 +8,28 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
-import dev.the_fireplace.grandeconomy.GrandEconomy;
+import dev.the_fireplace.grandeconomy.api.injectables.CurrencyAPI;
 import dev.the_fireplace.grandeconomy.command.GeCommand;
+import dev.the_fireplace.lib.api.chat.injectables.TranslatorFactory;
+import dev.the_fireplace.lib.api.command.injectables.FeedbackSenderFactory;
+import dev.the_fireplace.lib.api.command.injectables.Requirements;
 import net.minecraft.command.arguments.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public final class WalletCommand extends GeCommand {
-    
+
+    @Inject
+    public WalletCommand(CurrencyAPI currencyAPI, TranslatorFactory translatorFactory, FeedbackSenderFactory feedbackSenderFactory, Requirements requirements) {
+        super(currencyAPI, translatorFactory, feedbackSenderFactory, requirements);
+    }
+
     @Override
     public CommandNode<ServerCommandSource> register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> walletCommand = CommandManager.literal("wallet")
@@ -72,7 +84,7 @@ public final class WalletCommand extends GeCommand {
             return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
         }
         currencyAPI.setBalance(targetPlayer.getUuid(), amount, true);
-        command.getSource().sendFeedback(GrandEconomy.getTranslator().getTextForTarget(command.getSource(), "commands.grandeconomy.wallet.set", targetPlayer.getDisplayName(), currencyAPI.formatCurrency(amount)), false);
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.set", targetPlayer.getDisplayName(), currencyAPI.formatCurrency(amount));
         return Command.SINGLE_SUCCESS;
     }
 

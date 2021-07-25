@@ -1,4 +1,4 @@
-package dev.the_fireplace.grandeconomy.api;
+package dev.the_fireplace.grandeconomy.api.interfaces;
 
 import java.util.UUID;
 

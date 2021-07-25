@@ -1,10 +1,12 @@
 package dev.the_fireplace.grandeconomy.command;
 
-import dev.the_fireplace.grandeconomy.GrandEconomy;
-import dev.the_fireplace.grandeconomy.api.CurrencyAPI;
-import dev.the_fireplace.lib.api.command.FeedbackSender;
-import dev.the_fireplace.lib.api.command.RegisterableCommand;
-import dev.the_fireplace.lib.api.command.Requirements;
+import dev.the_fireplace.grandeconomy.GrandEconomyConstants;
+import dev.the_fireplace.grandeconomy.api.injectables.CurrencyAPI;
+import dev.the_fireplace.lib.api.chat.injectables.TranslatorFactory;
+import dev.the_fireplace.lib.api.command.injectables.FeedbackSenderFactory;
+import dev.the_fireplace.lib.api.command.injectables.Requirements;
+import dev.the_fireplace.lib.api.command.interfaces.FeedbackSender;
+import dev.the_fireplace.lib.api.command.interfaces.RegisterableCommand;
 
 public abstract class GeCommand implements RegisterableCommand {
 
@@ -12,9 +14,14 @@ public abstract class GeCommand implements RegisterableCommand {
 	protected final FeedbackSender feedbackSender;
 	protected final Requirements requirements;
 
-	protected GeCommand() {
-		this.currencyAPI = CurrencyAPI.getInstance();
-		this.feedbackSender = GrandEconomy.getFeedbackSender();
-		this.requirements = Requirements.getInstance();
+	protected GeCommand(
+		CurrencyAPI currencyAPI,
+		TranslatorFactory translatorFactory,
+		FeedbackSenderFactory feedbackSenderFactory,
+		Requirements requirements
+	) {
+		this.currencyAPI = currencyAPI;
+		this.feedbackSender = feedbackSenderFactory.get(translatorFactory.getTranslator(GrandEconomyConstants.MODID));
+		this.requirements = requirements;
 	}
 }

@@ -1,15 +1,11 @@
-package dev.the_fireplace.grandeconomy.api;
+package dev.the_fireplace.grandeconomy.api.injectables;
 
-import dev.the_fireplace.grandeconomy.impl.EconomyRegistryImpl;
+import dev.the_fireplace.grandeconomy.api.interfaces.Economy;
 
 import java.util.Collection;
 
+@SuppressWarnings("UnusedReturnValue")
 public interface EconomyRegistry {
-    static EconomyRegistry getInstance() {
-        //noinspection deprecation
-        return EconomyRegistryImpl.INSTANCE;
-    }
-
     /**
      * Check if an economy handler exists for the given modid or alias
      * @param key
