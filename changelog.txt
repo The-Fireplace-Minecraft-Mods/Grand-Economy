@@ -1,8 +1,6 @@
 Additions:
-Added /gereload to reload config from the config file
 
 Changes:
-Updated to use features from Fireplace Lib 3.0.4+
-Updated logo
+Updated to Fireplace Lib 5.2+
 
 Fixes/Internal Changes:
