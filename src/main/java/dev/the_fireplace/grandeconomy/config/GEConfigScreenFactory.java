@@ -107,7 +107,7 @@ public final class GEConfigScreenFactory {
             value ->
                 economyRegistry.hasEconomyHandler(value)
                     ? Optional.empty()
-                    : Optional.of(translator.getTranslatedText(OPTION_TRANSLATION_BASE + "economyHandler.err"))
+                    : Optional.of(translator.getTranslatedString(OPTION_TRANSLATION_BASE + "economyHandler.err"))
         );
         configScreenBuilder.addBoolToggle(
             OPTION_TRANSLATION_BASE + "enforceNonNegativeBalance",
