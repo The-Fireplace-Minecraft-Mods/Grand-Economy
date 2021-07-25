@@ -1,6 +1,6 @@
 package dev.the_fireplace.grandeconomy.compat.gunpowder;
 
-import dev.the_fireplace.grandeconomy.api.Economy;
+import dev.the_fireplace.grandeconomy.api.interfaces.Economy;
 import io.github.gunpowder.api.GunpowderMod;
 import io.github.gunpowder.api.module.currency.modelhandlers.BalanceHandler;
 

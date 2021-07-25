@@ -19,17 +19,17 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "dev.the_fireplace.grandeconomy.GrandEconomy"
+    "di-main": [
+      "dev.the_fireplace.grandeconomy.entrypoints.MainEntrypoint"
     ],
     "grandeconomy": [
-      "dev.the_fireplace.grandeconomy.nativeeconomy.NativeEconomyEntrypoint"
+      "dev.the_fireplace.grandeconomy.entrypoints.EconomyRegistryEntrypoint"
     ],
     "modmenu": [
-      "dev.the_fireplace.grandeconomy.config.ModMenuIntegration"
+      "dev.the_fireplace.grandeconomy.entrypoints.ModMenuEntrypoint"
     ],
     "gunpowder:modules": [
-      "dev.the_fireplace.grandeconomy.compat.gunpowder.GrandEconomyGunpowderModule"
+      "dev.the_fireplace.grandeconomy.entrypoints.GunpowderEntrypoint"
     ]
   },
   "mixins": [
@@ -40,6 +40,6 @@
     "fabricloader": ">=0.7.2",
     "fabric": "*",
     "minecraft": ">=1.16",
-    "fireplacelib": ">=3.0.4 <4"
+    "fireplacelib": ">=5.2 <6"
   }
 }

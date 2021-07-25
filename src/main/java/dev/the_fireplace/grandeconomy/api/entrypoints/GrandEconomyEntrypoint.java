@@ -1,4 +1,7 @@
-package dev.the_fireplace.grandeconomy.api;
+package dev.the_fireplace.grandeconomy.api.entrypoints;
+
+import dev.the_fireplace.grandeconomy.api.injectables.EconomyRegistry;
+import dev.the_fireplace.grandeconomy.api.interfaces.Economy;
 
 public interface GrandEconomyEntrypoint {
 	/**

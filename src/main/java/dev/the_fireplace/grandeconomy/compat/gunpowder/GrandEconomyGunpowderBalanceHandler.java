@@ -1,6 +1,7 @@
 package dev.the_fireplace.grandeconomy.compat.gunpowder;
 
-import dev.the_fireplace.grandeconomy.api.CurrencyAPI;
+import dev.the_fireplace.annotateddi.api.DIContainer;
+import dev.the_fireplace.grandeconomy.api.injectables.CurrencyAPI;
 import io.github.gunpowder.api.module.currency.dataholders.StoredBalance;
 import io.github.gunpowder.api.module.currency.modelhandlers.BalanceHandler;
 import kotlin.jvm.functions.Function1;
@@ -14,7 +15,7 @@ public final class GrandEconomyGunpowderBalanceHandler implements BalanceHandler
     private final CurrencyAPI currencyAPI;
 
     private GrandEconomyGunpowderBalanceHandler() {
-        this.currencyAPI = CurrencyAPI.getInstance();
+        this.currencyAPI = DIContainer.get().getInstance(CurrencyAPI.class);
     }
 
     @NotNull

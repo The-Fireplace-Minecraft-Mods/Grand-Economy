@@ -5,12 +5,30 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
+import dev.the_fireplace.grandeconomy.api.injectables.CurrencyAPI;
 import dev.the_fireplace.grandeconomy.command.CommonTranslationKeys;
 import dev.the_fireplace.grandeconomy.command.GeCommand;
+import dev.the_fireplace.lib.api.chat.injectables.TranslatorFactory;
+import dev.the_fireplace.lib.api.command.injectables.FeedbackSenderFactory;
+import dev.the_fireplace.lib.api.command.injectables.Requirements;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public final class BalanceCommand extends GeCommand {
+
+    @Inject
+    public BalanceCommand(
+        CurrencyAPI currencyAPI,
+        TranslatorFactory translatorFactory,
+        FeedbackSenderFactory feedbackSenderFactory,
+        Requirements requirements
+    ) {
+        super(currencyAPI, translatorFactory, feedbackSenderFactory, requirements);
+    }
 
     @Override
     public CommandNode<ServerCommandSource> register(CommandDispatcher<ServerCommandSource> commandDispatcher) {
