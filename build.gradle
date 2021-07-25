@@ -14,6 +14,16 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+sourceSets {
+	api {
+		compileClasspath += sourceSets.main.compileClasspath
+	}
+	main {
+		compileClasspath += sourceSets.api.output
+		runtimeClasspath += sourceSets.api.output
+	}
+}
+
 archivesBaseName = project.archives_base_name
 version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
@@ -68,11 +78,30 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-	withSourcesJar()
 	withJavadocJar()
 }
 
 javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	archiveClassifier.set('sources')
+	from sourceSets.main.allSource + sourceSets.api.allSource
+}
+
+javadoc {
+	source sourceSets.api.allJava
+	source sourceSets.main.allJava
+}
+
+task apiJar(type: Jar, dependsOn: classes) {
+	archiveClassifier.set('api')
+	from sourceSets.api.output
+}
+
+task apiSourcesJar(type: Jar, dependsOn: classes) {
+	archiveClassifier.set('api-sources')
+	from sourceSets.api.allSource
+}
 
 jar {
 	from("LICENSE") {
@@ -140,6 +169,8 @@ if (hasProperty('nexusUsername')) {
 					builtBy remapSourcesJar
 				}
 				artifact javadocJar
+				artifact apiJar
+				artifact apiSourcesJar
 				pom {
 					name = 'Grand Economy'
 					packaging = 'jar'
