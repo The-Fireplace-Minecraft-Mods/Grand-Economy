@@ -20,6 +20,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.UUID;
 
 @Singleton
 public final class PayCommand extends GeCommand {
@@ -47,13 +48,15 @@ public final class PayCommand extends GeCommand {
         if (amount < 0) {
             return feedbackSender.throwFailure(command, "commands.grandeconomy.pay.negative");
         }
-        if (currencyAPI.getBalance(targetPlayer.getUuid(), true) < amount) {
+        UUID senderAccountId = command.getSource().getPlayer().getUuid();
+        if (currencyAPI.getBalance(senderAccountId, true) < amount) {
             return feedbackSender.throwFailure(command, CommonTranslationKeys.INSUFFICIENT_CREDIT, currencyAPI.getCurrencyName(2));
         }
 
-        boolean taken = currencyAPI.takeFromBalance(command.getSource().getPlayer().getUuid(), amount, true);
+        boolean taken = currencyAPI.takeFromBalance(senderAccountId, amount, true);
         if (taken) {
-            currencyAPI.addToBalance(targetPlayer.getUuid(), amount, true);
+            UUID targetAccountId = targetPlayer.getUuid();
+            currencyAPI.addToBalance(targetAccountId, amount, true);
             feedbackSender.basic(command, "commands.grandeconomy.pay.paid", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
             feedbackSender.basic(targetPlayer, "commands.grandeconomy.pay.recieved", currencyAPI.formatCurrency(amount), command.getSource().getName());
 
