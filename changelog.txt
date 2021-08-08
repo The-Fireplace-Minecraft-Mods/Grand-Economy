@@ -4,3 +4,4 @@ Changes:
 Updated to Fireplace Lib 5.2+
 
 Fixes/Internal Changes:
+Fixed /pay looking at wrong account for amount that can be paid.
