@@ -1,7 +1,6 @@
 Additions:
 
 Changes:
-/pay can now be used to pay offline players
 Updated to Fireplace Lib 5.2+
 
 Fixes/Internal Changes:

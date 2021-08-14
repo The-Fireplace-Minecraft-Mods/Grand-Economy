@@ -5,6 +5,4 @@ public final class CommonTranslationKeys {
 
     public static final String INSUFFICIENT_CREDIT = COMMON_PREFIX + "insufficient_credit";
     public static final String BALANCE = COMMON_PREFIX + "balance";
-
-    public static final String PLAYER_NOT_FOUND = "argument.player.unknown";
 }
