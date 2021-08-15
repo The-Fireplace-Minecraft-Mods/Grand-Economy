@@ -31,11 +31,6 @@ group = project.maven_group
 repositories {
 	maven { url 'https://maven.shedaniel.me/' }
 	maven { url 'https://maven.terraformersmc.com/releases/' }
-	maven {
-		name = 'Gunpowder'
-		url = 'https://maven.martmists.com/releases'
-	}
-	jcenter()
 	flatDir { dirs 'lib' }
 }
 
@@ -53,7 +48,6 @@ dependencies {
 	modCompileOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}:api"
 	modRuntime "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
 	annotationProcessor "dev.the-fireplace:Annotated-DI:${project.annotateddi_version}:processor"
-	modImplementation "dev.the-fireplace:Annotated-DI:${project.annotateddi_version}"//TODO temporary, so we still have deps when using local FL
 
 	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 }
