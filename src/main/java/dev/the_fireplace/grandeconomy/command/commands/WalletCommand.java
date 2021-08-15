@@ -11,8 +11,10 @@ import com.mojang.brigadier.tree.CommandNode;
 import dev.the_fireplace.grandeconomy.api.injectables.CurrencyAPI;
 import dev.the_fireplace.grandeconomy.command.GeCommand;
 import dev.the_fireplace.lib.api.chat.injectables.TranslatorFactory;
+import dev.the_fireplace.lib.api.command.injectables.ArgumentTypeFactory;
 import dev.the_fireplace.lib.api.command.injectables.FeedbackSenderFactory;
 import dev.the_fireplace.lib.api.command.injectables.Requirements;
+import dev.the_fireplace.lib.api.command.interfaces.PossiblyOfflinePlayer;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
@@ -25,9 +27,12 @@ import javax.inject.Singleton;
 @Singleton
 public final class WalletCommand extends GeCommand {
 
+    private final ArgumentTypeFactory argumentTypeFactory;
+
     @Inject
-    public WalletCommand(CurrencyAPI currencyAPI, TranslatorFactory translatorFactory, FeedbackSenderFactory feedbackSenderFactory, Requirements requirements) {
+    public WalletCommand(CurrencyAPI currencyAPI, TranslatorFactory translatorFactory, FeedbackSenderFactory feedbackSenderFactory, Requirements requirements, ArgumentTypeFactory argumentTypeFactory) {
         super(currencyAPI, translatorFactory, feedbackSenderFactory, requirements);
+        this.argumentTypeFactory = argumentTypeFactory;
     }
 
     @Override
@@ -36,15 +41,12 @@ public final class WalletCommand extends GeCommand {
             .requires(requirements::manageGameSettings);
 
         walletCommand.then(CommandManager.literal("balance")
-            .then(CommandManager.argument("player", EntityArgumentType.player())
-                .executes((command) -> {
-                    ServerPlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "player");
-                    return runBalanceCommand(command, targetPlayer);
-                })
+            .then(CommandManager.argument("player", argumentTypeFactory.possiblyOfflinePlayer())
+                .executes(this::runBalanceCommand)
             )
         );
         walletCommand.then(CommandManager.literal("set")
-            .then(CommandManager.argument("player", EntityArgumentType.player())
+            .then(CommandManager.argument("player", argumentTypeFactory.possiblyOfflinePlayer())
                 .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0))
                     .executes(this::runSetCommand)
                 )
@@ -52,14 +54,14 @@ public final class WalletCommand extends GeCommand {
         );
 
         addAliased(walletCommand, new String[]{"give", "add"},
-            CommandManager.argument("player", EntityArgumentType.player())
+            CommandManager.argument("player", argumentTypeFactory.possiblyOfflinePlayer())
                 .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0))
                     .executes(this::runGiveCommand)
                 )
         );
 
         walletCommand.then(CommandManager.literal("take")
-            .then(CommandManager.argument("target", EntityArgumentType.player())
+            .then(CommandManager.argument("player", argumentTypeFactory.possiblyOfflinePlayer())
                 .then(CommandManager.argument("amount", DoubleArgumentType.doubleArg(0))
                     .executes(this::runTakeCommand)
                 )
@@ -78,40 +80,41 @@ public final class WalletCommand extends GeCommand {
     }
 
     private int runSetCommand(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {
-        PlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "player");
+        PossiblyOfflinePlayer targetPlayer = argumentTypeFactory.getPossiblyOfflinePlayer(command, "player");
         double amount = command.getArgument("amount", Double.class);
         if (amount < 0) {
-            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
+            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getName());
         }
-        currencyAPI.setBalance(targetPlayer.getUuid(), amount, true);
-        feedbackSender.basic(command, "commands.grandeconomy.wallet.set", targetPlayer.getDisplayName(), currencyAPI.formatCurrency(amount));
+        currencyAPI.setBalance(targetPlayer.getId(), amount, true);
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.set", targetPlayer.getName(), currencyAPI.formatCurrency(amount));
         return Command.SINGLE_SUCCESS;
     }
 
-    private int runBalanceCommand(CommandContext<ServerCommandSource> command, ServerPlayerEntity targetPlayer) {
-        feedbackSender.basic(command, "commands.grandeconomy.wallet.balance", targetPlayer.getDisplayName(), currencyAPI.getFormattedBalance(targetPlayer.getUuid(), true));
+    private int runBalanceCommand(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {
+        PossiblyOfflinePlayer targetPlayer = argumentTypeFactory.getPossiblyOfflinePlayer(command, "player");
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.balance", targetPlayer.getName(), currencyAPI.getFormattedBalance(targetPlayer.getId(), true));
         return Command.SINGLE_SUCCESS;
     }
 
     private int runGiveCommand(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {
-        PlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "player");
+        PossiblyOfflinePlayer targetPlayer = argumentTypeFactory.getPossiblyOfflinePlayer(command, "player");
         double amount = command.getArgument("amount", Double.class);
-        if (currencyAPI.getBalance(targetPlayer.getUuid(), true) + amount < 0) {
-            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
+        if (currencyAPI.getBalance(targetPlayer.getId(), true) + amount < 0) {
+            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getName());
         }
-        currencyAPI.addToBalance(targetPlayer.getUuid(), amount, true);
-        feedbackSender.basic(command, "commands.grandeconomy.wallet.given", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
+        currencyAPI.addToBalance(targetPlayer.getId(), amount, true);
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.given", currencyAPI.formatCurrency(amount), targetPlayer.getName());
         return Command.SINGLE_SUCCESS;
     }
 
     private int runTakeCommand(CommandContext<ServerCommandSource> command) throws CommandSyntaxException {
-        PlayerEntity targetPlayer = EntityArgumentType.getPlayer(command, "target");
+        PossiblyOfflinePlayer targetPlayer = argumentTypeFactory.getPossiblyOfflinePlayer(command, "player");
         double amount = command.getArgument("amount", Double.class);
-        if (currencyAPI.getBalance(targetPlayer.getUuid(), true) - amount < 0) {
-            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getDisplayName());
+        if (currencyAPI.getBalance(targetPlayer.getId(), true) - amount < 0) {
+            return feedbackSender.throwFailure(command, "commands.grandeconomy.wallet.negative", targetPlayer.getName());
         }
-        currencyAPI.takeFromBalance(targetPlayer.getUuid(), amount, true);
-        feedbackSender.basic(command, "commands.grandeconomy.wallet.taken", currencyAPI.formatCurrency(amount), targetPlayer.getDisplayName());
+        currencyAPI.takeFromBalance(targetPlayer.getId(), amount, true);
+        feedbackSender.basic(command, "commands.grandeconomy.wallet.taken", currencyAPI.formatCurrency(amount), targetPlayer.getName());
         return Command.SINGLE_SUCCESS;
     }
 }
