@@ -85,11 +85,6 @@ task apiJar(type: Jar, dependsOn: classes) {
 	from sourceSets.api.output
 }
 
-task apiSourcesJar(type: Jar, dependsOn: classes) {
-	archiveClassifier.set('api-sources')
-	from sourceSets.api.allSource
-}
-
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
@@ -150,7 +145,6 @@ if (hasProperty('nexusUsername')) {
 				}
 				artifact javadocJar
 				artifact apiJar
-				artifact apiSourcesJar
 				pom {
 					name = 'Grand Economy'
 					packaging = 'jar'
