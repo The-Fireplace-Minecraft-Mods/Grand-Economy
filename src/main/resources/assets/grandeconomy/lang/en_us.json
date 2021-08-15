@@ -67,6 +67,7 @@
   "text.config.grandeconomy.option.currencyNameSingular": "Currency Name (Singular)",
   "text.config.grandeconomy.option.currencyNameMultiple": "Currency Name (Plural)",
   "text.config.grandeconomy.option.decimalFormattingLanguageTag": "Decimal Format Language Tag",
+  "text.config.grandeconomy.option.decimalFormattingLanguageTag.desc": "IETF Language Tag to be used for the decimal format.",
   "text.config.grandeconomy.option.startBalance": "Start Balance",
   "text.config.grandeconomy.option.basicIncome": "Basic Income",
   "text.config.grandeconomy.option.basicIncome.desc": "Give each player currency every day they log in.",

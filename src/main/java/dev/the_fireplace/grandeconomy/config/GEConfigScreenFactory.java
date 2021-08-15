@@ -71,13 +71,15 @@ public final class GEConfigScreenFactory {
             OPTION_TRANSLATION_BASE + "currencyNameSingular",
             config.getCurrencyNameSingular(),
             defaultConfigValues.getCurrencyNameSingular(),
-            config::setCurrencyNameSingular
+            config::setCurrencyNameSingular,
+            (byte) 0
         );
         configScreenBuilder.addStringField(
             OPTION_TRANSLATION_BASE + "currencyNameMultiple",
             config.getCurrencyNameMultiple(),
             defaultConfigValues.getCurrencyNameMultiple(),
-            config::setCurrencyNameMultiple
+            config::setCurrencyNameMultiple,
+            (byte) 0
         );
         configScreenBuilder.addStringField(
             OPTION_TRANSLATION_BASE + "decimalFormattingLanguageTag",
@@ -91,7 +93,8 @@ public final class GEConfigScreenFactory {
             defaultConfigValues.getStartBalance(),
             config::setStartBalance,
             0,
-            Double.MAX_VALUE
+            Double.MAX_VALUE,
+            (byte) 0
         );
     }
 
@@ -162,7 +165,8 @@ public final class GEConfigScreenFactory {
             defaultConfigValues.getMaxIncomeSavingsDays(),
             config::setMaxIncomeSavingsDays,
             0,
-            Integer.MAX_VALUE
+            Integer.MAX_VALUE,
+            (byte) 2
         );
     }
 }
