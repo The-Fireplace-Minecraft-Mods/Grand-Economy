@@ -40,6 +40,6 @@
     "fabricloader": ">=0.7.2",
     "fabric": "*",
     "minecraft": ">=1.16",
-    "fireplacelib": ">=5.2 <6"
+    "fireplacelib": ">=5.3 <6"
   }
 }
