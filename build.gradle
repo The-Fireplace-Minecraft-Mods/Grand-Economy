@@ -31,17 +31,6 @@ group = project.maven_group
 repositories {
 	maven { url 'https://maven.shedaniel.me/' }
 	maven { url 'https://maven.terraformersmc.com/releases/' }
-	maven {
-		name = 'Gunpowder'
-		url = 'https://maven.martmists.com/releases'
-	}
-	maven {
-		name = 'Hermes (Gunpowder dep)'
-		url = 'https://hephaestus.dev/release'
-	}
-	// Gunpowder dep
-	//noinspection GrDeprecatedAPIUsage, JCenterRepository
-	jcenter()
 	flatDir { dirs 'lib' }
 }
 
@@ -58,9 +47,6 @@ dependencies {
 	modCompileOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}:api"
 	modRuntime "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
 	annotationProcessor "dev.the-fireplace:Annotated-DI:${project.annotateddi_version}:processor"
-	modCompileOnly("io.github.gunpowder:gunpowder-api:${gunpowder_version}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
 
 	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 }
@@ -122,7 +108,6 @@ if (hasProperty('curseForgeApiKey')) {
 					requiredDependency 'fireplace-lib'
 					optionalDependency 'cloth-config'
 					optionalDependency 'modmenu'
-					optionalDependency 'gunpowder-currency'
 				}
 			}
 		}

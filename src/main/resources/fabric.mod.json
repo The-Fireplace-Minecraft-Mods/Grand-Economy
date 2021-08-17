@@ -27,9 +27,6 @@
     ],
     "modmenu": [
       "dev.the_fireplace.grandeconomy.entrypoints.ModMenuEntrypoint"
-    ],
-    "gunpowder:modules": [
-      "dev.the_fireplace.grandeconomy.entrypoints.GunpowderEntrypoint"
     ]
   },
   "mixins": [
