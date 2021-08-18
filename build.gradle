@@ -99,6 +99,7 @@ task apiJar(type: Jar, dependsOn: classes) {
 }
 
 jar {
+	from sourceSets.api.output
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
