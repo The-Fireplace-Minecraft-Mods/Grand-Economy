@@ -1,9 +1,6 @@
 Additions:
 
 Changes:
-/pay can now be used to pay offline players
-/wallet can now be used on offline players
-Updated to Fireplace Lib 5.3+
 
 Fixes/Internal Changes:
-Fixed /pay looking at wrong account for amount that can be paid.
+Fixed startup crash
