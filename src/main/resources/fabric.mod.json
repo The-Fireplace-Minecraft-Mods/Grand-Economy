@@ -32,11 +32,17 @@
   "mixins": [
     "grandeconomy.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.7.2",
     "fabric": "*",
     "minecraft": ">=1.17",
     "fireplacelib": ">=6.0.2 <7"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/QXQYPj5"
+      }
+    }
   }
 }
