@@ -79,6 +79,7 @@ javadoc {
 task apiJar(type: Jar, dependsOn: classes) {
 	archiveClassifier.set('api')
 	from sourceSets.api.output
+	from 'src/api/dummyresources/fabric.mod.json'
 }
 
 jar {
