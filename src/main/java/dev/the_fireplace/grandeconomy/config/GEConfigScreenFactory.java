@@ -7,6 +7,7 @@ import dev.the_fireplace.lib.api.chat.injectables.TranslatorFactory;
 import dev.the_fireplace.lib.api.chat.interfaces.Translator;
 import dev.the_fireplace.lib.api.client.injectables.ConfigScreenBuilderFactory;
 import dev.the_fireplace.lib.api.client.interfaces.ConfigScreenBuilder;
+import dev.the_fireplace.lib.api.client.interfaces.OptionBuilder;
 import dev.the_fireplace.lib.api.lazyio.injectables.ConfigStateManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -71,16 +72,14 @@ public final class GEConfigScreenFactory {
             OPTION_TRANSLATION_BASE + "currencyNameSingular",
             config.getCurrencyNameSingular(),
             defaultConfigValues.getCurrencyNameSingular(),
-            config::setCurrencyNameSingular,
-            (byte) 0
-        );
+            config::setCurrencyNameSingular
+        ).setDescriptionRowCount((byte) 0);
         configScreenBuilder.addStringField(
             OPTION_TRANSLATION_BASE + "currencyNameMultiple",
             config.getCurrencyNameMultiple(),
             defaultConfigValues.getCurrencyNameMultiple(),
-            config::setCurrencyNameMultiple,
-            (byte) 0
-        );
+            config::setCurrencyNameMultiple
+        ).setDescriptionRowCount((byte) 0);
         configScreenBuilder.addStringField(
             OPTION_TRANSLATION_BASE + "decimalFormattingLanguageTag",
             config.getDecimalFormattingLanguageTag(),
@@ -91,11 +90,8 @@ public final class GEConfigScreenFactory {
             OPTION_TRANSLATION_BASE + "startBalance",
             config.getStartBalance(),
             defaultConfigValues.getStartBalance(),
-            config::setStartBalance,
-            0,
-            Double.MAX_VALUE,
-            (byte) 0
-        );
+            config::setStartBalance
+        ).setMinimum(0.0).setDescriptionRowCount((byte) 0);
     }
 
     private void addEconomyHandlingCategoryEntries() {
@@ -104,21 +100,18 @@ public final class GEConfigScreenFactory {
             config.getEconomyHandler(),
             defaultConfigValues.getEconomyHandler(),
             economyRegistry.getEconomyHandlers(),
-            config::setEconomyHandler,
-            false,
-            (byte) 2,
-            value ->
-                economyRegistry.hasEconomyHandler(value)
-                    ? Optional.empty()
-                    : Optional.of(translator.getTranslatedString(OPTION_TRANSLATION_BASE + "economyHandler.err"))
-        );
+            config::setEconomyHandler
+        ).setErrorSupplier(value ->
+            economyRegistry.hasEconomyHandler(value)
+                ? Optional.empty()
+                : Optional.of(translator.getTranslatedString(OPTION_TRANSLATION_BASE + "economyHandler.err"))
+        ).setDescriptionRowCount((byte) 2);
         configScreenBuilder.addBoolToggle(
             OPTION_TRANSLATION_BASE + "enforceNonNegativeBalance",
             config.isEnforceNonNegativeBalance(),
             defaultConfigValues.isEnforceNonNegativeBalance(),
-            config::setEnforceNonNegativeBalance,
-            (byte) 2
-        );
+            config::setEnforceNonNegativeBalance
+        ).setDescriptionRowCount((byte) 2);
     }
 
     private void addGlobalCategoryEntries() {
@@ -126,26 +119,23 @@ public final class GEConfigScreenFactory {
             OPTION_TRANSLATION_BASE + "showBalanceOnJoin",
             config.isShowBalanceOnJoin(),
             defaultConfigValues.isShowBalanceOnJoin(),
-            config::setShowBalanceOnJoin,
-            (byte) 0
-        );
-        configScreenBuilder.addDoublePercentSlider(
+            config::setShowBalanceOnJoin
+        ).setDescriptionRowCount((byte) 0);
+        configScreenBuilder.addDoubleSlider(
             OPTION_TRANSLATION_BASE + "pvpMoneyTransferPercent",
             config.getPvpMoneyTransferPercent(),
             defaultConfigValues.getPvpMoneyTransferPercent(),
             config::setPvpMoneyTransferPercent,
-            (byte) 1,
-            (byte) 1
-        );
+            0,
+            100
+        ).enablePercentMode();
         configScreenBuilder.addDoubleField(
             OPTION_TRANSLATION_BASE + "pvpMoneyTransferFlat",
             config.getPvpMoneyTransferFlat(),
             defaultConfigValues.getPvpMoneyTransferFlat(),
-            config::setPvpMoneyTransferFlat,
-            0,
-            Double.MAX_VALUE
-        );
-        configScreenBuilder.addBoolToggle(
+            config::setPvpMoneyTransferFlat
+        ).setMinimum(0.0);
+        OptionBuilder<Boolean> basicIncome = configScreenBuilder.addBoolToggle(
             OPTION_TRANSLATION_BASE + "basicIncome",
             config.isBasicIncome(),
             defaultConfigValues.isBasicIncome(),
@@ -155,18 +145,15 @@ public final class GEConfigScreenFactory {
             OPTION_TRANSLATION_BASE + "basicIncomeAmount",
             config.getBasicIncomeAmount(),
             defaultConfigValues.getBasicIncomeAmount(),
-            config::setBasicIncomeAmount,
-            0,
-            Double.MAX_VALUE
-        );
+            config::setBasicIncomeAmount
+        ).setMinimum(0.0).addDependency(basicIncome);
         configScreenBuilder.addIntField(
             OPTION_TRANSLATION_BASE + "maxIncomeSavingsDays",
             config.getMaxIncomeSavingsDays(),
             defaultConfigValues.getMaxIncomeSavingsDays(),
-            config::setMaxIncomeSavingsDays,
-            0,
-            Integer.MAX_VALUE,
-            (byte) 2
-        );
+            config::setMaxIncomeSavingsDays
+        ).setMinimum(0)
+        .setDescriptionRowCount((byte) 2)
+        .addDependency(basicIncome);
     }
 }
