@@ -5,8 +5,19 @@
 ## Adding Grand Economy to your dev environment
 To use this with your mod, include the following in `build.gradle`:
 ```
+repositories {
+  maven {
+	name 'Cloth Config'
+	url 'https://maven.shedaniel.me/'
+  }
+  maven {
+	name 'Mod Menu'
+	url 'https://maven.terraformersmc.com/releases/'
+  }
+}
 dependencies {
-  modImplementation "dev.the-fireplace:GrandEconomy:${project.grandeconomy_version}"
+  modCompileOnly "dev.the-fireplace:Grand-Economy:${project.grandeconomy_version}:api"
+  modRuntime "dev.the-fireplace:Grand-Economy:${project.grandeconomy_version}"
 }
 ```
 And in `gradle.properties`:
