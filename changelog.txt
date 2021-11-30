@@ -1,7 +1,1 @@
-Additions:
-
-Changes:
-Updated to Fireplace Lib 6.0.2+
-Basic Income Amount/Max Savings Days are now hidden in the Config GUI when Basic Income is off
-
-Fixes/Internal Changes:
+Update to use newer Fabric Loader and Fireplace Lib versions
