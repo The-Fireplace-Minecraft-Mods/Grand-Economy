@@ -1,7 +1,7 @@
 //file:noinspection GroovyAssignabilityCheck
 plugins {
 	// Dependencies
-	id 'fabric-loom' version '0.9-SNAPSHOT'
+	id 'fabric-loom' version '0.10-SNAPSHOT'
 	// Mod Hosting Publish
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 	id 'com.modrinth.minotaur' version '1.1.0'
@@ -41,7 +41,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modCompileOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}:api"
-	modRuntime "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
+	modRuntimeOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
 	annotationProcessor "dev.the-fireplace:Annotated-DI:${project.annotateddi_version}:processor"
 
 	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
@@ -60,16 +60,17 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.release.set(16)
 }
 
-java {
-	withJavadocJar()
-}
-
-javadoc.options.addStringOption('Xdoclint:none', '-quiet')
-
 task sourcesJar(type: Jar, dependsOn: classes) {
 	archiveClassifier.set('sources')
 	from sourceSets.main.allSource + sourceSets.api.allSource
 }
+
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
+javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 
 javadoc {
 	source sourceSets.api.allJava
@@ -82,11 +83,17 @@ task apiJar(type: Jar, dependsOn: classes) {
 	from 'src/api/dummyresources/fabric.mod.json'
 }
 
+build.dependsOn(apiJar)
+
 jar {
 	from sourceSets.api.output
 	from('LICENSE') {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
+}
+
+configurations {
+	apiElements.outgoing.artifact(apiJar)
 }
 
 if (hasProperty('curseForgeApiKey')) {
@@ -136,14 +143,7 @@ if (hasProperty('nexusUsername')) {
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
-				artifact(remapJar) {
-					builtBy remapJar
-				}
-				artifact(sourcesJar) {
-					builtBy remapSourcesJar
-				}
-				artifact javadocJar
-				artifact apiJar
+				from components.java
 				pom {
 					name = 'Grand Economy'
 					packaging = 'jar'
