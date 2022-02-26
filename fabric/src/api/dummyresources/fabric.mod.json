@@ -1,0 +1,16 @@
+{
+    "schemaVersion": 1,
+    "id": "grandeconomyapi",
+    "version": "${version}",
+    "name": "${readable_name} API",
+    "description": "This is a dummy file to include in the API jar so Loom will remap the API in the dev environment.",
+    "authors": [
+        "The_Fireplace"
+    ],
+    "contact": {},
+    "license": "${license_id}",
+    "environment": "*",
+    "entrypoints": {},
+    "mixins": [],
+    "depends": {}
+}

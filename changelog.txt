@@ -1,1 +1,2 @@
-Update to use newer Fabric Loader and Fireplace Lib versions
+[Fabric] Add Diamond Economy adapter (experimental)
+Update to use Annotated DI 3 and Fireplace Lib 7
