@@ -1,0 +1,251 @@
+//file:noinspection GroovyAssignabilityCheck
+plugins {
+    id 'fabric-loom' version '0.12-SNAPSHOT'
+    // Mod Hosting Publish
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'com.modrinth.minotaur' version '2.2.0'
+}
+
+archivesBaseName = "${archives_base_name}-Fabric"
+def mainArtifactFile = new File(new File(buildDir, 'libs'), "$archivesBaseName-${version}.jar")
+def changelogFile = file('../changelog.txt')
+
+sourceSets {
+    api {
+        compileClasspath += sourceSets.main.compileClasspath
+    }
+    main {
+        compileClasspath += sourceSets.api.output
+        runtimeClasspath += sourceSets.api.output
+    }
+}
+
+repositories {
+    maven { url 'https://maven.shedaniel.me/' }
+    maven { url 'https://maven.terraformersmc.com/releases/' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
+    maven {
+        url 'https://www.cursemaven.com/'
+        content {
+            includeGroup 'curse.maven'
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    def fabricLoaderDependency = "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modImplementation fabricLoaderDependency
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+
+    def fabricApiDependency = "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    modImplementation fabricApiDependency
+
+    modCompileOnly "dev.the-fireplace:Fireplace-Lib-Fabric:${project.fireplacelib_version}:api"
+    modRuntimeOnly "dev.the-fireplace:Fireplace-Lib-Fabric:${project.fireplacelib_version}"
+    annotationProcessor "dev.the-fireplace:Annotated-DI-Fabric-Processor:${project.annotateddi_version}"
+
+    modCompileOnly 'curse.maven:gunpowder-350123:3344786'
+    modCompileOnly "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+
+    /*modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:${project.fabric_clothconfig_version}") {
+        exclude(group: 'net.fabricmc.fabric-api')
+    }*/
+
+    apiImplementation fabricLoaderDependency
+    apiImplementation fabricApiDependency
+
+    apiCompileOnly project(":api")
+    compileOnly project(":api")
+    compileOnly project(":common")
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+processResources {
+    from project(':common').sourceSets.main.resources
+    inputs.property 'version', project.version
+
+    def buildProps = project.properties.clone()
+
+    filesMatching('*.mixins.json') {
+        expand "refmap_target": "${archivesBaseName}-"
+    }
+
+    filesMatching(['**/*.json', 'pack.mcmeta']) {
+        expand buildProps
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('sources')
+    from project(':common').sourceSets.main.allSource
+    from project(':api').sourceSets.main.allSource
+    from sourceSets.main.allSource
+    from sourceSets.api.allSource
+}
+
+javadoc {
+    source project(':common').sourceSets.main.allJava
+    source project(':api').sourceSets.main.allJava
+    source sourceSets.api.allJava
+    source sourceSets.main.allJava
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+compileJava {
+    source project(':common').sourceSets.main.allSource
+    source project(':api').sourceSets.main.allSource
+    source sourceSets.api.allSource
+}
+
+task apiJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('api')
+    from sourceSets.api.output
+    from project(':api').sourceSets.main.output
+    from 'src/api/dummyresources/fabric.mod.json'
+}
+
+build.dependsOn(apiJar)
+
+configurations {
+    apiElements.outgoing.artifact(apiJar)
+}
+
+if (hasProperty('curseForgeApiKey')) {
+    curseforge {
+        apiKey = curseForgeApiKey
+        project {
+            id = '312141'
+            changelog = changelogFile
+            releaseType = project.release_type
+            addGameVersion project.minecraft_version
+            addGameVersion '1.17'
+            addGameVersion 'Java 16'
+            addGameVersion 'Fabric'
+            mainArtifact(mainArtifactFile) {
+                displayName = "$archivesBaseName-$version"
+                relations {
+                    requiredDependency 'fabric-api'
+                    requiredDependency 'annotated-di'
+                    requiredDependency 'fireplace-lib'
+                    optionalDependency 'modmenu'
+                }
+            }
+        }
+        options {
+            javaIntegration = false
+            forgeGradleIntegration = false
+        }
+    }
+}
+
+if (hasProperty('modrinthApiKey')) {
+    modrinth {
+        token = modrinthApiKey
+        projectId = 'gno5mxtx'
+        versionNumber = "$version-fabric"
+        versionName = project.mod_version
+        uploadFile = mainArtifactFile
+        changelog = changelogFile.getText()
+        versionType = project.release_type
+        gameVersions = [
+                project.minecraft_version as String,
+                '1.17',
+        ]
+        loaders = [
+                'fabric',
+                'quilt',
+        ]
+        dependencies {
+            required.project 'P7dR8mSH'// Fabric API
+            required.project 'RAXqYPH1'// Annotated DI
+            required.project 'ING0LAPF'// Fireplace Lib
+            optional.project 'mOgUt4GM'// Mod Menu
+        }
+    }
+}
+
+if (hasProperty('nexusUsername') || System.getenv("NEXUS_USERNAME") != null) {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                groupId project.maven_group
+                artifactId project.archivesBaseName
+                version project.version
+                pom {
+                    name = project.readable_name
+                    packaging = 'jar'
+                    description = project.maven_description
+                    url = project.modrinth_url
+                    scm {
+                        connection = "scm:svn:${project.github_url}.git"
+                        developerConnection = "scm:svn:${project.github_url}.git"
+                        url = project.github_url
+                    }
+
+                    licenses {
+                        license {
+                            name = project.license_name
+                            url = project.license_url
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'the_fireplace'
+                            name = 'The_Fireplace'
+                            email = 'git@the-fireplace.dev'
+                        }
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = findProperty('nexusUsername') ?: System.getenv("NEXUS_USERNAME")
+                    password = findProperty('nexusPassword') ?: System.getenv("NEXUS_PASSWORD")
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
+}
