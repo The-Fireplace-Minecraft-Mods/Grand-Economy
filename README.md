@@ -26,7 +26,7 @@ grandeconomy_version=<mod version>+<minecraft version>
 ```
 
 ## Using the Entrypoint
-To use currency from Grand Economy and/or register your own currency, you'll want to use the entrypoint.
+To use economy from Grand Economy and/or register your own economy, you'll want to use the entrypoint.
 
 1. Create a class that implements `GrandEconomyEntrypoint`
 2. Add whatever logic you want to in your `GrandEconomyEntrypoint`'s `init` function
