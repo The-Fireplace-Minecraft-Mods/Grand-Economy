@@ -1,189 +1,69 @@
 //file:noinspection GroovyAssignabilityCheck
 plugins {
-	// Dependencies
-	id 'fabric-loom' version '0.9-SNAPSHOT'
-	// Mod Hosting Publish
-	id 'com.matthewprenger.cursegradle' version '1.4.0'
-	id 'com.modrinth.minotaur' version '1.1.0'
-	// Maven Publish
+	id 'java'
+	// Standard Artifact Publish
 	id 'maven-publish'
 	id 'signing'
 	id 'io.codearte.nexus-staging' version '0.30.0'
 }
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'maven-publish'
+	apply plugin: 'signing'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
 
-sourceSets {
-	api {
-		compileClasspath += sourceSets.main.compileClasspath
+	group = project.maven_group
+	version = "${project.mod_version}+${project.minecraft_version}"
+	if (project.hasProperty('SNAPSHOT')) {
+		version = "${version}-SNAPSHOT"
 	}
-	main {
-		compileClasspath += sourceSets.api.output
-		runtimeClasspath += sourceSets.api.output
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.encoding = 'UTF-8'
+		it.options.release.set(8)
 	}
-}
 
-archivesBaseName = project.archives_base_name
-version = "${project.mod_version}+${project.minecraft_version}"
-group = project.maven_group
+	javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 
-repositories {
-	maven { url 'https://maven.shedaniel.me/' }
-	maven { url 'https://maven.terraformersmc.com/releases/' }
-	flatDir { dirs 'lib' }
-}
-
-dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	modCompileOnly "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}:api"
-	modRuntime "dev.the-fireplace:Fireplace-Lib:${project.fireplacelib_version}"
-	annotationProcessor "dev.the-fireplace:Annotated-DI:${project.annotateddi_version}:processor"
-
-	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
-}
-
-processResources {
-	inputs.property 'version', project.version
-
-	filesMatching('fabric.mod.json') {
-		expand 'version': project.version
+	nexusStaging {
+		packageGroup = project.maven_group
 	}
-}
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = 'UTF-8'
-	it.options.release.set(8)
-}
-
-java {
-	withJavadocJar()
-}
-
-javadoc.options.addStringOption('Xdoclint:none', '-quiet')
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-	archiveClassifier.set('sources')
-	from sourceSets.main.allSource + sourceSets.api.allSource
-}
-
-javadoc {
-	source sourceSets.api.allJava
-	source sourceSets.main.allJava
-}
-
-task apiJar(type: Jar, dependsOn: classes) {
-	archiveClassifier.set('api')
-	from sourceSets.api.output
-	from 'src/api/dummyresources/fabric.mod.json'
-}
-
-jar {
-	from sourceSets.api.output
-	from('LICENSE') {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
-}
-
-if (hasProperty('curseForgeApiKey')) {
-	curseforge {
-		apiKey = curseForgeApiKey
-		project {
-			id = '312141'
-			changelog = file('changelog.txt')
-			releaseType = project.release_type
-			addGameVersion project.minecraft_version
-			addGameVersion 'Java 8'
-			addGameVersion 'Fabric'
-			mainArtifact(new File(new File(buildDir, "libs"), "$archivesBaseName-${version}.jar")) {
-				displayName = "$archivesBaseName-$version"
-				relations {
-					requiredDependency 'fabric-api'
-					requiredDependency 'fireplace-lib'
-					optionalDependency 'modmenu'
-				}
-			}
+	jar {
+		manifest {
+			attributes([
+				'Specification-Title'     : archives_base_name,
+				'Specification-Vendor'    : 'The_Fireplace',
+				'Specification-Version'   : project.jar.archiveVersion,
+				'Implementation-Title'    : project.name,
+				'Implementation-Version'  : project.jar.archiveVersion,
+				'Implementation-Vendor'   : 'The_Fireplace',
+				'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+				'Timestampe'              : System.currentTimeMillis(),
+				'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+				'Build-On-Minecraft'      : minecraft_version
+			])
 		}
-		options {
-			javaIntegration = false
-			forgeGradleIntegration = false
-		}
-	}
-}
-
-import com.modrinth.minotaur.TaskModrinthUpload
-if (hasProperty('modrinthApiKey')) {
-	task publishModrinth(type: TaskModrinthUpload) {
-		token = modrinthApiKey
-		projectId = 'gno5mxtx'
-		versionNumber = version
-		versionName = project.mod_version
-		uploadFile = new File(new File(buildDir, 'libs'), "$archivesBaseName-${version}.jar")
-		changelog = file('changelog.txt').getText()
-		releaseType = project.release_type
-		addGameVersion(project.minecraft_version as String)
-		addLoader('fabric')
-	}
-}
-
-if (hasProperty('nexusUsername')) {
-	publishing {
-		publications {
-			mavenJava(MavenPublication) {
-				artifact(remapJar) {
-					builtBy remapJar
-				}
-				artifact(sourcesJar) {
-					builtBy remapSourcesJar
-				}
-				artifact javadocJar
-				artifact apiJar
-				pom {
-					name = 'Grand Economy'
-					packaging = 'jar'
-					description = 'A server-side economy mod/api for Minecraft.'
-					url = 'https://www.curseforge.com/minecraft/mc-mods/grand-economy'
-					scm {
-						connection = "scm:svn:https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}.git"
-						developerConnection = "scm:svn:https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}.git"
-						url = "https://github.com/The-Fireplace-Minecraft-Mods/${project.github_slug}"
-					}
-
-					licenses {
-						license {
-							name = 'Mozilla Public License 2.0'
-							url = 'https://www.mozilla.org/en-US/MPL/2.0/'
-						}
-					}
-
-					developers {
-						developer {
-							id = 'the_fireplace'
-							name = 'The_Fireplace'
-							email = 'the.f1repl4ce@gmail.com'
-						}
-					}
-				}
-			}
-		}
-		repositories {
-			maven {
-				def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-				def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-				url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-				credentials {
-					username = nexusUsername
-					password = nexusPassword
-				}
-			}
+		from('LICENSE') {
+			rename { "${it}_${archives_base_name}" }
 		}
 	}
 
-	signing {
-		sign publishing.publications.mavenJava
+	repositories {
+		mavenCentral()
+
+		maven {
+			name = 'Sponge / Mixin'
+			url = 'https://repo.spongepowered.org/repository/maven-public/'
+		}
+	}
+
+	// Disables Gradle's custom module metadata from being published to maven. The
+	// metadata includes mapped dependencies which are not reasonably consumable by
+	// other mod developers.
+	tasks.withType(GenerateModuleMetadata) {
+		enabled = false
 	}
 }

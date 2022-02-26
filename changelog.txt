@@ -1,7 +1,2 @@
-Additions:
-
-Changes:
-Updated to Fireplace Lib 6.0.2+
-Basic Income Amount/Max Savings Days are now hidden in the Config GUI when Basic Income is off
-
-Fixes/Internal Changes:
+[Fabric] Add Diamond Economy adapter (experimental)
+Update to use Annotated DI 3 and Fireplace Lib 7
