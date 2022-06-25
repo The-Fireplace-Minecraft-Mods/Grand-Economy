@@ -7,8 +7,8 @@ import dev.the_fireplace.grandeconomy.domain.init.LoaderSpecificInitialization;
 import dev.the_fireplace.lib.api.events.FLEventBus;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 
 import java.util.function.Consumer;
 
@@ -28,7 +28,7 @@ public final class ForgeSpecificInitialization implements LoaderSpecificInitiali
     private record ServerStarting(Consumer<MinecraftServer> runnable)
     {
         @SubscribeEvent
-        public void onServerStarting(ServerStartingEvent event) {
+        public void onServerStarting(FMLServerStartingEvent event) {
             runnable.accept(event.getServer());
         }
     }
