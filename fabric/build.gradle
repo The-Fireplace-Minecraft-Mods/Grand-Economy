@@ -153,6 +153,7 @@ if (hasProperty('curseForgeApiKey')) {
                     requiredDependency 'annotated-di'
                     requiredDependency 'fireplace-lib'
                     optionalDependency 'modmenu'
+                    optionalDependency 'diamond-economy'
                 }
             }
         }
@@ -185,6 +186,7 @@ if (hasProperty('modrinthApiKey')) {
             required.project 'RAXqYPH1'// Annotated DI
             required.project 'ING0LAPF'// Fireplace Lib
             optional.project 'mOgUt4GM'// Mod Menu
+            optional.project '2kJPGlnV'// Diamond Economy
         }
     }
 }
