@@ -175,7 +175,7 @@ if (hasProperty('curseForgeApiKey')) {
     curseforge {
         apiKey = curseForgeApiKey
         project {
-            id = '000000'
+            id = '312141'
             changelog = changelogFile
             releaseType = project.release_type
             addGameVersion project.minecraft_version
