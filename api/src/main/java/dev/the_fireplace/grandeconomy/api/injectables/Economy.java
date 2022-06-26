@@ -1,7 +1,6 @@
 package dev.the_fireplace.grandeconomy.api.injectables;
 
-import org.jetbrains.annotations.Nullable;
-
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
