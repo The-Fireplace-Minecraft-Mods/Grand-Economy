@@ -14,6 +14,11 @@ dependencies {
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 if (hasProperty('nexusUsername') || System.getenv("NEXUS_USERNAME") != null) {
     publishing {
         publications {
