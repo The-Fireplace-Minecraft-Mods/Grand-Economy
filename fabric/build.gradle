@@ -150,9 +150,12 @@ if (hasProperty('curseForgeApiKey')) {
             changelog = changelogFile
             releaseType = project.release_type
             addGameVersion project.minecraft_version
-            addGameVersion '1.17'
-            addGameVersion 'Java 16'
+            addGameVersion '1.16.4'
+            addGameVersion '1.16.3'
+            addGameVersion '1.16.2'
+            addGameVersion 'Java 8'
             addGameVersion 'Fabric'
+            addGameVersion 'Quilt'
             mainArtifact(mainArtifactFile) {
                 displayName = "$archivesBaseName-$version"
                 relations {
@@ -160,6 +163,7 @@ if (hasProperty('curseForgeApiKey')) {
                     requiredDependency 'annotated-di'
                     requiredDependency 'fireplace-lib'
                     optionalDependency 'modmenu'
+                    optionalDependency 'gunpowder-currency'
                 }
             }
         }
@@ -181,7 +185,9 @@ if (hasProperty('modrinthApiKey')) {
         versionType = project.release_type
         gameVersions = [
                 project.minecraft_version as String,
-                '1.17',
+                '1.16.4',
+                '1.16.3',
+                '1.16.2',
         ]
         loaders = [
                 'fabric',
