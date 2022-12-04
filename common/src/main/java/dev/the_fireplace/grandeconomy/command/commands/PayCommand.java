@@ -13,9 +13,9 @@ import dev.the_fireplace.lib.api.chat.injectables.TranslatorFactory;
 import dev.the_fireplace.lib.api.command.injectables.ArgumentTypeFactory;
 import dev.the_fireplace.lib.api.command.injectables.FeedbackSenderFactory;
 import dev.the_fireplace.lib.api.command.injectables.Requirements;
-import dev.the_fireplace.lib.api.command.interfaces.PossiblyOfflinePlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 
 import javax.inject.Inject;
@@ -37,7 +37,7 @@ public final class PayCommand extends GeCommand {
     public CommandNode<CommandSourceStack> register(CommandDispatcher<CommandSourceStack> commandDispatcher) {
         return commandDispatcher.register(Commands.literal("pay")
             .requires(requirements::player)
-            .then(Commands.argument("player", argumentTypeFactory.possiblyOfflinePlayer())
+            .then(Commands.argument("player", EntityArgument.player())
                 .then(Commands.argument("amount", DoubleArgumentType.doubleArg(0))
                     .executes(this::execute)
                 )
@@ -46,7 +46,7 @@ public final class PayCommand extends GeCommand {
     }
 
     private int execute(CommandContext<CommandSourceStack> command) throws CommandSyntaxException {
-        PossiblyOfflinePlayer targetPlayer = argumentTypeFactory.getPossiblyOfflinePlayer(command, "player");
+        ServerPlayer targetPlayer = EntityArgument.getPlayer(command, "player");
         double amount = command.getArgument("amount", Double.class);
         if (amount < 0) {
             return feedbackSender.throwFailure(command, "commands.grandeconomy.pay.negative");
@@ -58,10 +58,10 @@ public final class PayCommand extends GeCommand {
 
         boolean taken = economy.takeFromBalance(senderAccountId, amount, true);
         if (taken) {
-            UUID targetAccountId = targetPlayer.getId();
+            UUID targetAccountId = targetPlayer.getUUID();
             economy.addToBalance(targetAccountId, amount, true);
             feedbackSender.basic(command, "commands.grandeconomy.pay.paid", economy.formatCurrency(amount), targetPlayer.getName());
-            ServerPlayer targetPlayerEntity = targetPlayer.entity();
+            ServerPlayer targetPlayerEntity = targetPlayer;
             if (targetPlayerEntity != null) {
                 feedbackSender.basic(targetPlayerEntity, "commands.grandeconomy.pay.recieved", economy.formatCurrency(amount), command.getSource().getDisplayName());
             }

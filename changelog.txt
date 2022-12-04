@@ -1,2 +1,1 @@
-[Fabric] Add Diamond Economy adapter (experimental)
-Update to use Annotated DI 3 and Fireplace Lib 7
+[1.19] Drop offline player support from commands for now, this will have to be reworked at a later time.
