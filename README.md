@@ -4,6 +4,8 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/dev.the-fireplace/GrandEconomy/badge.png)](https://maven-badges.herokuapp.com/maven-central/dev.the-fireplace/GrandEconomy)
 ## Adding Grand Economy to your dev environment
 To use this with your mod, include the following in `build.gradle`:
+
+Fabric:
 ```
 repositories {
   maven {
@@ -16,8 +18,24 @@ repositories {
   }
 }
 dependencies {
-  modCompileOnly "dev.the-fireplace:Grand-Economy:${project.grandeconomy_version}:api"
-  modRuntime "dev.the-fireplace:Grand-Economy:${project.grandeconomy_version}"
+  modCompileOnly "dev.the-fireplace:Grand-Economy-Fabric:${project.grandeconomy_version}:api"
+  modRuntimeOnly "dev.the-fireplace:Grand-Economy-Fabric:${project.grandeconomy_version}"
+}
+```
+Forge:
+```
+repositories {
+  maven {
+	name 'Cloth Config'
+	url 'https://maven.shedaniel.me/'
+  }
+}
+dependencies {
+  implementation(fg.deobf("dev.the-fireplace:Annotated-DI-Forge:${project.annotateddi_version}"))
+  compileOnly(fg.deobf("dev.the-fireplace:Fireplace-Lib-Forge:${project.fireplacelib_version}:api"))
+  runtimeOnly(fg.deobf("dev.the-fireplace:Fireplace-Lib-Forge:${project.fireplacelib_version}"))
+  compileOnly(fg.deobf("dev.the-fireplace:Grand-Economy-Forge:${project.grandeconomy_version}:api"
+  runtimeOnly(fg.deobf("dev.the-fireplace:Grand-Economy-Forge:${project.grandeconomy_version}"
 }
 ```
 And in `gradle.properties`:
