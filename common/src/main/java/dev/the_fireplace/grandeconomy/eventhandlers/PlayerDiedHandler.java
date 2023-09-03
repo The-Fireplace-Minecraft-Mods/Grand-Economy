@@ -28,7 +28,7 @@ public final class PlayerDiedHandler
     }
 
     public void onPlayerDeath(ServerPlayer dyingPlayer, DamageSource source) {
-        if (!dyingPlayer.level.isClientSide()) {
+        if (!dyingPlayer.level().isClientSide) {
             double flatMoneyTransferAmount = configValues.getPvpMoneyTransferFlat();
             double percentMoneyTransferAmount = configValues.getPvpMoneyTransferPercent();
             if (doubleEquals(flatMoneyTransferAmount, 0) && doubleEquals(percentMoneyTransferAmount, 0)) {
